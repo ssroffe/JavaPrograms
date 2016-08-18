@@ -1,0 +1,21 @@
+/* Written by
+   Simonseth Roffe
+   Lab Tuesday 4-5:50
+*/
+
+import java.util.*;
+public class Statistics {
+    
+    public static void main(String[] args) {
+
+	Scanner in = new Scanner(System.in);
+
+	System.out.println("Enter your data values one at a time (end list with the word \"stop\"");
+
+	boolean end = false;
+	ArrayList<Double> values = new ArrayList<Double>();
+
+	do {
+	    double number = in.nextDouble();
+	    values.add(number);
+	} while (!(in.next()).equalsIgnoreCase("stop"));

@@ -1,0 +1,101 @@
+/* Written by:
+   Simonseth Roffe
+   sdr45@pitt.edu
+   CS401 - Tuesday 4-5:50 Lab
+*/
+
+import java.util.*;
+import java.io.*;
+
+public class FileLines {
+    
+    /** Takes input in the form of a double and sees whether it is in a specified range.
+	returns the input.
+	@param lowerBound Input has to be larger than or equal to this double to be valid.
+	@param upperBound Input has to be less than or equal to this double to be valid
+	@return returns the valid double within the specified range.
+	@exception ime Thrown if the input for the number is anything but a double
+    */
+    public static double getValidNumber(double lowerBound, double upperBound) {
+
+	Scanner input = new Scanner(System.in);
+	double number = 0.0;
+	boolean invalid = true;
+	do {
+	    try {
+		System.out.print("Please enter a number between "+lowerBound+" and "+upperBound+" ");
+		number = input.nextDouble();
+
+		if (number < lowerBound || number > upperBound) {
+		    System.out.println("The input must be between "+lowerBound+" and "+upperBound);
+		    invalid = true;
+		}
+		else {
+		    invalid = false;
+		}
+	    }
+	    catch (InputMismatchException ime) {
+		System.out.println("The input must be a number between "+lowerBound+" and "+upperBound);
+		input.nextLine();
+		invalid = true;
+	    }
+	} while (invalid);
+	return number;
+    }
+
+    /** Asks the user for a string of the filename. If the file does not exist,
+	it states that the file does not exist and asks for another one.
+	Loops until the file of the filename exists.
+	@return a string of the filename.
+    */
+    public static String getFilename() {
+	Scanner input = new Scanner(System.in);
+	String filename;
+	boolean exists = false;
+	do {
+	    System.out.print("Please enter a filename: ");
+	    filename = input.nextLine();
+	    File file = new File(filename);
+	    if(file.exists()) {
+		exists = true;
+	    }
+	    else {
+		System.out.println("The file does not exist! Try again.");
+		exists = false;
+	    }
+	} while (!exists);
+	input.close();
+	return filename;
+    }
+
+    /** counts the amount of lines there are in a specified file
+	@param filename the name of the file that is being read
+	@return the amount of lines within the file
+    */
+    public static int countFileLines(String filename) throws FileNotFoundException {
+	File file = new File(filename);
+	Scanner inFile = new Scanner(file);
+	int count = 0;
+	while (inFile.hasNext()) {
+	    inFile.nextLine();
+	    count++;
+	}
+	inFile.close();
+	return count;
+    }
+
+    /** Tells the user the value of the double they put in is. The number must be
+	within a specified range (0 and 100). Then tells the user how many lines there
+	are within the file that was input.
+    */
+    public static void main(String[] args) throws FileNotFoundException{
+	final int lowerBound = 0;
+	final int upperBound = 100;
+	double number = getValidNumber(lowerBound,upperBound);
+	System.out.println("The value of the number is "+number);
+	
+	String filename = getFilename();
+	int numLines = countFileLines(filename);
+	System.out.println("The file "+filename+" has "+numLines+" lines.");
+    }
+}

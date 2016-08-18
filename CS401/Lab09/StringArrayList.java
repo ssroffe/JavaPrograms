@@ -1,0 +1,85 @@
+/* Written by
+   Simonseth Roffe
+   Lab Tuesday 4-5:50 pm
+*/
+
+import java.util.*;
+public class StringArrayList {
+    
+    /** Gets a specified number of strings and puts
+	the strings into an ArrayList.
+	@param number The number of strings being inputted.
+	@param prompt The string that asks the user for a string to input
+	@return list Returns the ArrayList of all of the inputted strings.
+    *//
+    public static ArrayList<String> getStrings(int number, String prompt) {
+	Scanner input = new Scanner(System.in);
+	ArrayList<String> list = new ArrayList<String>();
+	for(int i = 0; i<number; i++) {
+	    System.out.print(prompt);
+	    String str = input.nextLine();
+	    list.add(str);
+	}
+	return list;
+    }
+
+    /** Counts the amount of times a specified string appears
+	in an ArrayList.
+	@param strs An ArrayList of strings.
+	@param countStr String to search for within the ArrayList.
+	@return count Returns the amount of times the string appears in the ArrayList.
+    */
+    public static int countValues(ArrayList<String> strs, String countStr) {
+	int count = 0;
+	for (int i = 0; i < strs.size(); i++) {
+
+	    if (strs.get(i).equals(countStr)) {
+		count++;
+	    }
+	}
+	return count;
+    }
+
+    /** Asks the user how many strings that a user wants to input
+	and then asks what those strings are. Puts the strings into
+	an ArrayList and removes the last instance of a specified 
+	string that is searched for in the ArrayList.
+    */
+    public static void main(String[] args) {
+	Scanner input = new Scanner(System.in);
+	boolean invalid = true;
+	int stringNum = 0;
+	do {
+	    try {
+		System.out.print("How many strings do you want to input? ");
+		stringNum = input.nextInt();
+		if (stringNum <= 0) {
+		    System.out.println("The number of strings must be an integer greater than 0!");
+		    invalid = true;
+		}
+		else { 
+		    invalid = false;
+		}
+	    }
+	    catch (InputMismatchException ime) {
+		System.out.println("The number of strings must be an integer greater than 0!");
+		invalid = true;
+		input.nextLine();
+	    }
+	} while (invalid);
+	
+	ArrayList<String> strs = getStrings(stringNum, "Please input a string: ");
+
+	input.nextLine();
+	System.out.print("What string do you want to search for? ");
+	String searchString = input.nextLine();
+
+	int count = countValues(strs, searchString);
+
+	if (count >= 2) {
+	    strs.remove(strs.lastIndexOf(searchString));
+	}
+	
+	System.out.println("The final arraylist is: "+strs);
+    }
+}

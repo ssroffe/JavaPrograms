@@ -1,0 +1,56 @@
+/* Written by
+   Simonseth Roffe
+   Lab Tuesday 4-5:50 pm
+*/
+
+import java.util.*;
+
+public class CoinToss {
+    
+    public static void main(String[] args) {
+
+	Scanner in = new Scanner(System.in);
+	Random rand = new Random();
+	
+	int playerScore = 0;
+	int compScore = 0;
+	boolean end = false;
+	do {
+	    boolean finishGuess = false;
+	    int guess = 0;
+	    do {
+		try {
+		    System.out.print("Player 1, how many heads do you think will show up (out of 7 flips): ");
+		    guess = in.nextInt();
+		    if (guess < 0 || guess > 7) {
+			System.out.println("Your guess must be an integer between 0 and 7!");
+			finishGuess = false;
+		    }
+		    else {
+			finishGuess = true;
+		    }
+		}
+		catch (InputMismatchException ime) {
+		    System.out.println("Your guess must be an integer between 0 and 7!");
+		    finishGuess = false;
+		}
+	    }
+	    
+	    int compGuess = rand.nextInt();
+	    System.out.println("The computer guesses there will be " + compGuess + " heads.");
+
+	    int numHeads = rand.nextInt();
+
+	    if (Math.abs(numHeads - guess) < Math.abs(numHeads - compGuess)) {
+		System.out.println("There are "+numHeads+" heads. Player 1 wins this round!");
+		playerscore++;
+	    }
+	    else if (Math.abs(numHeads - guess) > Math.abs(numHeads - compGuess)) {
+		System.out.println("There are "+numHeads+" heads. The computer wins this round!");
+		compScore++;
+	    }
+	    
+	    else if (Math.abs(numHeads - guess) == Math.abs(numHeads - compGuess)) {
+		System.out.println("There are "+numHeads+" heads. It is a tie!");
+		compScore++;
+		playerscore++;

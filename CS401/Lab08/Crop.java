@@ -1,0 +1,147 @@
+/* Written by
+   Simonseth Roffe
+   Lab Tuesday 4-5:50 pm
+*/
+/** Represents a crop by its name, how much
+    of it is grown, and the price of it per
+    kilogram.
+    @author Simonseth Roffe
+*/
+public class Crop {
+
+    private String name;
+    private int yield;
+    private double price;
+
+    /** Constructor to assign values to each field (name,
+	yield, and price).
+	@param name Name of the crop.
+	@param yield Yield of the crop (How much of it is grown).
+	@param price Price of the crop per kilogram.
+    */
+    public Crop(String name, int yield, double price) {
+	setName(name);
+	setYield(yield);
+	setPrice(price);
+    }
+
+    /** Copy constructor to make a duplicate of a crop
+	object.
+    */
+    public Crop(Crop crop) {
+	setName(crop.getName());
+	setYield(crop.getYield());
+	setPrice(crop.getPrice());
+    }
+
+    /** No args constructor which initializes the crop
+	to have an empty string name and a 0 yield and
+	price.
+    */
+    public Crop() {
+	setName("");
+	setYield(0);
+	setPrice(0);
+    }
+
+    /** Compares two crop's name for equality.
+	@param  crop Second crop to compare.
+	@return true if the names are equal (ignoring capitalization).
+    */
+    public boolean equals(Crop crop) {
+	if (name.equalsIgnoreCase(crop.getName())) {
+	    return true;
+	}
+	else {
+	    return false;
+	}
+    }
+
+    /** Compares a crop's name with a name for equality.
+	@param  n Second name to compare.
+	@return true if the names are equal (ignoring capitalization).
+    */
+    public boolean equals(String n) {
+	if (name.equalsIgnoreCase(n)) {
+	    return true;
+	}
+	else {
+	    return false;
+	}
+    }
+
+    /** Set the name of the crop.
+	@param n The new name of the crop.
+    */
+    public void setName(String n) {
+	if (n.length() == 0) {
+	    IllegalArgumentException iae = new IllegalArgumentException("Name can't be empty");
+	    throw iae;
+	}
+	else {
+	    name = n;
+	}
+    }
+
+    /** Set the yield of the crop.
+	@param y The new amount of the crop grown.
+	@throws IllegalArgumentException. Will be thrown when a negative or zero value is passed in.
+    */    
+    public void setYield(int y) {
+	if (y < 0) {
+	    IllegalArgumentException iae = new IllegalArgumentException("Yield must be non-negative.");
+	    throw iae;
+	}
+	else {
+	    yield = y;
+	}
+    }
+    
+    /** Set the price of the crop.
+	@param p The new price of the crop per kilogram.
+	@throws IllegalArgumentException. Will be thrown when a negative or zero value is passed in.
+    */
+    public void setPrice(double p) {
+	if (p <= 0) {
+	    IllegalArgumentException iae = new IllegalArgumentException("Price must be positive");
+	    throw iae;
+	}
+	else {
+	    price = p;
+	}
+    }
+
+    /** get the name of the crop.
+	@return name The name of the crop.
+    */
+    public String getName() {
+	return name;
+    }
+
+    /** get the value of the yield.
+	@return yield The amount of the crop grown.
+    */    
+    public int getYield() {
+	return yield;
+    }
+    
+    /** get the value of the price.
+	@return price The price of the crop per kilogram.
+    */
+    public double getPrice() {
+	return price;
+    }
+
+
+    /** Returns a string representation of the crop
+	including its name, yield and price.
+	@return return name+": "+yield+" 
+	has been grown with $"+price+" per kilogram." The crop information.
+    */
+    public String toString() {
+	String name = getName();
+	int yield = getYield();
+	double price = getPrice();
+	return name+": "+yield+" has been grown with $"+price+" per kilogram.";
+    }
+}
