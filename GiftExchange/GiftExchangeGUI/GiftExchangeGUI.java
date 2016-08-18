@@ -234,7 +234,9 @@ public class GiftExchangeGUI {
        	
 	//write files
 	try {
-	    String path = GiftExchangeGUI.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+	    String pathToJar = GiftExchangeGUI.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+	    String path = new File(pathToJar).getParentFile().getPath();
+	    
 	    for (int i = 0; i<names.size(); i++) {
 		PrintWriter output = new PrintWriter(path+"/"+names.get(i)+".txt");
 		//Map number in shuffled integer array to original names array.
