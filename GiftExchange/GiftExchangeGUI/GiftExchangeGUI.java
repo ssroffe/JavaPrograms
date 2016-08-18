@@ -235,7 +235,7 @@ public class GiftExchangeGUI {
 	//write files
 	try {
 	    for (int i = 0; i<names.size(); i++) {
-		PrintWriter output = new PrintWriter(names.get(i)+".txt");
+		PrintWriter output = new PrintWriter("./"+names.get(i)+".txt");
 		//Map number in shuffled integer array to original names array.
 		output.print("You are buying for "+names.get(exchange.get(i))+".");
 		output.close();
