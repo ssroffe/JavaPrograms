@@ -1,9 +1,0 @@
-//Seth Roffe
-
-import java.lang.Math;
-
-public class PerfectNumber {
-
-    public static boolean isPerfectNumber(int number) {
-	int sum = 1;
-	int maxD = (int)Math.sqrt(number)
