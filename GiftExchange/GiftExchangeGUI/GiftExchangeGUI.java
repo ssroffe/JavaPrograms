@@ -2,8 +2,6 @@
    Seth Roffe
 */
 
-package GiftExchangeGUI;
-
 import java.util.*;
 import java.util.regex.*;
 import java.util.logging.*;
@@ -371,7 +369,7 @@ public class GiftExchangeGUI {
 		    getEmail = true;
 		}
 		
-		else if ( passwd.getText().length() == 0 ) {
+		else if ( passwd.getPassword().length == 0 ) {
 		    JLabel errMessage = new JLabel("You need to input a password.");
 
 		    errMessage.setFont(new Font("Arial",Font.BOLD,32));
@@ -387,7 +385,7 @@ public class GiftExchangeGUI {
 		else {
 		    getEmail = false;
 		    String user = username.getText();
-		    String pass = passwd.getText();
+		    String pass = new String(passwd.getPassword());
 		    String[] userpass = {user,pass};
 		    return userpass;
 		}
