@@ -12,9 +12,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.plaf.*;
-import mail.*;
-import mail.internet.*;
-import mail.Message.*;
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.mail.Message.*;
 
 public class GiftExchangeGUI {
     
