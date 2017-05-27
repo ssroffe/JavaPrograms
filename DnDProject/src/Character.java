@@ -5,13 +5,12 @@
 
     v0.1: Basic stuff. character stats 
 */
-package com.mkyong.json;
+
+package dnd;
 
 import java.util.*;
 import java.io.*;
-
 import com.google.gson.Gson;
-
 
 public class Character {
     //about character
@@ -43,6 +42,8 @@ public class Character {
     private int intelligence;
     private int wisdom;
     private int charisma;
+
+    private int gold;
     
 
     //HashSets
@@ -62,7 +63,7 @@ public class Character {
 		     String weapon, HashSet<String> cantrips, HashSet<String> spells, HashSet<String> skills,
 		     int maxHealth, int maxMP, int armor, int initiative, int speed, int hitdice,
 		     int str, int cons, int dex, int intel, int wis, int charis, int level, int exp,
-		     ArrayList<String> inventory, HashSet<String> features) {
+		     ArrayList<String> inventory, HashSet<String> features, int gold) {
 	
 	setName(name);
 	setClss(clss);
@@ -91,6 +92,8 @@ public class Character {
 	setLevel(level);
 	setExp(exp);
 
+	setGold(gold);
+
 	setFeatures(features);
 }
     
@@ -113,6 +116,7 @@ public class Character {
 	setMaxMP(0);
 
 	setHitDice(0);
+	setGold(0);
 	
 	setRace("");
 	setSubrace("");
@@ -153,6 +157,7 @@ public class Character {
 	setHitDice(0);
 	setLevel(1);
 	setExp(0);
+	setGold(0);
 	
 	setMaxHP(0);
 	setMaxMP(0);
@@ -200,7 +205,7 @@ public class Character {
 	setExp(c.getExp());
 	setInventory(c.getInventory());
 	setCurrentHP(c.getCurrentHP());
-
+	setGold(c.getGold());
 	setFeatures(c.getFeatures());
     }
 	
@@ -232,6 +237,7 @@ public class Character {
 
 	setLevel(1);
 	setExp(0);
+	setGold(0);
 	
 	setMaxMP(0);
 	setHitDice(0);
@@ -329,6 +335,13 @@ public class Character {
 	return currentMP;
     }
 
+    public void setGold(int g) {
+	this.gold = g;
+    }
+    public int getGold() {
+	return gold;
+    }
+    
     public void setArmor(int a) {
 	this.armor = a;
     }
@@ -469,7 +482,37 @@ public class Character {
 	this.exp = this.exp + n;
     }
     
-    
+    public static void SaveCharacter(Character character) {
+
+	Gson gson = new Gson();
+
+	String name = character.getName();
+	
+	try (FileWriter writer = new FileWriter(name + ".json")) {
+	    gson.toJson(character,writer);
+	}
+	catch (IOException e) {
+	    e.printStackTrace();
+	}
+
+    }
+
+    public static Character LoadCharacter(String CNamePath) {
+
+	Gson gson = new Gson();
+
+	Character character = new Character();
+	
+	try (Reader reader = new FileReader(CNamePath + ".json")) {
+	    
+	    character = gson.fromJson(reader, Character.class);	   
+	    
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
+	
+	return character;
+    }
     
     ///////////////////////////////////////
     ///////////////////////////////////////
@@ -481,7 +524,7 @@ public class Character {
 	    ", speed=" + speed + ", hitdice=" + hitdice + ", strength=" + strength + ", constitution=" + constitution +
 	    ", dexterity=" + dexterity + ", intelligence=" + intelligence + ", wisdom=" + wisdom +
 	    ", charisma=" + charisma + ", cantrips =" + cantrips + ", spells=" + spells +
-	    ", inventory=" + Arrays.toString(inventory.toArray()) + "]";
+	    ", inventory=" + Arrays.toString(inventory.toArray()) + ", Gold=" + gold + "]";
     }
 
 
