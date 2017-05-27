@@ -5,8 +5,13 @@
 
     v0.1: Basic stuff. character stats 
 */
+package com.mkyong.json;
 
 import java.util.*;
+import java.io.*;
+
+import com.google.gson.Gson;
+
 
 public class Character {
     //about character
@@ -24,6 +29,7 @@ public class Character {
     private int currentMP;
 
     private int level;
+    private int exp;
 
     //stats
     private int armor;
@@ -37,7 +43,7 @@ public class Character {
     private int intelligence;
     private int wisdom;
     private int charisma;
-
+    
 
     //HashSets
     private HashSet<String> cantrips;
@@ -54,8 +60,8 @@ public class Character {
     
     public Character(String name, String clss, String race, String subrace, char gender,
 		     String weapon, HashSet<String> cantrips, HashSet<String> spells, HashSet<String> skills,
-		     int maxHealth, int maxMP, int armor, int initiative, int speed, int hitdice
-		     int str, int cons, int dex, int intel, int wis, int charis, int level,
+		     int maxHealth, int maxMP, int armor, int initiative, int speed, int hitdice,
+		     int str, int cons, int dex, int intel, int wis, int charis, int level, int exp,
 		     ArrayList<String> inventory, HashSet<String> features) {
 	
 	setName(name);
@@ -83,6 +89,7 @@ public class Character {
 	setHitDice(hitdice);
 
 	setLevel(level);
+	setExp(exp);
 
 	setFeatures(features);
 }
@@ -121,6 +128,7 @@ public class Character {
 	setInventory(new ArrayList<String>());
 
 	setLevel(1);
+	setExp(0);
 	
 	setCurrentHP(0);
 	
@@ -144,6 +152,7 @@ public class Character {
 
 	setHitDice(0);
 	setLevel(1);
+	setExp(0);
 	
 	setMaxHP(0);
 	setMaxMP(0);
@@ -188,6 +197,7 @@ public class Character {
 	setWis(c.getWis());
 	setChar(c.getChar());
 	setLevel(c.getLevel());
+	setExp(c.getExp());
 	setInventory(c.getInventory());
 	setCurrentHP(c.getCurrentHP());
 
@@ -221,6 +231,7 @@ public class Character {
 	setWeapon("");
 
 	setLevel(1);
+	setExp(0);
 	
 	setMaxMP(0);
 	setHitDice(0);
@@ -244,8 +255,15 @@ public class Character {
     public void setLevel(int l) {
 	this.level = l;
     }
-    public int setLevel() {
+    public int getLevel() {
 	return level;
+    }
+
+    public void setExp(int e) {
+	this.exp = e;
+    }
+    public int getExp() {
+	return exp;
     }
     
     public void setClss(String c) {
@@ -447,6 +465,9 @@ public class Character {
 	this.features.remove(item);
     }
 
+    public void addExp(int n) {
+	this.exp = this.exp + n;
+    }
     
     
     
