@@ -22,7 +22,7 @@ public class Character {
     private String weapon;
 
     //health and magic
-    private int maxHP;
+	private int maxHP;
     private int currentHP;
     private int maxMP;
     private int currentMP;
@@ -456,32 +456,45 @@ public class Character {
     ///////////////////////////////
     
     public void addToInventory(String item) {
-	this.inventory.add(item);
+		this.inventory.add(item);
     }
 
     public void removeFromInventory(String item) {
-	this.inventory.remove(item);
+		this.inventory.remove(item);
     }
     public int inventorySize() {
-	return inventory.size();
+		return inventory.size();
     }
 
     public void addLevel() {
-	this.level++;
+		this.level++;
     }
     
     public void addFeature(String item) {
-	this.features.add(item);
+		this.features.add(item);
     }
 
     public void removeFeature(String item) {
-	this.features.remove(item);
+		this.features.remove(item);
     }
 
     public void addExp(int n) {
-	this.exp = this.exp + n;
+		this.exp = this.exp + n;
     }
+
+	public void subtractHealth(int n) {
+		this.currentHP = this.currentHP - n;
+	}	
     
+	public void addHealth(int n) {
+		this.currentHP = this.currentHP + n;
+	}
+
+
+	///////////////////////////////
+	//////// Saving/Loading ///////
+	///////////////////////////////
+
     public static void SaveCharacter(Character character) {
 
 	Gson gson = new Gson();
