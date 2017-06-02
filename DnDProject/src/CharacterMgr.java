@@ -38,7 +38,7 @@ public class CharacterMgr {
                     newLoad = NewOrLoad();
                 }
                 else {
-                    System.out.println(fileName);
+					character = Character.loadCharacter(fileName);
                     goodFileName = true;
                 }
             }
@@ -48,6 +48,7 @@ public class CharacterMgr {
             }
         } while (!goodFileName);
 
+		
 
     }
 
@@ -116,6 +117,14 @@ public class CharacterMgr {
 
     }
 
+	public static void CharacterPage(Character c) {
+
+		JPanel panel = new JPanel();
+		
+		JLabel name = new JLabel(c.getName());
+		JLabel race = new JLabel(c.getRace() + " " + c.getClss());
+
+	}
 
     // Make a button for questions
     public static int makeQuestionButton(JPanel panel, String title, String[] btnNames) {
