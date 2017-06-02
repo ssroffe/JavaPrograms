@@ -2,15 +2,16 @@
  * Seth Roffe
 */
 
-package dnd;
+//package dnd;
 
 import java.util.*;
-import java.io.*;
 import java.util.regex.*;
 import java.util.logging.*;
+import java.io.File;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.filechooser.*;
 import javax.swing.plaf.*;
 
 public class CharacterMgr {
@@ -23,14 +24,26 @@ public class CharacterMgr {
 
         int newLoad = NewOrLoad(); // 0 for load, 1 for new
 
-        String fileName = new String("")
-        if (newLoad == 0) {
-            // Load a Character file
-            fileName = loadCharacterFile();
-        }
-        else if (newLoad == 1) {
-            // New Character
-        }
+        String fileName = new String("");
+        boolean goodFileName = false;
+        do {
+            if (newLoad == 0) {
+                // Load a Character file and make sure it exists
+                fileName = loadCharacterFile();
+                if (fileName.isEmpty()) {
+                    goodFileName = false;
+                    newLoad = NewOrLoad();
+                }
+                else {
+                    System.out.println(fileName);
+                    goodFileName = true;
+                }
+            }
+            else if (newLoad == 1) {
+                // New Character
+                goodFileName = true;
+            }
+        } while (!goodFileName);
 
     }
 
@@ -41,10 +54,11 @@ public class CharacterMgr {
         String[] loadNew = {"Load Character", "New Character"};
         JPanel panel = new JPanel();
 
-        UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("ARIAL",Font.PLAIN,36)));
+        //Button font
+        UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("ARIAL",Font.PLAIN,30)));
 
         JLabel label = new JLabel("Would you like to create a new character or load an old one?");
-        label.setFont(new Font("Arial", Font.PLAIN, 30));
+        label.setFont(new Font("Arial", Font.PLAIN, 30)); //label font
 
         panel.setLayout(new GridBagLayout());
         GridBagConstraints grid = new GridBagConstraints();
@@ -72,17 +86,28 @@ public class CharacterMgr {
         else if (btn == JOptionPane.CLOSED_OPTION) {
             System.exit(0);
         }
+        return -1;
     }
 
+    // Load a previously made character file
     public static String loadCharacterFile() {
-       JFileChooser fc = new JFileChoose(".");
-
-       int returnVal = fc.showOpenDialog(CharacterMgr.this);
+        JFileChooser fc = new JFileChooser(".");
+        
+        //show only json files
+        FileFilter filter = new FileNameExtensionFilter("JSON Files", "json");
+        fc.addChoosableFileFilter(filter);
+        fc.setAcceptAllFileFilterUsed(false);
+       
+        int returnVal = fc.showOpenDialog(null);
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
+
             String fileName = file.getName();
 			return fileName;
+        }
+        else {
+            return "";
         }
 
     }
@@ -102,8 +127,6 @@ public class CharacterMgr {
 
         return btn;
     }
-
-    //Used
 
 }
 

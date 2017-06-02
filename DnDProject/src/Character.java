@@ -516,7 +516,7 @@ public class Character {
 
 	Character character = new Character();
 	
-	try (Reader reader = new FileReader(CNamePath + ".json")) {
+	try (Reader reader = new FileReader(CNamePath)) {
 	    
 	    character = gson.fromJson(reader, Character.class);	   
 	    
