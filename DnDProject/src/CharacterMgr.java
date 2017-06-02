@@ -82,7 +82,9 @@ public class CharacterMgr {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
             String fileName = file.getName();
+			return fileName;
         }
+
     }
 
 
