@@ -24,6 +24,9 @@ public class CharacterMgr {
 
         int newLoad = NewOrLoad(); // 0 for load, 1 for new
 
+        Character character = new Character();
+
+        //Get the Character File
         String fileName = new String("");
         boolean goodFileName = false;
         do {
@@ -44,6 +47,7 @@ public class CharacterMgr {
                 goodFileName = true;
             }
         } while (!goodFileName);
+
 
     }
 
@@ -103,7 +107,7 @@ public class CharacterMgr {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
 
-            String fileName = file.getName();
+            String fileName = file.getPath();
 			return fileName;
         }
         else {
