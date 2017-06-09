@@ -146,7 +146,7 @@ public class CharacterMgr extends Application {
                     CharacterSheet(c);
                 }
                 else {
-                    Character c = new Character(nameTf.getText(),clss.getText());
+                    Character c = new Character(nameTf.getText(),clssTf.getText());
                     stage.close();
                     CharacterSheet(c);
                 }
@@ -184,11 +184,120 @@ public class CharacterMgr extends Application {
         //scene.getStylesheets().add(this.getClass().getResource("CharacterSheet.css").toExternalForm());
 
         stage.setScene(scene);
-
+	int row = 1;
         Text characterName = new Text(c.getName());
+        characterName.setId("characterName");
+        grid.add(characterName,0,0,2,1);
+
+        //////////// Class ////////////////
+        Label clssLabel = new Label("Class:");
+        grid.add(clssLabel,0,row);
+        TextField clssTf = new TextField();
+        clssTf.setText(c.getClss());
+        clssTf.setEditable(false);
+        grid.add(clssTf,1,row);
+
+        ToggleButton clssbtn = new ToggleButton("edit");
+        clssbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                if (clssbtn.isSelected()) {
+                    clssTf.setEditable(true);
+                    clssTf.setId("unlocked-tf");
+                }
+                else {
+                    clssTf.setEditable(false);
+                    clssTf.setId("locked-tf");
+                    c.setClss(clssTf.getText());
+                }
+            }
+        });
+        grid.add(clssbtn,2,row);
+	row++;
+
+        ///////////// Race //////////////
+        Label raceLabel = new Label("Race:");
+        grid.add(raceLabel,0,row);
+        TextField raceTf = new TextField();
+        raceTf.setText(c.getRace());
+        raceTf.setEditable(false);
+        grid.add(raceTf,1,row);
+
+        ToggleButton racebtn = new ToggleButton("edit");
+        racebtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                if (racebtn.isSelected()) {
+                    raceTf.setEditable(true);
+                    raceTf.setId("unlocked-tf");
+                }
+                else {
+                    raceTf.setEditable(false);
+                    raceTf.setId("locked-tf");
+                    c.setRace(raceTf.getText());
+                }
+            }
+        });
+        grid.add(racebtn,2,row);
+	row++;
+
+        ///////////// SubRace //////////////
+        Label subRaceLabel = new Label("SubRace:");
+        grid.add(subRaceLabel,0,row);
+        TextField subRaceTf = new TextField();
+        subRaceTf.setText(c.getSubrace());
+        subRaceTf.setEditable(false);
+        grid.add(subRaceTf,1,row);
+
+        ToggleButton subRacebtn = new ToggleButton("edit");
+        subRacebtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                if (subRacebtn.isSelected()) {
+                    subRaceTf.setEditable(true);
+                    subRaceTf.setId("unlocked-tf");
+                }
+                else {
+                    subRaceTf.setEditable(false);
+                    subRaceTf.setId("locked-tf");
+                    c.setSubrace(subRaceTf.getText());
+                }
+            }
+        });
+        grid.add(subRacebtn,2,row);
+	row++;
 
         stage.show();
 
+        ///////////// Weapon //////////////
+        Label weaponLabel = new Label("Weapon:");
+        grid.add(weaponLabel,0,row);
+        TextField weaponTf = new TextField();
+        weaponTf.setText(c.getWeapon());
+        weaponTf.setEditable(false);
+        grid.add(weaponTf,1,row);
+
+        ToggleButton weaponbtn = new ToggleButton("edit");
+        weaponbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                if (weaponbtn.isSelected()) {
+                    weaponTf.setEditable(true);
+                    weaponTf.setId("unlocked-tf");
+                }
+                else {
+                    weaponTf.setEditable(false);
+                    weaponTf.setId("locked-tf");
+                    c.setWeapon(weaponTf.getText());
+                }
+            }
+        });
+        grid.add(weaponbtn,2,row);
+	row++;
+
+        stage.show();	
+
+	
 
     }
 
@@ -212,6 +321,24 @@ public class CharacterMgr extends Application {
         else {
             return "";
         }
+    }
+
+    public static ToggleButton EditButton(TextField tf) {
+        ToggleButton btn = new ToggleButton("edit");
+        btn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                if (btn.isSelected()) {
+                    tf.setEditable(true);
+                    tf.setId("unlocked-tf");
+                }
+                else {
+                    tf.setEditable(false);
+                    tf.setId("locked-tf");
+                }
+            }
+        });
+        return btn;
     }
     
 }
