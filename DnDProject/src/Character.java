@@ -95,9 +95,50 @@ public class Character {
 	setGold(gold);
 
 	setFeatures(features);
-}
+    }
     
-        public Character() {
+    public Character(String name) {
+	setName(name);
+	setClss("");
+	
+	setStr(0);
+	setCons(0);
+	setDex(0);
+	setInt(0);
+	setWis(0);
+	setChar(0);
+
+	setInitiative(0);
+	setArmor(0);
+	setSpeed(0);
+	
+	setMaxHP(0);
+	setMaxMP(0);
+
+	setHitDice(0);
+	setGold(0);
+	
+	setRace("");
+	setSubrace("");
+	setGender('m');
+	setWeapon("");
+
+	setSkills(new HashSet<String>());
+
+	setCantrips(new HashSet<String>());
+	setSpells(new HashSet<String>());
+	setFeatures(new HashSet<String>());
+
+	setInventory(new ArrayList<String>());
+
+	setLevel(1);
+	setExp(0);
+	
+	setCurrentHP(0);
+	
+    }
+
+public Character() {
 	setName("");
 	setClss("");
 	

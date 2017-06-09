@@ -9,12 +9,15 @@ import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.scene.paint.*;
 import javafx.stage.Stage;
+import javafx.fxml.FXML;
  
 public class HelloWorld extends Application {
-    public static void main(String[] args) {
-        launch(args);
-    }
-    
+    //public static void main(String[] args) {
+    //    launch(args);
+    //}
+    @FXML
+    private ToggleButton ebtn;
+
     @Override
     public void start(Stage primaryStage) {
 	primaryStage.setTitle("JavaFx welcome");
@@ -25,7 +28,7 @@ public class HelloWorld extends Application {
 	grid.setVgap(10);
 	grid.setPadding(new Insets(25,25,25,25));
 	
-	Scene scene = new Scene(grid, 300, 275);
+	Scene scene = new Scene(grid, 400, 375);
 	primaryStage.setScene(scene);
 
 	scene.getStylesheets().add(this.getClass().getResource("Login.css").toExternalForm());
@@ -38,6 +41,25 @@ public class HelloWorld extends Application {
 
 	TextField userText = new TextField();
 	grid.add(userText,1,1);
+    userText.setEditable(false);
+    userText.setId("locked-tf");
+
+    ebtn = new ToggleButton("edit");
+    grid.add(ebtn,2,1);
+
+    ebtn.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            if (ebtn.isSelected()) {
+                userText.setEditable(true);
+                userText.setId("unlocked-tf");
+            }
+            else {
+                userText.setEditable(false);
+                userText.setId("locked-tf");
+            }
+        }
+    });
 
 	Label pw = new Label("Password:");
 	grid.add(pw,0,2);
@@ -60,11 +82,12 @@ public class HelloWorld extends Application {
 		    target.setFill(Color.FIREBRICK);
 		    target.setText("Sign in button pressed");
 		}
-	    });
+    });
 
 	scenetitle.setId("welcome-text");
 	target.setId("actiontarget");
 	
 	primaryStage.show();
     }
+
 }
