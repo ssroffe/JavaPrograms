@@ -293,10 +293,14 @@ public class CharacterMgr extends Application {
             }
         });
         grid.add(weaponbtn,2,row);
-	row++;
 
-        stage.show();	
+		// Separate Descriptions from Health
+		row++;
+		row++;
+		row++;
 
+	////////////////////////////////////////////////
+	////////////////////////////////////////////////
 	
 	//////////// Health //////////////
 	Label maxHealthLabel = new Label("Max HP:");
@@ -337,6 +341,7 @@ public class CharacterMgr extends Application {
 	});
 	grid.add(maxHealthbtn,2,row);
 
+	stage.show();	
 	}
 
     
