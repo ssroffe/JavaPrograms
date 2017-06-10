@@ -1,7 +1,7 @@
 Compile:
 
-javac -d . -cp ".;jars/*" <program>.java
+javac -d . -cp ".:jars/*" <program>.java
 
 run:
 
-java -cp ".;jars/*" <program>
+java -cp ".:jars/*" <program>

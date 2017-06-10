@@ -556,10 +556,14 @@ public Character() {
 	Gson gson = new Gson();
 
 	Character character = new Character();
-	
+	File f = new File(CNamePath);
+	String fileName = f.getName();
+	String name = fileName.substring(0,fileName.lastIndexOf("."));
+
 	try (Reader reader = new FileReader(CNamePath)) {
 	    
 	    character = gson.fromJson(reader, Character.class);	   
+	    character.setName(name);
 	    
 	} catch (IOException e) {
 	    e.printStackTrace();
@@ -581,10 +585,4 @@ public Character() {
 	    ", inventory=" + Arrays.toString(inventory.toArray()) + ", Gold=" + gold + "]";
     }
 
-
-    /////////////////////////////
-    /////// SAVE FUNCTION ///////
-    /////////////////////////////
-
-    //public void Save Function() {
 }

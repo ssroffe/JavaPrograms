@@ -298,8 +298,46 @@ public class CharacterMgr extends Application {
         stage.show();	
 
 	
+	//////////// Health //////////////
+	Label maxHealthLabel = new Label("Max HP:");
+	grid.add(maxHealthLabel,0,row);
+	TextField maxHealthTf = new TextField();
+	maxHealthTf.setText(Integer.toString(c.getMaxHP()));
+	maxHealthTf.setEditable(false);
+	grid.add(maxHealthTf,1,row);
+	final int maxHealthRow = row;
+	
+	ToggleButton maxHealthbtn = new ToggleButton("edit");
+	maxHealthbtn.setOnAction(new EventHandler<ActionEvent>() {
+		//for checking valid new max HP
+		int previousMaxHP = Integer.parseInt(maxHealthTf.getText());
+		Text errMaxHP = new Text("New Max HP was not an integer!");
+		@Override
+		public void handle(ActionEvent e) {
+		    if (maxHealthbtn.isSelected()) {
+			previousMaxHP = Integer.parseInt(maxHealthTf.getText());
+			maxHealthTf.setEditable(true);
+			maxHealthTf.setId("unlocked-tf");
+		    }
+		    else {
+				maxHealthTf.setEditable(false);
+				maxHealthTf.setId("locked-tf");
+				boolean isInt = isInteger(maxHealthTf.getText());
+				if (isInt) {
+					c.setMaxHP(Integer.parseInt(maxHealthTf.getText()));
+					grid.getChildren().remove(errMaxHP);
+				}
+				else {
+					errMaxHP.setFill(Color.FIREBRICK);
+					grid.add(errMaxHP,3,maxHealthRow);
+					maxHealthTf.setText(Integer.toString(previousMaxHP));
+				}
+			}
+		}
+	});
+	grid.add(maxHealthbtn,2,row);
 
-    }
+	}
 
     
     //Load a previously made character file
@@ -323,22 +361,14 @@ public class CharacterMgr extends Application {
         }
     }
 
-    public static ToggleButton EditButton(TextField tf) {
-        ToggleButton btn = new ToggleButton("edit");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                if (btn.isSelected()) {
-                    tf.setEditable(true);
-                    tf.setId("unlocked-tf");
-                }
-                else {
-                    tf.setEditable(false);
-                    tf.setId("locked-tf");
-                }
-            }
-        });
-        return btn;
+    public static boolean isInteger(String s) {
+	try {
+	    Integer.parseInt(s);
+	    return true;
+	}
+	catch (NumberFormatException ex) {
+	    return false;
+	}
     }
     
 }
