@@ -31,7 +31,7 @@ public class GiftExchangev2 extends Application {
     private String userName;
     private String password;
 
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws FileNotFoundException, AddressException, MessagingException {
        UsingEmails();
     }
 
@@ -62,20 +62,39 @@ public class GiftExchangev2 extends Application {
             @Override
             public void handle(ActionEvent e) {
                 primaryStage.close();
-                getEmailPswd();
+                try {
+                    getEmailPswd();
+                }
+                catch (FileNotFoundException fne) {
+                    System.out.println("File Not Found Exception");
+                    fne.printStackTrace();
+                }
+                catch (AddressException ae) {
+                    ae.printStackTrace();
+                }
+                catch (MessagingException me) {
+                    me.printStackTrace();
+                }
+
             }
         });
 
         no.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent e) {
+            public void handle(ActionEvent e) { 
                 primaryStage.close();
+                try {
+                    GetPartyNoEmail();
+                }
+                catch (FileNotFoundException fne) {
+                    fne.printStackTrace();
+                }
             }
         });
         primaryStage.show();
     }
 
-    public void getEmailPswd() {
+    public void getEmailPswd() throws FileNotFoundException, AddressException, MessagingException {
         Stage stage = new Stage();
         stage.setTitle("Gift Exchange -- Host Email");
 
@@ -121,8 +140,20 @@ public class GiftExchangev2 extends Application {
                 else {
                     userName = userTf.getText();
                     password = pwPf.getText();
-                    GetPartyEmail();
-                    stage.close();
+                    try {
+                        GetPartyEmail();
+                        stage.close();
+                    }
+                    catch (FileNotFoundException fne) {
+                        System.out.println("File Not Found Exception");
+                        fne.printStackTrace();
+                    }
+                    catch (AddressException ae) {
+                        ae.printStackTrace();
+                    }
+                    catch (MessagingException me) {
+                        me.printStackTrace();
+                    }
                 }
             }
         });
@@ -139,7 +170,7 @@ public class GiftExchangev2 extends Application {
 
     }
 
-    public void GetPartyEmail() {
+    public void GetPartyEmail() throws FileNotFoundException, AddressException, MessagingException {
 
         ArrayList<String> names = new ArrayList<String>();
         ArrayList<String> emails = new ArrayList<String>();
@@ -250,7 +281,19 @@ public class GiftExchangev2 extends Application {
                     }
                 }
                 stage.close();
-                ListConfirm(names,emails);
+                try {
+                    ListConfirm(names,emails);
+                }
+                catch (FileNotFoundException fne) {
+                    System.out.println("File Not Found Exception");
+                    fne.printStackTrace();
+                }
+                catch (AddressException ae) {
+                    ae.printStackTrace();
+                }
+                catch (MessagingException me) {
+                    me.printStackTrace();
+                }
             }
         });
 
@@ -260,7 +303,7 @@ public class GiftExchangev2 extends Application {
         
     }
 
-    public void ListConfirm(ArrayList<String> names, ArrayList<String> emails) {
+    public void ListConfirm(ArrayList<String> names, ArrayList<String> emails) throws FileNotFoundException, AddressException, MessagingException {
 
         Stage stage = new Stage();
         stage.setTitle("Gift Exchange -- List Confirm");
@@ -308,15 +351,37 @@ public class GiftExchangev2 extends Application {
             @Override
             public void handle(ActionEvent e) {
                 stage.close();
-                //EmailPeople();
+                try {
+                    EmailPeople(names,emails);
+                }
+                catch (FileNotFoundException fne) {
+                    fne.printStackTrace();
+                }
+                catch (AddressException ae) {
+                    ae.printStackTrace();
+                }
+                catch (MessagingException me) {
+                    me.printStackTrace();
+                }
             }
         });
         
         no.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent e) {
+            public void handle(ActionEvent e) { 
                 stage.close();
-                GetPartyEmail();
+                try {
+                    GetPartyEmail();
+                }
+                catch (FileNotFoundException fne) {
+                    fne.printStackTrace();
+                }
+                catch (AddressException ae) {
+                    ae.printStackTrace();
+                }
+                catch (MessagingException me) {
+                    me.printStackTrace();
+                }
             }
         });
 
@@ -421,6 +486,240 @@ public class GiftExchangev2 extends Application {
 
         
             
+
+    }
+    
+    public void GetPartyNoEmail() throws FileNotFoundException {
+
+        ArrayList<String> names = new ArrayList<String>();
+        ArrayList<String> emails = new ArrayList<String>();
+
+        Stage stage = new Stage();
+        stage.setTitle("Gift Exchange -- Party input");
+        GridPane grid = GridSetup();
+
+        Scene scene = new Scene(grid);
+        
+        stage.setScene(scene);
+
+        final ScrollPane sp = new ScrollPane();
+        
+        sp.setVmax(440);
+        sp.setPrefSize(115,150);
+
+        final VBox vb = new VBox();
+
+        vb.setLayoutX(5);
+        vb.setSpacing(5);
+
+        sp.setContent(vb);
+
+        grid.add(sp,0,0);
+
+        //get the list of people
+
+        Text namesText = new Text("Name:");
+
+        TextField namesTf = new TextField();
+        
+        HBox hbNames = new HBox(10);
+        hbNames.getChildren().addAll(namesText,namesTf);
+        grid.add(hbNames,0,1);
+
+        Button next = new Button("Next");
+        Button done = new Button("Done");
+        HBox hb = new HBox(10);
+        hb.getChildren().addAll(next,done);
+        grid.add(hb,0,2);
+
+        next.setOnAction(new EventHandler<ActionEvent>() {
+            Text errMsgName = new Text("You need to input a person\'s name!");
+            @Override
+            public void handle(ActionEvent e) {
+
+                errMsgName.setFill(Color.FIREBRICK);
+                String person = namesTf.getText();
+
+                if (person.length() == 0) {
+                    grid.add(errMsgName,2,1);
+
+                }
+                else {
+                    names.add(person);
+                    grid.getChildren().remove(errMsgName);
+                    emails.add("");
+                    Label label = new Label(person);
+                    vb.getChildren().add(label);
+                    namesTf.clear();
+                    namesTf.requestFocus();
+                }
+            }
+        });
+
+        done.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                String person = namesTf.getText();
+                if (person.length() == 0) {
+                }
+                else {
+                    names.add(person);
+                }
+                stage.close();
+                try {
+                    ListConfirmNoEmail(names);
+                }
+                catch (FileNotFoundException fne) {
+                    fne.printStackTrace();
+                }
+
+            }
+        });
+
+        stage.show();
+
+
+        
+    }
+    public void ListConfirmNoEmail(ArrayList<String> names) throws FileNotFoundException {
+
+        Stage stage = new Stage(); 
+        stage.setTitle("Gift Exchange -- List Confirm");
+
+        GridPane grid = GridSetup();
+
+        Scene scene = new Scene(grid);
+
+        stage.setScene(scene);
+
+        final ScrollPane sp = new ScrollPane();
+        
+        sp.setVmax(440);
+        sp.setPrefSize(200,200);
+
+        final VBox vb = new VBox();
+
+        vb.setLayoutX(5);
+        vb.setSpacing(5);
+        
+        for (int i = 0; i < names.size(); i++) {
+            Label label = new Label(names.get(i)); 
+            vb.getChildren().add(label);
+        }
+
+
+        Label listNames = new Label("The names in the list are:");
+        grid.add(listNames,0,0);
+        grid.add(sp,0,1);
+
+        Label correct = new Label("Is this correct?");
+        grid.add(correct,0,2);
+
+        Button yes = new Button("Yes");
+        Button no = new Button("No");
+        HBox hbyesno = new HBox(10);
+        hbyesno.getChildren().addAll(yes,no);
+        grid.add(hbyesno,0,3);
+
+        sp.setContent(vb);
+
+        stage.show();
+
+        yes.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                stage.close();
+                try {
+                    MakeFiles(names);
+                }
+                catch (FileNotFoundException fne) {
+                    fne.printStackTrace();
+                }
+
+            }
+        });
+        
+        no.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                stage.close();
+                try {
+                    GetPartyEmail();
+                }
+                catch (FileNotFoundException fne) {
+                    fne.printStackTrace();
+                }
+                catch (AddressException ae) {
+                    ae.printStackTrace();
+                }
+                catch (MessagingException me) {
+                    me.printStackTrace();
+                }
+            }
+        });
+
+    }
+
+
+    public void MakeFiles(ArrayList<String> names) throws FileNotFoundException {
+
+        ArrayList<Integer> exchange = new ArrayList<Integer>();
+        for (int i = 0; i < names.size(); i++) {
+            exchange.add(i);
+        }
+
+        //Don't want people to get themselves
+        boolean getSelf = true;
+        do {
+            getSelf = false;
+            Collections.shuffle(exchange);
+            for (int i = 0; i < names.size(); i++) {
+                if (exchange.get(i) == i) {
+                    getSelf = true;
+                }
+            }
+        } while (getSelf);
+
+        try {
+            String pathToJar = GiftExchangev2.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+            String path = new File(pathToJar).getParentFile().getPath();
+            for (int i = 0; i < names.size(); i++) {
+                //write files for people who don't have emails
+                PrintWriter output = new PrintWriter(path+"/"+names.get(i)+".txt");
+                //Map number in shuffled integer array to original names array.
+                output.print("You are buying for "+names.get(exchange.get(i))+".");
+                output.close();
+            }
+        }
+        catch (IOException ioe) {
+            System.out.println("There was an IO exception");
+            ioe.printStackTrace();
+        }
+
+        Stage stage = new Stage();
+        stage.setTitle("Gift Exchange -- Done");
+
+        GridPane grid = GridSetup();
+        
+        Scene scene = new Scene(grid);
+        stage.setScene(scene);
+
+        Label doneLabel = new Label("Done. Files Created. Files contain who that person is buying for.");
+        grid.add(doneLabel,0,0,1,2);
+
+        Button btn = new Button("OK");
+        grid.add(btn,0,3);
+
+        stage.show();
+
+        btn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                stage.close();
+            }
+        });
+    
+
 
     }
 
