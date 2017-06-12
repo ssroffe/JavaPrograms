@@ -184,7 +184,7 @@ public class CharacterMgr extends Application {
         //scene.getStylesheets().add(this.getClass().getResource("CharacterSheet.css").toExternalForm());
 
         stage.setScene(scene);
-	int row = 1;
+        int row = 1;
         Text characterName = new Text(c.getName());
         characterName.setId("characterName");
         grid.add(characterName,0,0,2,1);
