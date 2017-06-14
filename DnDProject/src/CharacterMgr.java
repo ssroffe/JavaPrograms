@@ -38,19 +38,23 @@ public class CharacterMgr extends Application {
         grid.setHgap(10);
         grid.setVgap(10);
 
+        VBox vbWelcome = new VBox(10);
+        vbWelcome.setAlignment(Pos.CENTER);
+
         grid.setPadding(new Insets(25,25,25,25));
 
         Scene scene1 = new Scene(grid, 600, 300);
+        scene1.getStylesheets().add(this.getClass().getResource("NewLoadScreen.css").toExternalForm());
         primaryStage.setScene(scene1);
 
-        scene1.getStylesheets().add(this.getClass().getResource("NewLoadScreen.css").toExternalForm());
 
         Text welcome = new Text("Welcome to DnD!");
-        grid.add(welcome, 0,0,2,1);
+        //grid.add(welcome, 0,0,3,1);
+        //grid.add(welcome,0,0);
         welcome.setId("welcome");
 
         Label loadLabel = new Label("Would you like to Load a Character or Make a New one?");
-        grid.add(loadLabel,0,1,1,2);
+        //grid.add(loadLabel,0,1,1,2);
 
         Button lbtn = new Button("Load Character");
         Button nbtn = new Button("New Character");
@@ -59,7 +63,10 @@ public class CharacterMgr extends Application {
         nlbtn.setAlignment(Pos.CENTER);
         nlbtn.getChildren().addAll(lbtn,nbtn);
 
-        grid.add(nlbtn,0,3);
+        //grid.add(nlbtn,0,3);
+
+        vbWelcome.getChildren().addAll(welcome,loadLabel,nlbtn);
+        grid.add(vbWelcome,0,0);
 
         //Load Old Character
         lbtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -107,7 +114,7 @@ public class CharacterMgr extends Application {
         //scene.getStylesheets().add(this.getClass().getResource("NewCharacter.css"));
         stage.setScene(scene);
 
-        Text insertName = new Text("Please insert the name of your character (Class name optional");
+        Text insertName = new Text("Please insert the name of your character (Class name optional).");
         grid.add(insertName,0,0);
 
         TextField nameTf = new TextField();
@@ -189,6 +196,36 @@ public class CharacterMgr extends Application {
         characterName.setId("characterName");
         grid.add(characterName,0,0,2,1);
 
+        //////////// Level ////////////////
+
+        Label levelLabel = new Label("Level:");
+        grid.add(levelLabel,0,row);
+        Label level = new Label(Integer.toString(c.getLevel()));
+        grid.add(level,1,row);
+        Button addLevel = new Button("Add Level");
+        Button lowLevel = new Button("Lower Level");
+        HBox hblvl = new HBox(10);
+        hblvl.getChildren().addAll(addLevel,lowLevel);
+        grid.add(hblvl,2,row);
+
+        addLevel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                c.setLevel(c.getLevel() + 1);
+                level.setText(Integer.toString(c.getLevel()));
+            }
+        });
+ 
+        lowLevel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                c.setLevel(c.getLevel() - 1);
+                level.setText(Integer.toString(c.getLevel()));
+            }
+        });       
+
+        row++;
+
         //////////// Class ////////////////
         Label clssLabel = new Label("Class:");
         grid.add(clssLabel,0,row);
@@ -213,6 +250,17 @@ public class CharacterMgr extends Application {
             }
         });
         grid.add(clssbtn,2,row);
+
+        /*
+        Button testbtn = new Button("test");
+        grid.add(testbtn,3,row);
+        testbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                System.out.println(c.getClss());
+            }
+        });
+        */
 	row++;
 
         ///////////// Race //////////////
@@ -267,37 +315,104 @@ public class CharacterMgr extends Application {
         grid.add(subRacebtn,2,row);
 	row++;
 
-        stage.show();
+    stage.show();
 
-        ///////////// Weapon //////////////
-        Label weaponLabel = new Label("Weapon:");
-        grid.add(weaponLabel,0,row);
-        TextField weaponTf = new TextField();
-        weaponTf.setText(c.getWeapon());
-        weaponTf.setEditable(false);
-        grid.add(weaponTf,1,row);
+    ///////////// Weapon //////////////
+    Label weaponLabel = new Label("Weapon:");
+    grid.add(weaponLabel,0,row);
+    TextField weaponTf = new TextField();
+    weaponTf.setText(c.getWeapon());
+    weaponTf.setEditable(false);
+    grid.add(weaponTf,1,row);
 
-        ToggleButton weaponbtn = new ToggleButton("edit");
-        weaponbtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                if (weaponbtn.isSelected()) {
-                    weaponTf.setEditable(true);
-                    weaponTf.setId("unlocked-tf");
+    ToggleButton weaponbtn = new ToggleButton("edit");
+    weaponbtn.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            if (weaponbtn.isSelected()) {
+                weaponTf.setEditable(true);
+                weaponTf.setId("unlocked-tf");
+            }
+            else {
+                weaponTf.setEditable(false);
+                weaponTf.setId("locked-tf");
+                c.setWeapon(weaponTf.getText());
+            }
+        }
+    });
+    grid.add(weaponbtn,2,row);
+
+    row++;
+
+    ///////////// Gold /////////////////
+    Label goldLabel = new Label("Gold:");
+    grid.add(goldLabel,0,row);
+    Label gold = new Label(Integer.toString(c.getGold()));
+    grid.add(gold,1,row);
+    gold.setId("gold");
+
+    row++;
+
+    ////////// ADD/LOSE GOLD ///////////
+    TextField pmGoldTf = new TextField();
+    pmGoldTf.setPromptText("Add or Subtract Gold");
+    grid.add(pmGoldTf,1,row);
+
+    Button plusGold = new Button("Add Gold");
+    Button minusGold = new Button("Spend Gold");
+    HBox hbpmGold = new HBox(10);
+    hbpmGold.getChildren().addAll(plusGold,minusGold);
+    grid.add(hbpmGold,2,row);
+
+    final int addGoldRow = row;
+
+    plusGold.setOnAction(new EventHandler<ActionEvent>() {
+        Text errMsg = new Text("Inputted Value was not an Integer!");
+        @Override
+        public void handle(ActionEvent e) {
+            boolean isInt = isInteger(pmGoldTf.getText());
+            if (isInt) {
+                int addGoldVal = Integer.parseInt(pmGoldTf.getText()) + c.getGold();
+                c.setGold(addGoldVal);
+                gold.setText(Integer.toString(c.getGold()));
+                grid.getChildren().remove(errMsg);
+            }
+            else {
+                errMsg.setFill(Color.FIREBRICK);
+                grid.add(errMsg,3,addGoldRow);
+            }
+
+        }
+    });
+
+    minusGold.setOnAction(new EventHandler<ActionEvent>() {
+        Text errMsg = new Text("Inputted Value was not an Integer!");
+        @Override
+        public void handle(ActionEvent e) {
+            boolean isInt = isInteger(pmGoldTf.getText());
+            if (isInt) {
+                int loseGoldVal = c.getGold() - Integer.parseInt(pmGoldTf.getText());
+                if (loseGoldVal > 0) {
+                    c.setGold(loseGoldVal);
+                    gold.setText(Integer.toString(c.getGold()));
                 }
                 else {
-                    weaponTf.setEditable(false);
-                    weaponTf.setId("locked-tf");
-                    c.setWeapon(weaponTf.getText());
+                    c.setGold(0);
+                    gold.setText(Integer.toString(c.getGold()));
                 }
+                grid.getChildren().remove(errMsg);
             }
-        });
-        grid.add(weaponbtn,2,row);
+            else {
+                errMsg.setFill(Color.FIREBRICK);
+                grid.add(errMsg,3,addGoldRow);
+            }
+        }
+    });
 
-		// Separate Descriptions from Health
-		row++;
-		row++;
-		row++;
+    // Separate Descriptions from Health
+    row++;
+    row++;
+    row++;
 
 	////////////////////////////////////////////////
 	////////////////////////////////////////////////
@@ -319,9 +434,9 @@ public class CharacterMgr extends Application {
 		@Override
 		public void handle(ActionEvent e) {
 		    if (maxHealthbtn.isSelected()) {
-			previousMaxHP = Integer.parseInt(maxHealthTf.getText());
-			maxHealthTf.setEditable(true);
-			maxHealthTf.setId("unlocked-tf");
+                previousMaxHP = Integer.parseInt(maxHealthTf.getText());
+                maxHealthTf.setEditable(true);
+                maxHealthTf.setId("unlocked-tf");
 		    }
 		    else {
 				maxHealthTf.setEditable(false);
@@ -341,10 +456,96 @@ public class CharacterMgr extends Application {
 	});
 	grid.add(maxHealthbtn,2,row);
 
+    row++;
+
+    Label currHealthLabel = new Label("Current HP:");
+    grid.add(currHealthLabel, 0, row);
+    Label currHealth = new Label();
+    currHealth.setText(Integer.toString(c.getCurrentHP()));
+    grid.add(currHealth,1,row);
+
+    row++;
+
+    /////// ADD/LOSE HP ////////
+
+    TextField pmHPTf = new TextField();
+    pmHPTf.setPromptText("Add or Subtract HP");
+    grid.add(pmHPTf,1,row);
+
+    Button plusHP = new Button("add HP");
+    Button minusHP = new Button("lose HP");
+    HBox hbpmHP = new HBox(10);
+    hbpmHP.getChildren().addAll(plusHP,minusHP);
+    grid.add(hbpmHP,2,row);
+
+    final int addHPRow = row;
+
+    plusHP.setOnAction(new EventHandler<ActionEvent>() {
+        Text errMsg = new Text("Inputted Value was not an Integer!");
+        @Override
+        public void handle(ActionEvent e) {
+            boolean isInt = isInteger(pmHPTf.getText());
+            if (isInt) {
+                int addHPVal = Integer.parseInt(pmHPTf.getText()) + c.getCurrentHP();
+                if (addHPVal >= c.getMaxHP()) {
+                    c.setCurrentHP(c.getMaxHP());
+                    currHealth.setText(Integer.toString(c.getMaxHP()));
+                }
+                else {
+                    c.setCurrentHP(addHPVal);
+                    currHealth.setText(Integer.toString(c.getCurrentHP()));
+                }
+                grid.getChildren().remove(errMsg);
+            }
+            else {
+                errMsg.setFill(Color.FIREBRICK);
+                grid.add(errMsg,3,addHPRow);
+            }
+
+        }
+    });
+
+    minusHP.setOnAction(new EventHandler<ActionEvent>() {
+        Text errMsg = new Text("Inputted Value was not an Integer!");
+        @Override
+        public void handle(ActionEvent e) {
+            boolean isInt = isInteger(pmHPTf.getText());
+            if (isInt) {
+                int loseHPVal = c.getCurrentHP() - Integer.parseInt(pmHPTf.getText());
+                if (loseHPVal > 0) {
+                    c.setCurrentHP(loseHPVal);
+                    currHealth.setText(Integer.toString(c.getCurrentHP()));
+                }
+                else {
+                    c.setCurrentHP(0);
+                    currHealth.setText(Integer.toString(c.getCurrentHP()));
+                }
+                grid.getChildren().remove(errMsg);
+            }
+            else {
+                errMsg.setFill(Color.FIREBRICK);
+                grid.add(errMsg,3,addHPRow);
+            }
+        }
+    });
+
+    row++;
+
+    Button setmaxhp = new Button("Refill HP");
+    grid.add(setmaxhp,1,row);
+    setmaxhp.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            c.setCurrentHP(c.getMaxHP());
+            currHealth.setText(Integer.toString(c.getCurrentHP()));
+        }
+    });
+    
+
 	stage.show();	
 	}
 
-    
+
     //Load a previously made character file
     public static String LoadCharacterFile(Stage primaryStage) {
         FileChooser fc = new FileChooser();
@@ -367,13 +568,13 @@ public class CharacterMgr extends Application {
     }
 
     public static boolean isInteger(String s) {
-	try {
-	    Integer.parseInt(s);
-	    return true;
-	}
-	catch (NumberFormatException ex) {
-	    return false;
-	}
+        try {
+            Integer.parseInt(s);
+            return true;
+        }
+        catch (NumberFormatException ex) {
+            return false;
+        }
     }
     
 }

@@ -3,7 +3,7 @@
 
     Character class for a Dungeons and dragons game
 
-    v0.1: Basic stuff. character stats 
+    v1.0: Basic stuff. character stats 
 */
 
 package dnd;
@@ -44,11 +44,31 @@ public class Character {
     private int charisma;
 
     private int gold;
+
+    private int deathRoll;
+    private int saveRoll;
     
 
-    //HashSets
+    //Spells
     private HashSet<String> cantrips;
-    private HashSet<String> spells;
+    private HashSet<String> spells1;
+    private int spellSlots1;
+    private HashSet<String> spells2;
+    private int spellSlots2;
+    private HashSet<String> spells3;
+    private int spellSlots3;
+    private HashSet<String> spells4;
+    private int spellSlots4;
+    private HashSet<String> spells5;
+    private int spellSlots5;
+    private HashSet<String> spells6;
+    private int spellSlots6;
+    private HashSet<String> spells7;
+    private int spellSlots7;
+    private HashSet<String> spells8;
+    private int spellSlots8;
+
+
     private HashSet<String> skills;
 
     private HashSet<String> features;
@@ -61,8 +81,13 @@ public class Character {
     
     public Character(String name, String clss, String race, String subrace, char gender,
 		     String weapon, HashSet<String> cantrips, HashSet<String> spells, HashSet<String> skills,
-		     int maxHealth, int maxMP, int armor, int initiative, int speed, int hitdice,
+		     int maxHealth, int armor, int initiative, int speed, int hitdice,
 		     int str, int cons, int dex, int intel, int wis, int charis, int level, int exp,
+             HashSet<String> spells1,HashSet<String> spells2,HashSet<String> spells3,HashSet<String> spells4,
+             HashSet<String> spells5,HashSet<String> spells6,HashSet<String> spells7,HashSet<String> spells8,
+             int spellSlots1,int spellSlots2,int spellSlots3,int spellSlots4,
+             int spellSlots5,int spellSlots6,int spellSlots7,int spellSlots8,
+             int dRoll, int sRoll,
 		     ArrayList<String> inventory, HashSet<String> features, int gold) {
 	
 	setName(name);
@@ -72,10 +97,8 @@ public class Character {
 	setGender(gender);
 	setWeapon(weapon);
 	setCantrips(cantrips);
-	setSpells(spells);
 	setSkills(skills);
 	setMaxHP(maxHealth);
-	setMaxMP(maxMP);
 	setArmor(armor);
 	setInitiative(initiative);
 	setSpeed(speed);
@@ -88,6 +111,27 @@ public class Character {
 	setInventory(inventory);
 	setCurrentHP(maxHealth);
 	setHitDice(hitdice);
+
+    setSpells1(spells1);
+    setSpells2(spells2);
+    setSpells3(spells3);
+    setSpells4(spells4);
+    setSpells5(spells5);
+    setSpells6(spells6);
+    setSpells7(spells7);
+    setSpells8(spells8);
+
+    setSpellSlots1(spellSlots1);
+    setSpellSlots2(spellSlots2);
+    setSpellSlots3(spellSlots3);
+    setSpellSlots4(spellSlots4);
+    setSpellSlots5(spellSlots5);
+    setSpellSlots6(spellSlots6);
+    setSpellSlots7(spellSlots7);
+    setSpellSlots8(spellSlots8);
+
+    setSaveRoll(sRoll);
+    setDeathRoll(dRoll);
 
 	setLevel(level);
 	setExp(exp);
@@ -126,13 +170,33 @@ public class Character {
 	setSkills(new HashSet<String>());
 
 	setCantrips(new HashSet<String>());
-	setSpells(new HashSet<String>());
 	setFeatures(new HashSet<String>());
 
 	setInventory(new ArrayList<String>());
 
+	setSpells1(new HashSet<String>());
+	setSpells2(new HashSet<String>());
+	setSpells3(new HashSet<String>());
+	setSpells4(new HashSet<String>());
+	setSpells5(new HashSet<String>());
+	setSpells6(new HashSet<String>());
+	setSpells7(new HashSet<String>());
+	setSpells8(new HashSet<String>());
+
+    setSpellSlots1(0);
+    setSpellSlots2(0);
+    setSpellSlots3(0);
+    setSpellSlots4(0);
+    setSpellSlots5(0);
+    setSpellSlots6(0);
+    setSpellSlots7(0);
+    setSpellSlots8(0);
+
 	setLevel(1);
 	setExp(0);
+    
+    setSaveRoll(0);
+    setDeathRoll(0);
 	
 	setCurrentHP(0);
 	
@@ -167,15 +231,35 @@ public Character() {
 	setSkills(new HashSet<String>());
 
 	setCantrips(new HashSet<String>());
-	setSpells(new HashSet<String>());
 	setFeatures(new HashSet<String>());
 
 	setInventory(new ArrayList<String>());
 
+	setSpells1(new HashSet<String>());
+	setSpells2(new HashSet<String>());
+	setSpells3(new HashSet<String>());
+	setSpells4(new HashSet<String>());
+	setSpells5(new HashSet<String>());
+	setSpells6(new HashSet<String>());
+	setSpells7(new HashSet<String>());
+	setSpells8(new HashSet<String>());
+
+    setSpellSlots1(0);
+    setSpellSlots2(0);
+    setSpellSlots3(0);
+    setSpellSlots4(0);
+    setSpellSlots5(0);
+    setSpellSlots6(0);
+    setSpellSlots7(0);
+    setSpellSlots8(0);
+
 	setLevel(1);
 	setExp(0);
+
+    setSaveRoll(0);
+    setDeathRoll(0);
 	
-	setCurrentHP(0);
+    setCurrentHP(0);
 	
     }
 
@@ -211,10 +295,30 @@ public Character() {
 	setSkills(new HashSet<String>());
 	
 	setCantrips(new HashSet<String>());
-	setSpells(new HashSet<String>());
 	setFeatures(new HashSet<String>());
 
-	setInventory(new ArrayList<String>());
+	setSpells1(new HashSet<String>());
+	setSpells2(new HashSet<String>());
+	setSpells3(new HashSet<String>());
+	setSpells4(new HashSet<String>());
+	setSpells5(new HashSet<String>());
+	setSpells6(new HashSet<String>());
+	setSpells7(new HashSet<String>());
+	setSpells8(new HashSet<String>());
+
+    setSpellSlots1(0);
+    setSpellSlots2(0);
+    setSpellSlots3(0);
+    setSpellSlots4(0);
+    setSpellSlots5(0);
+    setSpellSlots6(0);
+    setSpellSlots7(0);
+    setSpellSlots8(0);
+
+    setSaveRoll(0);
+    setDeathRoll(0);
+
+    setInventory(new ArrayList<String>());
 
 	setCurrentHP(0);
     }
@@ -229,7 +333,6 @@ public Character() {
 	setWeapon(c.getWeapon());
 	setArmor(c.getArmor());
 	setCantrips(c.getCantrips());
-	setSpells(c.getSpells());
 	setSkills(c.getSkills());
 	setMaxHP(c.getMaxHP());
 	setMaxMP(c.getMaxMP());
@@ -245,6 +348,28 @@ public Character() {
 	setLevel(c.getLevel());
 	setExp(c.getExp());
 	setInventory(c.getInventory());
+
+    setSpells1(c.getSpells1());
+    setSpells2(c.getSpells2());
+    setSpells3(c.getSpells3());
+    setSpells4(c.getSpells4());
+    setSpells5(c.getSpells5());
+    setSpells6(c.getSpells6());
+    setSpells7(c.getSpells7());
+    setSpells8(c.getSpells8());
+
+    setSpellSlots1(c.getSpellSlots1());
+    setSpellSlots2(c.getSpellSlots2());
+    setSpellSlots3(c.getSpellSlots3());
+    setSpellSlots4(c.getSpellSlots4());
+    setSpellSlots5(c.getSpellSlots5());
+    setSpellSlots6(c.getSpellSlots6());
+    setSpellSlots7(c.getSpellSlots7());
+    setSpellSlots8(c.getSpellSlots8());
+
+    setSaveRoll(c.getSaveRoll());
+    setDeathRoll(c.getDeathRoll());
+
 	setCurrentHP(c.getCurrentHP());
 	setGold(c.getGold());
 	setFeatures(c.getFeatures());
@@ -270,11 +395,31 @@ public Character() {
 	setGender('m');
 	
 	setCantrips(new HashSet<String>());
-	setSpells(new HashSet<String>());
 	setSkills(new HashSet<String>());
 	setFeatures(new HashSet<String>());
-	
+
+    setSpells1(new HashSet<String>());
+	setSpells2(new HashSet<String>());
+	setSpells3(new HashSet<String>());
+	setSpells4(new HashSet<String>());
+	setSpells5(new HashSet<String>());
+	setSpells6(new HashSet<String>());
+	setSpells7(new HashSet<String>());
+	setSpells8(new HashSet<String>());
+
+    setSpellSlots1(0);
+    setSpellSlots2(0);
+    setSpellSlots3(0);
+    setSpellSlots4(0);
+    setSpellSlots5(0);
+    setSpellSlots6(0);
+    setSpellSlots7(0);
+    setSpellSlots8(0);
+
 	setWeapon("");
+
+    setSaveRoll(0);
+    setDeathRoll(0);
 
 	setLevel(1);
 	setExp(0);
@@ -411,6 +556,20 @@ public Character() {
 	return hitdice;
     }
 
+    public void setSaveRoll(int s) {
+        this.saveRoll = s;
+    }
+    public int getSaveRoll() {
+        return saveRoll;
+    }
+
+    public void setDeathRoll(int d) {
+        this.deathRoll = d;
+    }
+    public int getDeathRoll() {
+        return deathRoll;
+    }
+
     public void setStr(int s) {
 	this.strength = s;
     }
@@ -447,49 +606,170 @@ public Character() {
     }
 
     public void setChar(int c) {
-	this.charisma = c;
+        this.charisma = c;
     }
     public int getChar() {
-	return charisma;
+        return charisma;
     }
 
     public void setCantrips(HashSet<String> c) {
-	this.cantrips = c;
+        this.cantrips = c;
     }
     public HashSet<String> getCantrips() {
-	return cantrips;
+        return cantrips;
     }
 
-    public void setSpells(HashSet<String> s) {
-	this.spells = s;
+    public void setSpells1(HashSet<String> s) {
+        this.spells1 = s;
     }
-    public HashSet<String> getSpells() {
-	return spells;
+
+    public HashSet<String> getSpells1() {
+        return spells1;
+    }
+
+    public void setSpells2(HashSet<String> s) {
+        this.spells2 = s;
+    }
+
+    public HashSet<String> getSpells2() {
+        return spells2;
+    }
+
+    public void setSpells3(HashSet<String> s) {
+        this.spells3 = s;
+    }
+
+    public HashSet<String> getSpells3() {
+        return spells3;
+    }
+
+    public void setSpells4(HashSet<String> s) {
+        this.spells4 = s;
+    }
+
+    public HashSet<String> getSpells4() {
+        return spells4;
+    }
+
+    public void setSpells5(HashSet<String> s) {
+        this.spells5 = s;
+    }
+
+    public HashSet<String> getSpells5() {
+        return spells5;
+    }
+
+    public void setSpells6(HashSet<String> s) {
+        this.spells6 = s;
+    }
+
+    public HashSet<String> getSpells6() {
+        return spells6;
+    }
+
+    public void setSpells7(HashSet<String> s) {
+        this.spells7 = s;
+    }
+
+    public HashSet<String> getSpells7() {
+        return spells7;
+    }
+
+    public void setSpells8(HashSet<String> s) {
+        this.spells8 = s;
+    }
+
+    public HashSet<String> getSpells8() {
+        return spells8;
+    }
+
+    public void setSpellSlots1(int s) {
+        this.spellSlots1 = s;
+    }
+
+    public int getSpellSlots1() {
+        return spellSlots1;
+    }
+
+    public void setSpellSlots2(int s) {
+        this.spellSlots2 = s;
+    }
+
+    public int getSpellSlots2() {
+        return spellSlots2;
+    }
+
+    public void setSpellSlots3(int s) {
+        this.spellSlots3 = s;
+    }
+
+    public int getSpellSlots3() {
+        return spellSlots3;
+    }
+
+    public void setSpellSlots4(int s) {
+        this.spellSlots4 = s;
+    }
+
+    public int getSpellSlots4() {
+        return spellSlots4;
+    }
+
+    public void setSpellSlots5(int s) {
+        this.spellSlots5 = s;
+    }
+
+    public int getSpellSlots5() {
+        return spellSlots5;
+    }
+
+    public void setSpellSlots6(int s) {
+        this.spellSlots6 = s;
+    }
+
+    public int getSpellSlots6() {
+        return spellSlots6;
+    }
+
+    public void setSpellSlots7(int s) {
+        this.spellSlots7 = s;
+    }
+
+    public int getSpellSlots7() {
+        return spellSlots7;
+    }
+
+    public void setSpellSlots8(int s) {
+        this.spellSlots8 = s;
+    }
+
+    public int getSpellSlots8() {
+        return spellSlots8;
     }
 
     public void setSkills(HashSet<String> s) {
-	this.skills = s;
+        this.skills = s;
     }
     public HashSet<String> getSkills() {
-	return skills;
+        return skills;
     }
 
     public void setFeatures(HashSet<String> f) {
-	this.features = f;
+        this.features = f;
     }
     public HashSet<String> getFeatures() {
-	return features;
+        return features;
     }
     
     public void setInventory(ArrayList<String> i) {
-	this.inventory = i;
+        this.inventory = i;
     }
     public ArrayList<String> getInventory() {
-	return inventory;
+        return inventory;
     }
     
     public void clearInventory() {
-	this.inventory = new ArrayList<String>();
+        this.inventory = new ArrayList<String>();
     }
 
     ///////////////////////////////
@@ -553,28 +833,29 @@ public Character() {
 
     public static Character LoadCharacter(String CNamePath) {
 
-	Gson gson = new Gson();
+        Gson gson = new Gson();
 
-	Character character = new Character();
-	File f = new File(CNamePath);
-	String fileName = f.getName();
-	String name = fileName.substring(0,fileName.lastIndexOf("."));
+        Character character = new Character();
+        File f = new File(CNamePath);
+        String fileName = f.getName();
+        String name = fileName.substring(0,fileName.lastIndexOf("."));
 
-	try (Reader reader = new FileReader(CNamePath)) {
+        try (Reader reader = new FileReader(CNamePath)) {
 	    
-	    character = gson.fromJson(reader, Character.class);	   
-	    character.setName(name);
-	    
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
+            character = gson.fromJson(reader, Character.class);	   
+            character.setName(name);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 	
-	return character;
+        return character;
     }
-    
+
     ///////////////////////////////////////
     ///////////////////////////////////////
-    
+
+    /* 
     public String printCharacter() {
 	return "Character: " + name + "level " + level + " [Class=" + clss + ", race=" + race + ", subrace=" + subrace + ", gender=" + gender +
 	    ", weapon=" + weapon + ", maxHP=" + maxHP + ", currentHP=" + currentHP + ", maxMP=" + maxMP +
@@ -584,5 +865,5 @@ public Character() {
 	    ", charisma=" + charisma + ", cantrips =" + cantrips + ", spells=" + spells +
 	    ", inventory=" + Arrays.toString(inventory.toArray()) + ", Gold=" + gold + "]";
     }
-
+    */
 }
