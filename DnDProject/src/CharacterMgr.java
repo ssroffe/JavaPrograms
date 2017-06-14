@@ -541,6 +541,64 @@ public class CharacterMgr extends Application {
         }
     });
     
+    //////////////////////////////////////////
+    //////////////////////////////////////////
+    //////////////////////////////////////////
+    
+    // Give some space before stats
+    row++;
+    row++;
+    row++;
+
+    //////////////// Stats ///////////////////
+    Label str = new Label("Str:");
+    Label con = new Label("Cons:");
+    Label dex = new Label("Dex:");
+    Label intel = new Label("Int:");
+    Label wis = new Label("Wis:");
+    Label cha = new Label("Char:");
+
+    TextField strTf = new TextField();
+    strTf.setText(Integer.toString(c.getStr()));
+    strTf.setEditable(false);
+    strTf.setPrefWidth(40);
+
+    TextField conTf = new TextField();
+    conTf.setText(Integer.toString(c.getCons()));
+    conTf.setEditable(false);
+    conTf.setPrefWidth(40);
+
+    TextField dexTf = new TextField();
+    dexTf.setText(Integer.toString(c.getDex()));
+    dexTf.setEditable(false);
+    dexTf.setPrefWidth(40);
+
+    TextField intelTf = new TextField();
+    intelTf.setText(Integer.toString(c.getInt()));
+    intelTf.setEditable(false);
+    intelTf.setPrefWidth(40);
+
+    TextField wisTf = new TextField();
+    wisTf.setText(Integer.toString(c.getWis()));
+    wisTf.setEditable(false);
+    wisTf.setPrefWidth(40);
+
+    TextField chaTf = new TextField();
+    chaTf.setText(Integer.toString(c.getChar()));
+    chaTf.setEditable(false);
+    chaTf.setPrefWidth(40);
+
+    HBox stathb1 = new HBox(10);
+    HBox stathb2 = new HBox(10);
+    stathb1.getChildren().addAll(str,strTf,con,conTf,dex,dexTf);
+    stathb2.getChildren().addAll(intel,intelTf,wis,wisTf,cha,chaTf);
+
+    VBox statvb = new VBox(10);
+    statvb.setAlignment(Pos.CENTER);
+    statvb.getChildren().addAll(stathb1,stathb2);
+
+    grid.add(statvb,1,row);
+
 
 	stage.show();	
 	}
