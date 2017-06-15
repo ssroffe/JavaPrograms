@@ -194,7 +194,7 @@ public class CharacterMgr extends Application {
         int row = 1;
         Text characterName = new Text(c.getName());
         characterName.setId("characterName");
-        grid.add(characterName,0,0,2,1);
+        grid.add(characterName,1,0,2,1);
 
         //////////// Level ////////////////
 
@@ -429,16 +429,17 @@ public class CharacterMgr extends Application {
 	ToggleButton maxHealthbtn = new ToggleButton("edit");
 	maxHealthbtn.setOnAction(new EventHandler<ActionEvent>() {
 		//for checking valid new max HP
-		int previousMaxHP = Integer.parseInt(maxHealthTf.getText());
+		int previousMaxHP = c.getMaxHP();
 		Text errMaxHP = new Text("New Max HP was not an integer!");
 		@Override
 		public void handle(ActionEvent e) {
 		    if (maxHealthbtn.isSelected()) {
-                previousMaxHP = Integer.parseInt(maxHealthTf.getText());
+                previousMaxHP = c.getMaxHP();
                 maxHealthTf.setEditable(true);
                 maxHealthTf.setId("unlocked-tf");
 		    }
 		    else {
+                previousMaxHP = c.getMaxHP();
 				maxHealthTf.setEditable(false);
 				maxHealthTf.setId("locked-tf");
 				boolean isInt = isInteger(maxHealthTf.getText());
@@ -448,6 +449,7 @@ public class CharacterMgr extends Application {
 				}
 				else {
 					errMaxHP.setFill(Color.FIREBRICK);
+					grid.getChildren().remove(errMaxHP);
 					grid.add(errMaxHP,3,maxHealthRow);
 					maxHealthTf.setText(Integer.toString(previousMaxHP));
 				}
@@ -593,12 +595,125 @@ public class CharacterMgr extends Application {
     stathb1.getChildren().addAll(str,strTf,con,conTf,dex,dexTf);
     stathb2.getChildren().addAll(intel,intelTf,wis,wisTf,cha,chaTf);
 
+
+
     VBox statvb = new VBox(10);
     statvb.setAlignment(Pos.CENTER);
     statvb.getChildren().addAll(stathb1,stathb2);
 
     grid.add(statvb,1,row);
 
+    row++;
+
+    int statsRow = row;
+
+    ToggleButton statbtn = new ToggleButton("Edit Stats");
+    grid.add(statbtn,1,row);
+    statbtn.setOnAction(new EventHandler<ActionEvent>() {
+        int previousStr = c.getStr();
+        int previousCon = c.getCons();
+        int previousDex = c.getDex();
+        int previousInt = c.getInt();
+        int previousWis = c.getWis();
+        int previousCha = c.getChar();
+        Text errMsg = new Text("One of the Stats was not an integer!");
+        @Override
+        public void handle(ActionEvent e) {
+           if (statbtn.isSelected()) {
+                previousStr = c.getStr();
+                previousCon = c.getCons();
+                previousDex = c.getDex();
+                previousInt = c.getInt();
+                previousWis = c.getWis();
+                previousCha = c.getChar();
+                strTf.setEditable(true);
+                conTf.setEditable(true);
+                dexTf.setEditable(true);
+                intelTf.setEditable(true);
+                wisTf.setEditable(true);
+                chaTf.setEditable(true);
+                strTf.setId("unlocked-tf");
+                conTf.setId("unlocked-tf");
+                dexTf.setId("unlocked-tf");
+                intelTf.setId("unlocked-tf");
+                wisTf.setId("unlocked-tf");
+                chaTf.setId("unlocked-tf");
+            }
+            else {
+                strTf.setEditable(false);
+                conTf.setEditable(false);
+                dexTf.setEditable(false);
+                intelTf.setEditable(false);
+                wisTf.setEditable(false);
+                chaTf.setEditable(false);
+                strTf.setId("locked-tf");
+                conTf.setId("locked-tf");
+                dexTf.setId("locked-tf");
+                intelTf.setId("locked-tf");
+                wisTf.setId("locked-tf");
+                chaTf.setId("locked-tf");
+                boolean strIsInt = isInteger(strTf.getText());
+                boolean conIsInt = isInteger(conTf.getText());
+                boolean dexIsInt = isInteger(dexTf.getText());
+                boolean intelIsInt = isInteger(intelTf.getText());
+                boolean wisIsInt = isInteger(wisTf.getText());
+                boolean chaIsInt = isInteger(chaTf.getText());
+                if (strIsInt && conIsInt && dexIsInt && intelIsInt && wisIsInt && chaIsInt) {
+                    c.setStr(Integer.parseInt(strTf.getText()));
+                    c.setCons(Integer.parseInt(conTf.getText()));
+                    c.setDex(Integer.parseInt(dexTf.getText()));
+                    c.setInt(Integer.parseInt(intelTf.getText()));
+                    c.setWis(Integer.parseInt(wisTf.getText()));
+                    c.setChar(Integer.parseInt(chaTf.getText()));
+                    grid.getChildren().remove(errMsg);
+                }
+                else {
+                    errMsg.setFill(Color.FIREBRICK);
+                    grid.getChildren().remove(errMsg);
+                    grid.add(errMsg,3,statsRow);
+                    strTf.setText(Integer.toString(previousStr));
+                    conTf.setText(Integer.toString(previousCon));
+                    dexTf.setText(Integer.toString(previousDex));
+                    intelTf.setText(Integer.toString(previousInt));
+                    wisTf.setText(Integer.toString(previousWis));
+                    chaTf.setText(Integer.toString(previousCon));
+                }
+            }
+        }
+    });
+    
+    row++;
+    row++;
+
+    ///////////////////////////////////////////
+    ///////////////////////////////////////////
+
+    Button 
+
+
+
+    ///////////// Save Button /////////////////
+    Button save = new Button("Save Character");
+    HBox hbsave = new HBox(10);
+    hbsave.getChildren().add(save);
+    hbsave.setAlignment(Pos.BOTTOM_RIGHT);
+
+    grid.add(hbsave,1,row);
+    int saveRow = row;
+
+    save.setOnAction(new EventHandler<ActionEvent>() {
+        Text notice = new Text("Character was saved to "+c.getName()+".json");
+        @Override
+        public void handle(ActionEvent e) {
+            Character.SaveCharacter(c);
+            notice.setFill(Color.FIREBRICK);
+            grid.getChildren().remove(notice);
+            grid.add(notice,2,saveRow);
+        }
+    });
+
+
+   
 
 	stage.show();	
 	}
