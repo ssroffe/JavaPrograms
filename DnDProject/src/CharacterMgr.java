@@ -188,7 +188,7 @@ public class CharacterMgr extends Application {
 
         Scene scene = new Scene(grid, 600, 800);
         
-        //scene.getStylesheets().add(this.getClass().getResource("CharacterSheet.css").toExternalForm());
+        scene.getStylesheets().add(this.getClass().getResource("CharacterSheet.css").toExternalForm());
 
         stage.setScene(scene);
         int row = 1;
@@ -225,11 +225,56 @@ public class CharacterMgr extends Application {
         });       
 
         row++;
+        
+        ////////////// Exp ////////////////
+        Label expLabel = new Label("Exp:");
+        grid.add(expLabel,0,row);
+        TextField expTf = new TextField();
+        expTf.setId("locked-tf");
+        expTf.setText(Integer.toString(c.getExp()));
+        expTf.setEditable(false);
+        grid.add(expTf,1,row);
+        final int expRow = row;
+
+        ToggleButton expbtn = new ToggleButton("edit");
+        expbtn.setOnAction(new EventHandler<ActionEvent>() {
+            //for checking valid new max HP
+            int previousExp = c.getExp();
+            Text errMsg = new Text("New Exp was not an integer!");
+            @Override
+            public void handle(ActionEvent e) {
+                if (expbtn.isSelected()) {
+                    previousExp = c.getExp();
+                    expTf.setEditable(true);
+                    expTf.setId("unlocked-tf");
+                }
+                else {
+                    previousExp = c.getExp();
+                    expTf.setEditable(false);
+                    expTf.setId("locked-tf");
+                    boolean isInt = isInteger(expTf.getText());
+                    if (isInt) {
+                        c.setExp(Integer.parseInt(expTf.getText()));
+                        grid.getChildren().remove(errMsg);
+                    }
+                    else {
+                        errMsg.setFill(Color.FIREBRICK);
+                        grid.getChildren().remove(errMsg);
+                        grid.add(errMsg,3,expRow);
+                        expTf.setText(Integer.toString(previousExp));
+                    }
+                }
+            }
+        });
+        grid.add(expbtn,2,row);
+
+        row++;
 
         //////////// Class ////////////////
         Label clssLabel = new Label("Class:");
         grid.add(clssLabel,0,row);
         TextField clssTf = new TextField();
+        clssTf.setId("locked-tf");
         clssTf.setText(c.getClss());
         clssTf.setEditable(false);
         grid.add(clssTf,1,row);
@@ -267,6 +312,7 @@ public class CharacterMgr extends Application {
         Label raceLabel = new Label("Race:");
         grid.add(raceLabel,0,row);
         TextField raceTf = new TextField();
+        raceTf.setId("locked-tf");
         raceTf.setText(c.getRace());
         raceTf.setEditable(false);
         grid.add(raceTf,1,row);
@@ -293,6 +339,7 @@ public class CharacterMgr extends Application {
         Label subRaceLabel = new Label("SubRace:");
         grid.add(subRaceLabel,0,row);
         TextField subRaceTf = new TextField();
+        subRaceTf.setId("locked-tf");
         subRaceTf.setText(c.getSubrace());
         subRaceTf.setEditable(false);
         grid.add(subRaceTf,1,row);
@@ -313,6 +360,34 @@ public class CharacterMgr extends Application {
             }
         });
         grid.add(subRacebtn,2,row);
+
+        row++;
+
+        ///////////// Background //////////////
+        Label backgroundLabel = new Label("Background:");
+        grid.add(backgroundLabel,0,row);
+        TextField backgroundTf = new TextField();
+        backgroundTf.setId("locked-tf");
+        backgroundTf.setText(c.getBackground());
+        backgroundTf.setEditable(false);
+        grid.add(backgroundTf,1,row);
+
+        ToggleButton backgroundbtn = new ToggleButton("edit");
+        backgroundbtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                if (backgroundbtn.isSelected()) {
+                    backgroundTf.setEditable(true);
+                    backgroundTf.setId("unlocked-tf");
+                }
+                else {
+                    backgroundTf.setEditable(false);
+                    backgroundTf.setId("locked-tf");
+                    c.setBackground(backgroundTf.getText());
+                }
+            }
+        });
+        grid.add(backgroundbtn,2,row);
 	row++;
 
     stage.show();
@@ -321,6 +396,7 @@ public class CharacterMgr extends Application {
     Label weaponLabel = new Label("Weapon:");
     grid.add(weaponLabel,0,row);
     TextField weaponTf = new TextField();
+    weaponTf.setId("locked-tf");
     weaponTf.setText(c.getWeapon());
     weaponTf.setEditable(false);
     grid.add(weaponTf,1,row);
@@ -421,6 +497,7 @@ public class CharacterMgr extends Application {
 	Label maxHealthLabel = new Label("Max HP:");
 	grid.add(maxHealthLabel,0,row);
 	TextField maxHealthTf = new TextField();
+    maxHealthTf.setId("locked-tf");
 	maxHealthTf.setText(Integer.toString(c.getMaxHP()));
 	maxHealthTf.setEditable(false);
 	grid.add(maxHealthTf,1,row);
@@ -559,39 +636,75 @@ public class CharacterMgr extends Application {
     Label intel = new Label("Int:");
     Label wis = new Label("Wis:");
     Label cha = new Label("Char:");
+    Label armor = new Label("Armor:");
+    Label init = new Label("Initiative:");
+    Label speed = new Label("Speed:");
+    Label hitdice = new Label("Hit Dice:");
+
+    TextField armorTf = new TextField();
+    armorTf.setId("locked-tf");
+    armorTf.setText(Integer.toString(c.getArmor()));
+    armorTf.setEditable(false);
+    armorTf.setPrefWidth(40);
+
+    TextField initTf = new TextField();
+    initTf.setId("locked-tf");
+    initTf.setText(Integer.toString(c.getInitiative()));
+    initTf.setEditable(false);
+    initTf.setPrefWidth(40);
+
+    TextField speedTf = new TextField();
+    speedTf.setId("locked-tf");
+    speedTf.setText(Integer.toString(c.getSpeed()));
+    speedTf.setEditable(false);
+    speedTf.setPrefWidth(40);
+
+    TextField hdTf = new TextField();
+    hdTf.setId("locked-tf");
+    hdTf.setText(c.getHitDice());
+    hdTf.setEditable(false);
+    hdTf.setPrefWidth(60);
 
     TextField strTf = new TextField();
+    strTf.setId("locked-tf");
     strTf.setText(Integer.toString(c.getStr()));
     strTf.setEditable(false);
     strTf.setPrefWidth(40);
 
     TextField conTf = new TextField();
+    conTf.setId("locked-tf");
     conTf.setText(Integer.toString(c.getCons()));
     conTf.setEditable(false);
     conTf.setPrefWidth(40);
 
     TextField dexTf = new TextField();
+    dexTf.setId("locked-tf");
     dexTf.setText(Integer.toString(c.getDex()));
     dexTf.setEditable(false);
     dexTf.setPrefWidth(40);
 
     TextField intelTf = new TextField();
+    intelTf.setId("locked-tf");
     intelTf.setText(Integer.toString(c.getInt()));
     intelTf.setEditable(false);
     intelTf.setPrefWidth(40);
 
     TextField wisTf = new TextField();
+    wisTf.setId("locked-tf");
     wisTf.setText(Integer.toString(c.getWis()));
     wisTf.setEditable(false);
     wisTf.setPrefWidth(40);
 
     TextField chaTf = new TextField();
+    chaTf.setId("locked-tf");
     chaTf.setText(Integer.toString(c.getChar()));
     chaTf.setEditable(false);
     chaTf.setPrefWidth(40);
 
+    HBox stathb0 = new HBox(10);
     HBox stathb1 = new HBox(10);
     HBox stathb2 = new HBox(10);
+    stathb0.getChildren().addAll(armor,armorTf,init,initTf,speed,speedTf,hitdice,hdTf);
     stathb1.getChildren().addAll(str,strTf,con,conTf,dex,dexTf);
     stathb2.getChildren().addAll(intel,intelTf,wis,wisTf,cha,chaTf);
 
@@ -599,7 +712,7 @@ public class CharacterMgr extends Application {
 
     VBox statvb = new VBox(10);
     statvb.setAlignment(Pos.CENTER);
-    statvb.getChildren().addAll(stathb1,stathb2);
+    statvb.getChildren().addAll(stathb0,stathb1,stathb2);
 
     grid.add(statvb,1,row);
 
@@ -616,6 +729,10 @@ public class CharacterMgr extends Application {
         int previousInt = c.getInt();
         int previousWis = c.getWis();
         int previousCha = c.getChar();
+        int previousArmor = c.getArmor();
+        int previousInit = c.getInitiative();
+        int previousSpeed = c.getSpeed();
+        String previousHitDice = c.getHitDice();
         Text errMsg = new Text("One of the Stats was not an integer!");
         @Override
         public void handle(ActionEvent e) {
@@ -626,18 +743,30 @@ public class CharacterMgr extends Application {
                 previousInt = c.getInt();
                 previousWis = c.getWis();
                 previousCha = c.getChar();
+                previousArmor = c.getArmor();
+                previousInit = c.getInitiative();
+                previousSpeed = c.getSpeed();
+                previousHitDice = c.getHitDice();
                 strTf.setEditable(true);
                 conTf.setEditable(true);
                 dexTf.setEditable(true);
                 intelTf.setEditable(true);
                 wisTf.setEditable(true);
                 chaTf.setEditable(true);
+                armorTf.setEditable(true);
+                initTf.setEditable(true);
+                speedTf.setEditable(true);
+                hdTf.setEditable(true);
                 strTf.setId("unlocked-tf");
                 conTf.setId("unlocked-tf");
                 dexTf.setId("unlocked-tf");
                 intelTf.setId("unlocked-tf");
                 wisTf.setId("unlocked-tf");
                 chaTf.setId("unlocked-tf");
+                armorTf.setId("unlocked-tf");
+                initTf.setId("unlocked-tf");
+                speedTf.setId("unlocked-tf");
+                hdTf.setId("unlocked-tf");
             }
             else {
                 strTf.setEditable(false);
@@ -646,25 +775,40 @@ public class CharacterMgr extends Application {
                 intelTf.setEditable(false);
                 wisTf.setEditable(false);
                 chaTf.setEditable(false);
+                armorTf.setEditable(false);
+                initTf.setEditable(false);
+                speedTf.setEditable(false);
+                hdTf.setEditable(false);
                 strTf.setId("locked-tf");
                 conTf.setId("locked-tf");
                 dexTf.setId("locked-tf");
                 intelTf.setId("locked-tf");
                 wisTf.setId("locked-tf");
                 chaTf.setId("locked-tf");
+                armorTf.setId("locked-tf");
+                speedTf.setId("locked-tf");
+                initTf.setId("locked-tf");
+                hdTf.setId("locked-tf");
                 boolean strIsInt = isInteger(strTf.getText());
                 boolean conIsInt = isInteger(conTf.getText());
                 boolean dexIsInt = isInteger(dexTf.getText());
                 boolean intelIsInt = isInteger(intelTf.getText());
                 boolean wisIsInt = isInteger(wisTf.getText());
                 boolean chaIsInt = isInteger(chaTf.getText());
-                if (strIsInt && conIsInt && dexIsInt && intelIsInt && wisIsInt && chaIsInt) {
+                boolean armorIsInt = isInteger(armorTf.getText());
+                boolean speedIsInt = isInteger(speedTf.getText());
+                boolean initIsInt = isInteger(initTf.getText());
+                if (strIsInt && conIsInt && dexIsInt && intelIsInt && wisIsInt && chaIsInt && armorIsInt && speedIsInt && initIsInt) {
                     c.setStr(Integer.parseInt(strTf.getText()));
                     c.setCons(Integer.parseInt(conTf.getText()));
                     c.setDex(Integer.parseInt(dexTf.getText()));
                     c.setInt(Integer.parseInt(intelTf.getText()));
                     c.setWis(Integer.parseInt(wisTf.getText()));
                     c.setChar(Integer.parseInt(chaTf.getText()));
+                    c.setArmor(Integer.parseInt(armorTf.getText()));
+                    c.setInitiative(Integer.parseInt(initTf.getText()));
+                    c.setSpeed(Integer.parseInt(speedTf.getText()));
+                    c.setHitDice(hdTf.getText());
                     grid.getChildren().remove(errMsg);
                 }
                 else {
@@ -677,6 +821,10 @@ public class CharacterMgr extends Application {
                     intelTf.setText(Integer.toString(previousInt));
                     wisTf.setText(Integer.toString(previousWis));
                     chaTf.setText(Integer.toString(previousCon));
+                    armorTf.setText(Integer.toString(previousArmor));
+                    speedTf.setText(Integer.toString(previousSpeed));
+                    initTf.setText(Integer.toString(previousInit));
+                    hdTf.setText(previousHitDice);
                 }
             }
         }
@@ -688,12 +836,30 @@ public class CharacterMgr extends Application {
     ///////////////////////////////////////////
     ///////////////////////////////////////////
 
-    Button 
+    Button skillsBtn = new Button("Skills");
+    Button spellsBtn = new Button("Spells");
+    Button inventoryBtn = new Button("Inventory"); 
+    Button idealsBtn = new Button("Ideals");
+    Button descriptionBtn = new Button("Description");
+    Button featsBtn = new Button("Features");
 
+    HBox hbbtns1 = new HBox(10);
+    hbbtns1.setAlignment(Pos.CENTER);
+    hbbtns1.getChildren().addAll(skillsBtn,spellsBtn,inventoryBtn);
+    HBox hbbtns2 = new HBox(10);
+    hbbtns2.setAlignment(Pos.CENTER);
+    hbbtns2.getChildren().addAll(idealsBtn,descriptionBtn,featsBtn);
 
+    VBox vbbtns = new VBox(10);
+    vbbtns.setAlignment(Pos.CENTER);
+    vbbtns.getChildren().addAll(hbbtns1,hbbtns2);
+    grid.add(vbbtns,1,row);
+
+    row++;
 
     ///////////// Save Button /////////////////
     Button save = new Button("Save Character");
+    save.setId("saveBtn");
     HBox hbsave = new HBox(10);
     hbsave.getChildren().add(save);
     hbsave.setAlignment(Pos.BOTTOM_RIGHT);
@@ -713,6 +879,45 @@ public class CharacterMgr extends Application {
     });
 
 
+    ///////////////////////////////
+    ///////// SKILLS PAGE /////////
+    ///////////////////////////////
+
+    skillsBtn.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            Stage skillsStage = new Stage();
+            skillsStage.setTitle("Skills Page");
+
+            GridPane skgrid = new GridPane();
+
+            skgrid.setAlignment(Pos.CENTER);
+            skgrid.setHgap(10);
+            skgrid.setVgap(10);
+
+            Scene skscene = new Scene(skgrid);
+            //skscene.getStylesheets().add(this.getClass().getResource("SkillsPage.css").toExternalForm());
+
+            skillsStage.setScene(skscene);
+
+            Label skillsTitle = new Label("Skills");
+            skgrid.add(skillsTitle,0,0,2,1);
+            skillsTitle.setId("skillsTitle");
+
+            HashSet<String> skillsList = c.getSkills();
+            Iterator<String> itr = skillsList.iterator();
+            int skrow = 1;
+            while (itr.hasNext()) {
+                Label sklabel = new Label(itr.next());
+                skgrid.add(sklabel,0,skrow);
+
+                skrow++;
+            }
+            
+            skillsStage.show();
+
+        }
+    });
    
 
 	stage.show();	
