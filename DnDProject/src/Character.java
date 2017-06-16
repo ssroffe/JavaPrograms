@@ -71,11 +71,14 @@ public class Character {
 
 
     private HashSet<String> skills;
+    private HashSet<String> ideals;
     private HashSet<String> bonds;
+    private HashSet<String> flaws;
 
     private HashSet<String> features;
 
     private ArrayList<String> inventory;
+    private String description;
 
     //////////////////////////
     /////// INSTANCES ////////
@@ -89,7 +92,7 @@ public class Character {
              HashSet<String> spells5,HashSet<String> spells6,HashSet<String> spells7,HashSet<String> spells8,
              int spellSlots1,int spellSlots2,int spellSlots3,int spellSlots4,
              int spellSlots5,int spellSlots6,int spellSlots7,int spellSlots8,
-             int dRoll, int sRoll, HashSet<String> bonds, String background,
+		     int dRoll, int sRoll, HashSet<String> bonds, String background,
 		     ArrayList<String> inventory, HashSet<String> features, int gold) {
 	
 	setName(name);
@@ -178,6 +181,9 @@ public class Character {
 	setCantrips(new HashSet<String>());
 	setFeatures(new HashSet<String>());
 	setBonds(new HashSet<String>());
+	setFlaws(new HashSet<String>());
+	setIdeals(new HashSet<String>());
+	setDescription("");
 
 	setInventory(new ArrayList<String>());
 
@@ -241,6 +247,9 @@ public Character() {
 	setCantrips(new HashSet<String>());
 	setBonds(new HashSet<String>());
 	setFeatures(new HashSet<String>());
+	setFlaws(new HashSet<String>());
+	setIdeals(new HashSet<String>());
+	setDescription("");
 
 	setInventory(new ArrayList<String>());
 
@@ -307,6 +316,9 @@ public Character() {
 	setCantrips(new HashSet<String>());
 	setBonds(new HashSet<String>());
 	setFeatures(new HashSet<String>());
+	setFlaws(new HashSet<String>());
+	setIdeals(new HashSet<String>());
+	setDescription("");
 
 	setSpells1(new HashSet<String>());
 	setSpells2(new HashSet<String>());
@@ -383,6 +395,9 @@ public Character() {
         setDeathRoll(c.getDeathRoll());
 
         setBonds(c.getBonds());
+	setFlaws(c.getFlaws());
+	setIdeals(c.getIdeals());
+	setDescription(c.getDescription());
         setCurrentHP(c.getCurrentHP());
         setGold(c.getGold());
         setFeatures(c.getFeatures());
@@ -654,6 +669,27 @@ public Character() {
     }
     public HashSet<String> getBonds() {
         return bonds;
+    }
+
+    public void setFlaws(HashSet<String> f) {
+	this.flaws = f;
+    }
+    public HashSet<String> getFlaws() {
+	return flaws;
+    }
+
+    public void setIdeals(HashSet<String> i) {
+	this.ideals = i;
+    }
+    public HashSet<String> getIdeals() {
+	return ideals;
+    }
+
+    public void setDescription(String d) {
+	this.description = d;
+    }
+    public String getDescription() {
+	return description;
     }
 
     public void setSpells2(HashSet<String> s) {

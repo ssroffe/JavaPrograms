@@ -889,36 +889,309 @@ public class CharacterMgr extends Application {
             Stage skillsStage = new Stage();
             skillsStage.setTitle("Skills Page");
 
-            GridPane skgrid = new GridPane();
 
-            skgrid.setAlignment(Pos.CENTER);
-            skgrid.setHgap(10);
-            skgrid.setVgap(10);
-
-            Scene skscene = new Scene(skgrid);
-            //skscene.getStylesheets().add(this.getClass().getResource("SkillsPage.css").toExternalForm());
-
-            skillsStage.setScene(skscene);
 
             Label skillsTitle = new Label("Skills");
-            skgrid.add(skillsTitle,0,0,2,1);
             skillsTitle.setId("skillsTitle");
+            VBox vbSkills = new VBox(10);
 
             HashSet<String> skillsList = c.getSkills();
             Iterator<String> itr = skillsList.iterator();
             int skrow = 1;
             while (itr.hasNext()) {
-                Label sklabel = new Label(itr.next());
-                skgrid.add(sklabel,0,skrow);
+                String nxtItem = itr.next();
+                Label skillslabel = new Label(nxtItem);
+                HBox hbSkillsList = new HBox(10);
+
+                Button rm = new Button("remove");
+                hbSkillsList.getChildren().addAll(skillslabel,rm);
+
+                vbSkills.getChildren().add(hbSkillsList);
+
+                ////// Remove button ///////
+                rm.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent e) {
+                        Stage confirmRm = new Stage();
+                        confirmRm.setTitle("Are you sure?");
+                        GridPane rmgrid = new GridPane();
+                        rmgrid.setAlignment(Pos.CENTER);
+                        rmgrid.setHgap(10);
+                        rmgrid.setVgap(10);
+                        Scene rmscene = new Scene(rmgrid);
+                        confirmRm.setScene(rmscene);
+                        confirmRm.show();
+
+                        Label rmLabel = new Label("remove " + nxtItem + ". Are you sure?");
+                        rmgrid.add(rmLabel,0,0);
+                        Button yesRm = new Button("Yes");
+                        Button noRm = new Button("Cancel");
+                        HBox hbynrm = new HBox(10);
+                        hbynrm.getChildren().addAll(yesRm,noRm);
+                        rmgrid.add(hbynrm,0,1);
+
+                        yesRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                vbSkills.getChildren().remove(hbSkillsList);
+                                skillsList.remove(skillslabel.getText());
+                                c.setSkills(skillsList);
+                                confirmRm.close();
+                            }
+                        });
+                        noRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                confirmRm.close();
+                            }
+                        });
+                    }
+                });
+
+
 
                 skrow++;
             }
             
+            Button addSkills = new Button("Add Skill");
+            Button doneSkills = new Button("Done");
+            HBox hbskills = new HBox(10);
+            hbskills.getChildren().addAll(addSkills,doneSkills);
+            BorderPane bpSkills = new BorderPane();
+            bpSkills.setPadding(new Insets(20));
+            bpSkills.setMargin(skillsTitle,new Insets(12,12,12,12));
+            bpSkills.setMargin(vbSkills,new Insets(10,10,10,10));
+            bpSkills.setTop(skillsTitle);
+            bpSkills.setCenter(vbSkills);
+            bpSkills.setBottom(hbskills);
+
+
+            Scene skillsscene = new Scene(bpSkills);
+            skillsscene.getStylesheets().add(this.getClass().getResource("SkillsPage.css").toExternalForm());
+
+            skillsStage.setScene(skillsscene);
+
+            //////// Add Skills //////////
+            addSkills.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    Stage addSkillsStage = new Stage();
+                    addSkillsStage.setTitle("Add Skill");
+                    GridPane addgrid = new GridPane();
+                    addgrid.setAlignment(Pos.CENTER);
+                    addgrid.setHgap(10);
+                    addgrid.setVgap(10);
+                    Scene addscene = new Scene(addgrid);
+                    addSkillsStage.setScene(addscene);
+                    
+                    addSkillsStage.show();
+
+                    Label addLabel = new Label("Add a skill?");
+                    addgrid.add(addLabel,0,0);
+                    TextField addTf = new TextField();
+                    addTf.setPromptText("Input Skill Name");
+                    addgrid.add(addTf,0,1);
+
+                    Button addOk = new Button("Add");
+                    Button noOk = new Button("Cancel");
+                    HBox hbadd= new HBox(10);
+                    hbadd.getChildren().addAll(addOk,noOk);
+                    addgrid.add(hbadd,0,2);
+                    
+                    addOk.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent e) {
+                            skillsList.add(addTf.getText());
+                            c.setSkills(skillsList);
+                            addSkillsStage.close();
+                            Label newSkills = new Label(addTf.getText());
+                            vbSkills.getChildren().add(newSkills);
+                            addSkillsStage.close();
+                        }
+                    });
+                    noOk.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent e) {
+                            addSkillsStage.close();
+                        }
+                    });
+                        
+
+
+                }
+            });
+
+            doneSkills.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    c.setSkills(skillsList);
+                    skillsStage.close();
+                }
+            });
+
             skillsStage.show();
 
         }
     });
    
+
+    //////////////////////////////////////
+    ////////// Inventory Page ////////////
+    //////////////////////////////////////
+
+    inventoryBtn.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            Stage inventoryStage = new Stage();
+            inventoryStage.setTitle("Inventory Page");
+
+
+
+            Label inventoryTitle = new Label("Inventory");
+            inventoryTitle.setId("inventoryTitle");
+            VBox vbInventory = new VBox(10);
+
+            ArrayList<String> inventoryList = c.getInventory();
+            Iterator<String> itr = inventoryList.iterator();
+            int skrow = 1;
+            while (itr.hasNext()) {
+                String nxtItem = itr.next();
+                Label inventorylabel = new Label(nxtItem);
+                HBox hbInventoryList = new HBox(10);
+
+                Button rm = new Button("remove");
+                hbInventoryList.getChildren().addAll(inventorylabel,rm);
+
+                vbInventory.getChildren().add(hbInventoryList);
+
+                ////// Remove button ///////
+                rm.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent e) {
+                        Stage confirmRm = new Stage();
+                        confirmRm.setTitle("Are you sure?");
+                        GridPane rmgrid = new GridPane();
+                        rmgrid.setAlignment(Pos.CENTER);
+                        rmgrid.setHgap(10);
+                        rmgrid.setVgap(10);
+                        Scene rmscene = new Scene(rmgrid);
+                        confirmRm.setScene(rmscene);
+                        confirmRm.show();
+
+                        Label rmLabel = new Label("remove " + nxtItem + ". Are you sure?");
+                        rmgrid.add(rmLabel,0,0);
+                        Button yesRm = new Button("Yes");
+                        Button noRm = new Button("Cancel");
+                        HBox hbynrm = new HBox(10);
+                        hbynrm.getChildren().addAll(yesRm,noRm);
+                        rmgrid.add(hbynrm,0,1);
+
+                        yesRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                vbInventory.getChildren().remove(hbInventoryList);
+                                inventoryList.remove(inventorylabel.getText());
+                                c.setInventory(inventoryList);
+                                confirmRm.close();
+                            }
+                        });
+                        noRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                confirmRm.close();
+                            }
+                        });
+                    }
+                });
+
+
+
+                skrow++;
+            }
+            
+            Button addItem = new Button("Add Item");
+            Button doneItem = new Button("Done");
+            HBox hbinventory = new HBox(10);
+            hbinventory.getChildren().addAll(addItem,doneItem);
+            BorderPane bpInventory = new BorderPane();
+            bpInventory.setPadding(new Insets(20));
+            bpInventory.setMargin(inventoryTitle,new Insets(12,12,12,12));
+            bpInventory.setMargin(vbInventory,new Insets(10,10,10,10));
+            bpInventory.setTop(inventoryTitle);
+            bpInventory.setCenter(vbInventory);
+            bpInventory.setBottom(hbinventory);
+
+
+            Scene inventoryscene = new Scene(bpInventory);
+            inventoryscene.getStylesheets().add(this.getClass().getResource("InventoryPage.css").toExternalForm());
+
+            inventoryStage.setScene(inventoryscene);
+
+            //////// Add Skill //////////
+            addItem.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    Stage addInventoryStage = new Stage();
+                    addInventoryStage.setTitle("Add Item");
+                    GridPane addgrid = new GridPane();
+                    addgrid.setAlignment(Pos.CENTER);
+                    addgrid.setHgap(10);
+                    addgrid.setVgap(10);
+                    Scene addscene = new Scene(addgrid);
+                    addInventoryStage.setScene(addscene);
+                    
+                    addInventoryStage.show();
+
+                    Label addLabel = new Label("Add an tem?");
+                    addgrid.add(addLabel,0,0);
+                    TextField addTf = new TextField();
+                    addTf.setPromptText("Input Item Name");
+                    addgrid.add(addTf,0,1);
+
+                    Button addOk = new Button("Add");
+                    Button noOk = new Button("Cancel");
+                    HBox hbadd= new HBox(10);
+                    hbadd.getChildren().addAll(addOk,noOk);
+                    addgrid.add(hbadd,0,2);
+                    
+                    addOk.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent e) {
+                            inventoryList.add(addTf.getText());
+                            c.setInventory(inventoryList);
+                            addInventoryStage.close();
+                            Label newInv = new Label(addTf.getText());
+                            vbInventory.getChildren().add(newInv);
+                            addInventoryStage.close();
+                        }
+                    });
+                    noOk.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent e) {
+                            addInventoryStage.close();
+                        }
+                    });
+                        
+
+
+                }
+            });
+
+            doneItem.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    c.setInventory(inventoryList);
+                    inventoryStage.close();
+                }
+            });
+
+            inventoryStage.show();
+
+        }
+    });
+
+
+
 
 	stage.show();	
 	}

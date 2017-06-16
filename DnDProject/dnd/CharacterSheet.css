@@ -20,6 +20,13 @@
     -fx-background-color: #AAAFB4;
 }
 
+#characterName {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-underline: true;
+}
+
+
 #unlocked-tf {
     -fx-background-color: #dddddd;
     -fx-text-fill: black;
