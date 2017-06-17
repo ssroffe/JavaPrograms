@@ -44,7 +44,7 @@ public class Character {
     private int wisdom;
     private int charisma;
 
-    private int gold;
+    private double gold;
 
     private int deathRoll;
     private int saveRoll;
@@ -74,7 +74,8 @@ public class Character {
     private HashSet<String> ideals;
     private HashSet<String> bonds;
     private HashSet<String> flaws;
-
+    private HashSet<String> languages;
+    
     private HashSet<String> features;
 
     private ArrayList<String> inventory;
@@ -184,6 +185,7 @@ public class Character {
 	setFlaws(new HashSet<String>());
 	setIdeals(new HashSet<String>());
 	setDescription("");
+	setLanguages(new HashSet<String>());
 
 	setInventory(new ArrayList<String>());
 
@@ -250,6 +252,7 @@ public Character() {
 	setFlaws(new HashSet<String>());
 	setIdeals(new HashSet<String>());
 	setDescription("");
+	setLanguages(new HashSet<String>());
 
 	setInventory(new ArrayList<String>());
 
@@ -319,6 +322,7 @@ public Character() {
 	setFlaws(new HashSet<String>());
 	setIdeals(new HashSet<String>());
 	setDescription("");
+	setLanguages(new HashSet<String>());
 
 	setSpells1(new HashSet<String>());
 	setSpells2(new HashSet<String>());
@@ -372,6 +376,7 @@ public Character() {
         setLevel(c.getLevel());
         setExp(c.getExp());
         setInventory(c.getInventory());
+	setLanguages(c.getLanguages());
 
         setSpells1(c.getSpells1());
         setSpells2(c.getSpells2());
@@ -427,6 +432,7 @@ public Character() {
 	setSkills(new HashSet<String>());
 	setBonds(new HashSet<String>());
 	setFeatures(new HashSet<String>());
+	setLanguages(new HashSet<String>());
 
     setSpells1(new HashSet<String>());
 	setSpells2(new HashSet<String>());
@@ -509,6 +515,13 @@ public Character() {
         return background;
     }
 
+    public void setLanguages(HashSet<String> l) {
+	this.languages = l;
+    }
+    public HashSet<String> getLanguages() {
+	return languages;
+    }
+
     public void setSubrace(String sr) {
 	this.subrace = sr;
     }
@@ -558,10 +571,10 @@ public Character() {
 	return currentMP;
     }
 
-    public void setGold(int g) {
+    public void setGold(double g) {
 	this.gold = g;
     }
-    public int getGold() {
+    public double getGold() {
 	return gold;
     }
     

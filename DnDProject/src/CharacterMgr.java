@@ -423,7 +423,7 @@ public class CharacterMgr extends Application {
     ///////////// Gold /////////////////
     Label goldLabel = new Label("Gold:");
     grid.add(goldLabel,0,row);
-    Label gold = new Label(Integer.toString(c.getGold()));
+    Label gold = new Label(Double.toString(c.getGold()));
     grid.add(gold,1,row);
     gold.setId("gold");
 
@@ -443,14 +443,14 @@ public class CharacterMgr extends Application {
     final int addGoldRow = row;
 
     plusGold.setOnAction(new EventHandler<ActionEvent>() {
-        Text errMsg = new Text("Inputted Value was not an Integer!");
+        Text errMsg = new Text("Inputted Value was not a number!");
         @Override
         public void handle(ActionEvent e) {
-            boolean isInt = isInteger(pmGoldTf.getText());
-            if (isInt) {
-                int addGoldVal = Integer.parseInt(pmGoldTf.getText()) + c.getGold();
+            boolean isDbl = isDouble(pmGoldTf.getText());
+            if (isDbl) {
+                double addGoldVal = Double.parseDouble(pmGoldTf.getText()) + c.getGold();
                 c.setGold(addGoldVal);
-                gold.setText(Integer.toString(c.getGold()));
+                gold.setText(Double.toString(c.getGold()));
                 grid.getChildren().remove(errMsg);
             }
             else {
@@ -462,19 +462,19 @@ public class CharacterMgr extends Application {
     });
 
     minusGold.setOnAction(new EventHandler<ActionEvent>() {
-        Text errMsg = new Text("Inputted Value was not an Integer!");
+        Text errMsg = new Text("Inputted Value was not a number!");
         @Override
         public void handle(ActionEvent e) {
-            boolean isInt = isInteger(pmGoldTf.getText());
-            if (isInt) {
-                int loseGoldVal = c.getGold() - Integer.parseInt(pmGoldTf.getText());
+            boolean isDbl = isDouble(pmGoldTf.getText());
+            if (isDbl) {
+                double loseGoldVal = c.getGold() - Double.parseDouble(pmGoldTf.getText());
                 if (loseGoldVal > 0) {
                     c.setGold(loseGoldVal);
-                    gold.setText(Integer.toString(c.getGold()));
+                    gold.setText(Double.toString(c.getGold()));
                 }
                 else {
                     c.setGold(0);
-                    gold.setText(Integer.toString(c.getGold()));
+                    gold.setText(Double.toString(c.getGold()));
                 }
                 grid.getChildren().remove(errMsg);
             }
@@ -842,10 +842,11 @@ public class CharacterMgr extends Application {
     Button idealsBtn = new Button("Ideals");
     Button descriptionBtn = new Button("Description");
     Button featsBtn = new Button("Features");
+    Button languagesBtn = new Button("Languages");
 
     HBox hbbtns1 = new HBox(10);
     hbbtns1.setAlignment(Pos.CENTER);
-    hbbtns1.getChildren().addAll(skillsBtn,spellsBtn,inventoryBtn);
+    hbbtns1.getChildren().addAll(skillsBtn,spellsBtn,inventoryBtn,languagesBtn);
     HBox hbbtns2 = new HBox(10);
     hbbtns2.setAlignment(Pos.CENTER);
     hbbtns2.getChildren().addAll(idealsBtn,descriptionBtn,featsBtn);
@@ -897,7 +898,7 @@ public class CharacterMgr extends Application {
 
             HashSet<String> skillsList = c.getSkills();
             Iterator<String> itr = skillsList.iterator();
-            int skrow = 1;
+
             while (itr.hasNext()) {
                 String nxtItem = itr.next();
                 Label skillslabel = new Label(nxtItem);
@@ -948,22 +949,23 @@ public class CharacterMgr extends Application {
                     }
                 });
 
-
-
-                skrow++;
             }
-            
+
+	    TextField addSkillsTf = new TextField();
+	    addSkillsTf.setPromptText("Add a Skill");
             Button addSkills = new Button("Add Skill");
             Button doneSkills = new Button("Done");
-            HBox hbskills = new HBox(10);
-            hbskills.getChildren().addAll(addSkills,doneSkills);
+            HBox hbaddSkills = new HBox(10);
+            hbaddSkills.getChildren().addAll(addSkillsTf,addSkills);
+	    VBox vbskillsBtns = new VBox(10);
+	    vbskillsBtns.getChildren().addAll(hbaddSkills,doneSkills);
             BorderPane bpSkills = new BorderPane();
             bpSkills.setPadding(new Insets(20));
             bpSkills.setMargin(skillsTitle,new Insets(12,12,12,12));
             bpSkills.setMargin(vbSkills,new Insets(10,10,10,10));
             bpSkills.setTop(skillsTitle);
             bpSkills.setCenter(vbSkills);
-            bpSkills.setBottom(hbskills);
+            bpSkills.setBottom(vbskillsBtns);
 
 
             Scene skillsscene = new Scene(bpSkills);
@@ -975,62 +977,28 @@ public class CharacterMgr extends Application {
             addSkills.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-                    Stage addSkillsStage = new Stage();
-                    addSkillsStage.setTitle("Add Skill");
-                    GridPane addgrid = new GridPane();
-                    addgrid.setAlignment(Pos.CENTER);
-                    addgrid.setHgap(10);
-                    addgrid.setVgap(10);
-                    Scene addscene = new Scene(addgrid);
-                    addSkillsStage.setScene(addscene);
-                    
-                    addSkillsStage.show();
-
-                    Label addLabel = new Label("Add a skill?");
-                    addgrid.add(addLabel,0,0);
-                    TextField addTf = new TextField();
-                    addTf.setPromptText("Input Skill Name");
-                    addgrid.add(addTf,0,1);
-
-                    Button addOk = new Button("Add");
-                    Button noOk = new Button("Cancel");
-                    HBox hbadd= new HBox(10);
-                    hbadd.getChildren().addAll(addOk,noOk);
-                    addgrid.add(hbadd,0,2);
-                    
-                    addOk.setOnAction(new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent e) {
-                            skillsList.add(addTf.getText());
-                            c.setSkills(skillsList);
-                            addSkillsStage.close();
-                            Label newSkills = new Label(addTf.getText());
-                            vbSkills.getChildren().add(newSkills);
-                            addSkillsStage.close();
-                        }
-                    });
-                    noOk.setOnAction(new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent e) {
-                            addSkillsStage.close();
-                        }
-                    });
-                        
+		    skillsList.add(addSkillsTf.getText());
+		    c.setSkills(skillsList);
+		    Label newSkills = new Label(addSkillsTf.getText());
+		    vbSkills.getChildren().add(newSkills);
+		    addSkillsTf.clear();
+		    
+		}
+		});
+	    
 
 
-                }
-            });
 
-            doneSkills.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent e) {
-                    c.setSkills(skillsList);
-                    skillsStage.close();
-                }
-            });
-
+	    doneSkills.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent e) {
+			c.setSkills(skillsList);
+			skillsStage.close();
+		    }
+		});
+	    
             skillsStage.show();
-
+	    
         }
     });
    
@@ -1053,7 +1021,7 @@ public class CharacterMgr extends Application {
 
             ArrayList<String> inventoryList = c.getInventory();
             Iterator<String> itr = inventoryList.iterator();
-            int skrow = 1;
+
             while (itr.hasNext()) {
                 String nxtItem = itr.next();
                 Label inventorylabel = new Label(nxtItem);
@@ -1104,22 +1072,23 @@ public class CharacterMgr extends Application {
                     }
                 });
 
-
-
-                skrow++;
             }
-            
-            Button addItem = new Button("Add Item");
-            Button doneItem = new Button("Done");
-            HBox hbinventory = new HBox(10);
-            hbinventory.getChildren().addAll(addItem,doneItem);
+
+	    TextField addInventoryTf = new TextField();
+	    addInventoryTf.setPromptText("Add an Item");
+            Button addInventory = new Button("Add Item");
+            Button doneInventory = new Button("Done");
+            HBox hbaddInventory = new HBox(10);
+            hbaddInventory.getChildren().addAll(addInventoryTf,addInventory);
+	    VBox vbinventoryBtns = new VBox(10);
+	    vbinventoryBtns.getChildren().addAll(hbaddInventory,doneInventory);
             BorderPane bpInventory = new BorderPane();
             bpInventory.setPadding(new Insets(20));
             bpInventory.setMargin(inventoryTitle,new Insets(12,12,12,12));
             bpInventory.setMargin(vbInventory,new Insets(10,10,10,10));
             bpInventory.setTop(inventoryTitle);
             bpInventory.setCenter(vbInventory);
-            bpInventory.setBottom(hbinventory);
+            bpInventory.setBottom(vbinventoryBtns);
 
 
             Scene inventoryscene = new Scene(bpInventory);
@@ -1127,70 +1096,156 @@ public class CharacterMgr extends Application {
 
             inventoryStage.setScene(inventoryscene);
 
-            //////// Add Skill //////////
-            addItem.setOnAction(new EventHandler<ActionEvent>() {
+            //////// Add Inventory //////////
+            addInventory.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-                    Stage addInventoryStage = new Stage();
-                    addInventoryStage.setTitle("Add Item");
-                    GridPane addgrid = new GridPane();
-                    addgrid.setAlignment(Pos.CENTER);
-                    addgrid.setHgap(10);
-                    addgrid.setVgap(10);
-                    Scene addscene = new Scene(addgrid);
-                    addInventoryStage.setScene(addscene);
-                    
-                    addInventoryStage.show();
-
-                    Label addLabel = new Label("Add an tem?");
-                    addgrid.add(addLabel,0,0);
-                    TextField addTf = new TextField();
-                    addTf.setPromptText("Input Item Name");
-                    addgrid.add(addTf,0,1);
-
-                    Button addOk = new Button("Add");
-                    Button noOk = new Button("Cancel");
-                    HBox hbadd= new HBox(10);
-                    hbadd.getChildren().addAll(addOk,noOk);
-                    addgrid.add(hbadd,0,2);
-                    
-                    addOk.setOnAction(new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent e) {
-                            inventoryList.add(addTf.getText());
-                            c.setInventory(inventoryList);
-                            addInventoryStage.close();
-                            Label newInv = new Label(addTf.getText());
-                            vbInventory.getChildren().add(newInv);
-                            addInventoryStage.close();
-                        }
-                    });
-                    noOk.setOnAction(new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent e) {
-                            addInventoryStage.close();
-                        }
-                    });
-                        
+		    inventoryList.add(addInventoryTf.getText());
+		    c.setInventory(inventoryList);
+		    Label newInventory = new Label(addInventoryTf.getText());
+		    vbInventory.getChildren().add(newInventory);
+		    addInventoryTf.clear();
+		    
+		}
+		});
+	    
 
 
-                }
-            });
 
-            doneItem.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent e) {
-                    c.setInventory(inventoryList);
-                    inventoryStage.close();
-                }
-            });
-
+	    doneInventory.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent e) {
+			c.setInventory(inventoryList);
+			inventoryStage.close();
+		    }
+		});
+	    
             inventoryStage.show();
-
+	    
         }
     });
 
+    //////////////////////////////////
+    ///////// LANGUAGES PAGE /////////
+    //////////////////////////////////
 
+    languagesBtn.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            Stage languagesStage = new Stage();
+            languagesStage.setTitle("Languages Page");
+
+
+
+            Label languagesTitle = new Label("Languages");
+            languagesTitle.setId("languagesTitle");
+            VBox vbLanguages = new VBox(10);
+
+            HashSet<String> languagesList = c.getLanguages();
+            Iterator<String> itr = languagesList.iterator();
+
+            while (itr.hasNext()) {
+                String nxtItem = itr.next();
+                Label languageslabel = new Label(nxtItem);
+                HBox hbLanguagesList = new HBox(10);
+
+                Button rm = new Button("remove");
+                hbLanguagesList.getChildren().addAll(languageslabel,rm);
+
+                vbLanguages.getChildren().add(hbLanguagesList);
+
+                ////// Remove button ///////
+                rm.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent e) {
+                        Stage confirmRm = new Stage();
+                        confirmRm.setTitle("Are you sure?");
+                        GridPane rmgrid = new GridPane();
+                        rmgrid.setAlignment(Pos.CENTER);
+                        rmgrid.setHgap(10);
+                        rmgrid.setVgap(10);
+                        Scene rmscene = new Scene(rmgrid);
+                        confirmRm.setScene(rmscene);
+                        confirmRm.show();
+
+                        Label rmLabel = new Label("remove " + nxtItem + ". Are you sure?");
+                        rmgrid.add(rmLabel,0,0);
+                        Button yesRm = new Button("Yes");
+                        Button noRm = new Button("Cancel");
+                        HBox hbynrm = new HBox(10);
+                        hbynrm.getChildren().addAll(yesRm,noRm);
+                        rmgrid.add(hbynrm,0,1);
+
+                        yesRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                vbLanguages.getChildren().remove(hbLanguagesList);
+                                languagesList.remove(languageslabel.getText());
+                                c.setLanguages(languagesList);
+                                confirmRm.close();
+                            }
+                        });
+                        noRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                confirmRm.close();
+                            }
+                        });
+                    }
+                });
+
+            }
+
+	    TextField addLanguagesTf = new TextField();
+	    addLanguagesTf.setPromptText("Add a Language");
+            Button addLanguages = new Button("Add Language");
+            Button doneLanguages = new Button("Done");
+            HBox hbaddLanguages = new HBox(10);
+            hbaddLanguages.getChildren().addAll(addLanguagesTf,addLanguages);
+	    VBox vblanguagesBtns = new VBox(10);
+	    vblanguagesBtns.getChildren().addAll(hbaddLanguages,doneLanguages);
+            BorderPane bpLanguages = new BorderPane();
+            bpLanguages.setPadding(new Insets(20));
+            bpLanguages.setMargin(languagesTitle,new Insets(12,12,12,12));
+            bpLanguages.setMargin(vbLanguages,new Insets(10,10,10,10));
+            bpLanguages.setTop(languagesTitle);
+            bpLanguages.setCenter(vbLanguages);
+            bpLanguages.setBottom(vblanguagesBtns);
+
+
+            Scene languagesscene = new Scene(bpLanguages);
+            languagesscene.getStylesheets().add(this.getClass().getResource("LanguagesPage.css").toExternalForm());
+
+            languagesStage.setScene(languagesscene);
+
+            //////// Add Languages //////////
+            addLanguages.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+		    languagesList.add(addLanguagesTf.getText());
+		    c.setLanguages(languagesList);
+		    Label newLanguages = new Label(addLanguagesTf.getText());
+		    vbLanguages.getChildren().add(newLanguages);
+		    addLanguagesTf.clear();
+		    
+		}
+		});
+	    
+
+
+
+	    doneLanguages.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent e) {
+			c.setLanguages(languagesList);
+			languagesStage.close();
+		    }
+		});
+	    
+            languagesStage.show();
+	    
+        }
+    });
 
 
 	stage.show();	
@@ -1226,6 +1281,16 @@ public class CharacterMgr extends Application {
         catch (NumberFormatException ex) {
             return false;
         }
+    }
+
+    public static boolean isDouble(String s) {
+	try {
+	    Double.parseDouble(s);
+	    return true;
+	}
+	catch (NumberFormatException ex) {
+	    return false;
+	}
     }
     
 }
