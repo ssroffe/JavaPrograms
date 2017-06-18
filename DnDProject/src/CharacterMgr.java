@@ -13,6 +13,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.scene.paint.*;
 import javafx.stage.Stage;
+import javafx.beans.value.*;
 import javafx.stage.FileChooser;
 import javafx.fxml.FXML;
 import javafx.geometry.*;
@@ -179,6 +180,9 @@ public class CharacterMgr extends Application {
         Stage stage = new Stage();
         stage.setTitle(c.getName() + " -- Character page");
 
+        BorderPane border = new BorderPane();
+        border.setPadding(new Insets(20));
+
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
@@ -186,7 +190,7 @@ public class CharacterMgr extends Application {
 
         grid.setPadding(new Insets(25,25,25,25));
 
-        Scene scene = new Scene(grid, 600, 800);
+        Scene scene = new Scene(border,600,800);
         
         scene.getStylesheets().add(this.getClass().getResource("CharacterSheet.css").toExternalForm());
 
@@ -194,7 +198,17 @@ public class CharacterMgr extends Application {
         int row = 1;
         Text characterName = new Text(c.getName());
         characterName.setId("characterName");
-        grid.add(characterName,1,0,2,1);
+        //grid.add(characterName,1,0,2,1);
+
+        ScrollBar sby = new ScrollBar();
+        sby.setOrientation(Orientation.VERTICAL);
+        sby.setPrefHeight(50);
+        sby.setMax(360);
+        sby.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov, Number old_val,Number new_val) {
+                border.setLayoutY(-new_val.doubleValue());
+            }
+        });
 
         //////////// Level ////////////////
 
@@ -630,40 +644,13 @@ public class CharacterMgr extends Application {
     row++;
 
     //////////////// Stats ///////////////////
-    Label str = new Label("Str:");
-    Label con = new Label("Cons:");
-    Label dex = new Label("Dex:");
-    Label intel = new Label("Int:");
-    Label wis = new Label("Wis:");
-    Label cha = new Label("Char:");
-    Label armor = new Label("Armor:");
-    Label init = new Label("Initiative:");
-    Label speed = new Label("Speed:");
-    Label hitdice = new Label("Hit Dice:");
+    Label str = new Label("Strength");
+    Label con = new Label("Constitution");
+    Label dex = new Label("Dexterity");
+    Label intel = new Label("Intelligence");
+    Label wis = new Label("Wisdom");
+    Label cha = new Label("Chararisma");
 
-    TextField armorTf = new TextField();
-    armorTf.setId("locked-tf");
-    armorTf.setText(Integer.toString(c.getArmor()));
-    armorTf.setEditable(false);
-    armorTf.setPrefWidth(40);
-
-    TextField initTf = new TextField();
-    initTf.setId("locked-tf");
-    initTf.setText(Integer.toString(c.getInitiative()));
-    initTf.setEditable(false);
-    initTf.setPrefWidth(40);
-
-    TextField speedTf = new TextField();
-    speedTf.setId("locked-tf");
-    speedTf.setText(Integer.toString(c.getSpeed()));
-    speedTf.setEditable(false);
-    speedTf.setPrefWidth(40);
-
-    TextField hdTf = new TextField();
-    hdTf.setId("locked-tf");
-    hdTf.setText(c.getHitDice());
-    hdTf.setEditable(false);
-    hdTf.setPrefWidth(60);
 
     TextField strTf = new TextField();
     strTf.setId("locked-tf");
@@ -701,27 +688,14 @@ public class CharacterMgr extends Application {
     chaTf.setEditable(false);
     chaTf.setPrefWidth(40);
 
-    HBox stathb0 = new HBox(10);
-    HBox stathb1 = new HBox(10);
-    HBox stathb2 = new HBox(10);
-    stathb0.getChildren().addAll(armor,armorTf,init,initTf,speed,speedTf,hitdice,hdTf);
-    stathb1.getChildren().addAll(str,strTf,con,conTf,dex,dexTf);
-    stathb2.getChildren().addAll(intel,intelTf,wis,wisTf,cha,chaTf);
 
+    VBox statvb1 = new VBox(10);
+    statvb1.getChildren().addAll(str,strTf,con,conTf,dex,dexTf,intel,intelTf,wis,wisTf,cha,chaTf);
 
-
-    VBox statvb = new VBox(10);
-    statvb.setAlignment(Pos.CENTER);
-    statvb.getChildren().addAll(stathb0,stathb1,stathb2);
-
-    grid.add(statvb,1,row);
-
-    row++;
-
-    int statsRow = row;
 
     ToggleButton statbtn = new ToggleButton("Edit Stats");
-    grid.add(statbtn,1,row);
+    statvb1.getChildren().add(statbtn);
+
     statbtn.setOnAction(new EventHandler<ActionEvent>() {
         int previousStr = c.getStr();
         int previousCon = c.getCons();
@@ -729,10 +703,6 @@ public class CharacterMgr extends Application {
         int previousInt = c.getInt();
         int previousWis = c.getWis();
         int previousCha = c.getChar();
-        int previousArmor = c.getArmor();
-        int previousInit = c.getInitiative();
-        int previousSpeed = c.getSpeed();
-        String previousHitDice = c.getHitDice();
         Text errMsg = new Text("One of the Stats was not an integer!");
         @Override
         public void handle(ActionEvent e) {
@@ -743,30 +713,21 @@ public class CharacterMgr extends Application {
                 previousInt = c.getInt();
                 previousWis = c.getWis();
                 previousCha = c.getChar();
-                previousArmor = c.getArmor();
-                previousInit = c.getInitiative();
-                previousSpeed = c.getSpeed();
-                previousHitDice = c.getHitDice();
+
                 strTf.setEditable(true);
                 conTf.setEditable(true);
                 dexTf.setEditable(true);
                 intelTf.setEditable(true);
                 wisTf.setEditable(true);
                 chaTf.setEditable(true);
-                armorTf.setEditable(true);
-                initTf.setEditable(true);
-                speedTf.setEditable(true);
-                hdTf.setEditable(true);
+
                 strTf.setId("unlocked-tf");
                 conTf.setId("unlocked-tf");
                 dexTf.setId("unlocked-tf");
                 intelTf.setId("unlocked-tf");
                 wisTf.setId("unlocked-tf");
                 chaTf.setId("unlocked-tf");
-                armorTf.setId("unlocked-tf");
-                initTf.setId("unlocked-tf");
-                speedTf.setId("unlocked-tf");
-                hdTf.setId("unlocked-tf");
+
             }
             else {
                 strTf.setEditable(false);
@@ -775,61 +736,143 @@ public class CharacterMgr extends Application {
                 intelTf.setEditable(false);
                 wisTf.setEditable(false);
                 chaTf.setEditable(false);
-                armorTf.setEditable(false);
-                initTf.setEditable(false);
-                speedTf.setEditable(false);
-                hdTf.setEditable(false);
                 strTf.setId("locked-tf");
                 conTf.setId("locked-tf");
                 dexTf.setId("locked-tf");
                 intelTf.setId("locked-tf");
                 wisTf.setId("locked-tf");
                 chaTf.setId("locked-tf");
-                armorTf.setId("locked-tf");
-                speedTf.setId("locked-tf");
-                initTf.setId("locked-tf");
-                hdTf.setId("locked-tf");
+
                 boolean strIsInt = isInteger(strTf.getText());
                 boolean conIsInt = isInteger(conTf.getText());
                 boolean dexIsInt = isInteger(dexTf.getText());
                 boolean intelIsInt = isInteger(intelTf.getText());
                 boolean wisIsInt = isInteger(wisTf.getText());
                 boolean chaIsInt = isInteger(chaTf.getText());
-                boolean armorIsInt = isInteger(armorTf.getText());
-                boolean speedIsInt = isInteger(speedTf.getText());
-                boolean initIsInt = isInteger(initTf.getText());
-                if (strIsInt && conIsInt && dexIsInt && intelIsInt && wisIsInt && chaIsInt && armorIsInt && speedIsInt && initIsInt) {
+
+                if (strIsInt && conIsInt && dexIsInt && intelIsInt && wisIsInt && chaIsInt ) {
                     c.setStr(Integer.parseInt(strTf.getText()));
                     c.setCons(Integer.parseInt(conTf.getText()));
                     c.setDex(Integer.parseInt(dexTf.getText()));
                     c.setInt(Integer.parseInt(intelTf.getText()));
                     c.setWis(Integer.parseInt(wisTf.getText()));
                     c.setChar(Integer.parseInt(chaTf.getText()));
-                    c.setArmor(Integer.parseInt(armorTf.getText()));
-                    c.setInitiative(Integer.parseInt(initTf.getText()));
-                    c.setSpeed(Integer.parseInt(speedTf.getText()));
-                    c.setHitDice(hdTf.getText());
-                    grid.getChildren().remove(errMsg);
+                    statvb1.getChildren().remove(errMsg);
                 }
                 else {
                     errMsg.setFill(Color.FIREBRICK);
-                    grid.getChildren().remove(errMsg);
-                    grid.add(errMsg,3,statsRow);
+                    statvb1.getChildren().remove(errMsg);
+                    statvb1.getChildren().add(errMsg);
                     strTf.setText(Integer.toString(previousStr));
                     conTf.setText(Integer.toString(previousCon));
                     dexTf.setText(Integer.toString(previousDex));
                     intelTf.setText(Integer.toString(previousInt));
                     wisTf.setText(Integer.toString(previousWis));
                     chaTf.setText(Integer.toString(previousCon));
-                    armorTf.setText(Integer.toString(previousArmor));
-                    speedTf.setText(Integer.toString(previousSpeed));
-                    initTf.setText(Integer.toString(previousInit));
-                    hdTf.setText(previousHitDice);
+
                 }
             }
         }
     });
     
+    ///////////////////////////////////////
+    ////////// OTHER STATS ////////////////
+    ///////////////////////////////////////
+    Label armor = new Label("Armor:");
+    Label init = new Label("Initiative:");
+    Label speed = new Label("Speed:");
+    Label hitdice = new Label("Hit Dice:");
+
+    TextField armorTf = new TextField();
+    armorTf.setId("locked-tf");
+    armorTf.setText(Integer.toString(c.getArmor()));
+    armorTf.setEditable(false);
+    armorTf.setPrefWidth(40);
+
+    TextField initTf = new TextField();
+    initTf.setId("locked-tf");
+    initTf.setText(Integer.toString(c.getInitiative()));
+    initTf.setEditable(false);
+    initTf.setPrefWidth(40);
+
+    TextField speedTf = new TextField();
+    speedTf.setId("locked-tf");
+    speedTf.setText(Integer.toString(c.getSpeed()));
+    speedTf.setEditable(false);
+    speedTf.setPrefWidth(40);
+
+    TextField hdTf = new TextField();
+    hdTf.setId("locked-tf");
+    hdTf.setText(c.getHitDice());
+    hdTf.setEditable(false);
+    hdTf.setPrefWidth(60);
+
+    HBox stathb0 = new HBox(10);
+    stathb0.getChildren().addAll(armor,armorTf,init,initTf,speed,speedTf,hitdice,hdTf);
+
+    grid.add(stathb0,1,row);
+
+    final int statsRow = row;
+
+    ToggleButton otherStatbtn = new ToggleButton("edit");
+    statvb1.getChildren().add(otherStatbtn);
+    grid.add(otherStatbtn,2,row);
+
+    otherStatbtn.setOnAction(new EventHandler<ActionEvent>() {
+        int previousArmor = c.getArmor();
+        int previousInit = c.getInitiative();
+        int previousSpeed = c.getSpeed();
+        String previousHitDice = c.getHitDice();
+        Text errMsg = new Text("One of the Stats was not an integer!");
+        @Override
+        public void handle(ActionEvent e) {
+           if (otherStatbtn.isSelected()) {
+                previousArmor = c.getArmor();
+                previousInit = c.getInitiative();
+                previousSpeed = c.getSpeed();
+                previousHitDice = c.getHitDice();
+                armorTf.setEditable(true);
+                initTf.setEditable(true);
+                speedTf.setEditable(true);
+                hdTf.setEditable(true);
+
+                armorTf.setId("unlocked-tf");
+                initTf.setId("unlocked-tf");
+                speedTf.setId("unlocked-tf");
+                hdTf.setId("unlocked-tf");
+           }
+           else {
+               armorTf.setEditable(false);
+               initTf.setEditable(false);
+               speedTf.setEditable(false);
+               hdTf.setEditable(false);
+               armorTf.setId("locked-tf");
+               speedTf.setId("locked-tf");
+               initTf.setId("locked-tf");
+               hdTf.setId("locked-tf");
+
+               boolean armorIsInt = isInteger(armorTf.getText());
+               boolean speedIsInt = isInteger(speedTf.getText());
+               boolean initIsInt = isInteger(initTf.getText());
+               if (armorIsInt && speedIsInt && initIsInt) {
+                   c.setArmor(Integer.parseInt(armorTf.getText()));
+                   c.setInitiative(Integer.parseInt(initTf.getText()));
+                   c.setSpeed(Integer.parseInt(speedTf.getText()));
+                   c.setHitDice(hdTf.getText());
+                   grid.getChildren().remove(errMsg);
+               }
+               else {
+                   errMsg.setFill(Color.FIREBRICK);
+                   grid.getChildren().remove(errMsg);
+                   grid.add(errMsg,3,statsRow);
+                   armorTf.setText(Integer.toString(previousArmor));
+                   speedTf.setText(Integer.toString(previousSpeed));
+                   initTf.setText(Integer.toString(previousInit));
+                   hdTf.setText(previousHitDice);
+               }
+           }
+        }
+    });
     row++;
     row++;
 
@@ -890,7 +933,8 @@ public class CharacterMgr extends Application {
             Stage skillsStage = new Stage();
             skillsStage.setTitle("Skills Page");
 
-
+            // MAKE A SCROLL PANE ADD IT TO BP.CENTER
+            // MAKE THE VBOX THE CONTENTS OF THE SCROLL PANE
 
             Label skillsTitle = new Label("Skills");
             skillsTitle.setId("skillsTitle");
@@ -952,56 +996,57 @@ public class CharacterMgr extends Application {
             }
 
 	    TextField addSkillsTf = new TextField();
-	    addSkillsTf.setPromptText("Add a Skill");
-            Button addSkills = new Button("Add Skill");
-            Button doneSkills = new Button("Done");
-            HBox hbaddSkills = new HBox(10);
-            hbaddSkills.getChildren().addAll(addSkillsTf,addSkills);
+        addSkillsTf.setPromptText("Add a Skill");
+        Button addSkills = new Button("Add Skill");
+        Button doneSkills = new Button("Done");
+        HBox hbaddSkills = new HBox(10);
+        hbaddSkills.getChildren().addAll(addSkillsTf,addSkills);
 	    VBox vbskillsBtns = new VBox(10);
 	    vbskillsBtns.getChildren().addAll(hbaddSkills,doneSkills);
-            BorderPane bpSkills = new BorderPane();
-            bpSkills.setPadding(new Insets(20));
-            bpSkills.setMargin(skillsTitle,new Insets(12,12,12,12));
-            bpSkills.setMargin(vbSkills,new Insets(10,10,10,10));
-            bpSkills.setTop(skillsTitle);
-            bpSkills.setCenter(vbSkills);
-            bpSkills.setBottom(vbskillsBtns);
+
+        BorderPane bpSkills = new BorderPane();
+        bpSkills.setPadding(new Insets(20));
+        bpSkills.setMargin(skillsTitle,new Insets(12,12,12,12));
+        bpSkills.setMargin(vbSkills,new Insets(10,10,10,10));
+        bpSkills.setTop(skillsTitle);
+        bpSkills.setCenter(vbSkills);
+        bpSkills.setBottom(vbskillsBtns);
 
 
-            Scene skillsscene = new Scene(bpSkills);
-            skillsscene.getStylesheets().add(this.getClass().getResource("SkillsPage.css").toExternalForm());
+        Scene skillsscene = new Scene(bpSkills);
+        skillsscene.getStylesheets().add(this.getClass().getResource("SkillsPage.css").toExternalForm());
 
-            skillsStage.setScene(skillsscene);
+        skillsStage.setScene(skillsscene);
 
-            //////// Add Skills //////////
-            addSkills.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent e) {
-		    skillsList.add(addSkillsTf.getText());
-		    c.setSkills(skillsList);
-		    Label newSkills = new Label(addSkillsTf.getText());
-		    vbSkills.getChildren().add(newSkills);
-		    addSkillsTf.clear();
-		    
-		}
-		});
-	    
+        //////// Add Skills //////////
+        addSkills.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                skillsList.add(addSkillsTf.getText());
+                c.setSkills(skillsList);
+                Label newSkills = new Label(addSkillsTf.getText());
+                vbSkills.getChildren().add(newSkills);
+                addSkillsTf.clear();
 
+            }
+        });
 
 
-	    doneSkills.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent e) {
-			c.setSkills(skillsList);
-			skillsStage.close();
-		    }
-		});
-	    
-            skillsStage.show();
-	    
+
+
+        doneSkills.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                c.setSkills(skillsList);
+                skillsStage.close();
+            }
+        });
+
+        skillsStage.show();
+
         }
     });
-   
+
 
     //////////////////////////////////////
     ////////// Inventory Page ////////////
@@ -1076,52 +1121,52 @@ public class CharacterMgr extends Application {
 
 	    TextField addInventoryTf = new TextField();
 	    addInventoryTf.setPromptText("Add an Item");
-            Button addInventory = new Button("Add Item");
-            Button doneInventory = new Button("Done");
-            HBox hbaddInventory = new HBox(10);
-            hbaddInventory.getChildren().addAll(addInventoryTf,addInventory);
-	    VBox vbinventoryBtns = new VBox(10);
-	    vbinventoryBtns.getChildren().addAll(hbaddInventory,doneInventory);
-            BorderPane bpInventory = new BorderPane();
-            bpInventory.setPadding(new Insets(20));
-            bpInventory.setMargin(inventoryTitle,new Insets(12,12,12,12));
-            bpInventory.setMargin(vbInventory,new Insets(10,10,10,10));
-            bpInventory.setTop(inventoryTitle);
-            bpInventory.setCenter(vbInventory);
-            bpInventory.setBottom(vbinventoryBtns);
+        Button addInventory = new Button("Add Item");
+        Button doneInventory = new Button("Done");
+        HBox hbaddInventory = new HBox(10);
+        hbaddInventory.getChildren().addAll(addInventoryTf,addInventory);
+        VBox vbinventoryBtns = new VBox(10);
+        vbinventoryBtns.getChildren().addAll(hbaddInventory,doneInventory);
+        BorderPane bpInventory = new BorderPane();
+        bpInventory.setPadding(new Insets(20));
+        bpInventory.setMargin(inventoryTitle,new Insets(12,12,12,12));
+        bpInventory.setMargin(vbInventory,new Insets(10,10,10,10));
+        bpInventory.setTop(inventoryTitle);
+        bpInventory.setCenter(vbInventory);
+        bpInventory.setBottom(vbinventoryBtns);
 
 
-            Scene inventoryscene = new Scene(bpInventory);
-            inventoryscene.getStylesheets().add(this.getClass().getResource("InventoryPage.css").toExternalForm());
+        Scene inventoryscene = new Scene(bpInventory);
+        inventoryscene.getStylesheets().add(this.getClass().getResource("InventoryPage.css").toExternalForm());
 
-            inventoryStage.setScene(inventoryscene);
+        inventoryStage.setScene(inventoryscene);
 
-            //////// Add Inventory //////////
-            addInventory.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent e) {
-		    inventoryList.add(addInventoryTf.getText());
-		    c.setInventory(inventoryList);
-		    Label newInventory = new Label(addInventoryTf.getText());
-		    vbInventory.getChildren().add(newInventory);
-		    addInventoryTf.clear();
-		    
-		}
-		});
-	    
+        //////// Add Inventory //////////
+        addInventory.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                inventoryList.add(addInventoryTf.getText());
+                c.setInventory(inventoryList);
+                Label newInventory = new Label(addInventoryTf.getText());
+                vbInventory.getChildren().add(newInventory);
+                addInventoryTf.clear();
 
+            }
+        });
 
 
-	    doneInventory.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent e) {
-			c.setInventory(inventoryList);
-			inventoryStage.close();
-		    }
-		});
-	    
-            inventoryStage.show();
-	    
+
+
+        doneInventory.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                c.setInventory(inventoryList);
+                inventoryStage.close();
+            }
+        });
+
+        inventoryStage.show();
+
         }
     });
 
@@ -1198,55 +1243,71 @@ public class CharacterMgr extends Application {
 
 	    TextField addLanguagesTf = new TextField();
 	    addLanguagesTf.setPromptText("Add a Language");
-            Button addLanguages = new Button("Add Language");
-            Button doneLanguages = new Button("Done");
-            HBox hbaddLanguages = new HBox(10);
-            hbaddLanguages.getChildren().addAll(addLanguagesTf,addLanguages);
-	    VBox vblanguagesBtns = new VBox(10);
-	    vblanguagesBtns.getChildren().addAll(hbaddLanguages,doneLanguages);
-            BorderPane bpLanguages = new BorderPane();
-            bpLanguages.setPadding(new Insets(20));
-            bpLanguages.setMargin(languagesTitle,new Insets(12,12,12,12));
-            bpLanguages.setMargin(vbLanguages,new Insets(10,10,10,10));
-            bpLanguages.setTop(languagesTitle);
-            bpLanguages.setCenter(vbLanguages);
-            bpLanguages.setBottom(vblanguagesBtns);
+        Button addLanguages = new Button("Add Language");
+        Button doneLanguages = new Button("Done");
+        HBox hbaddLanguages = new HBox(10);
+        hbaddLanguages.getChildren().addAll(addLanguagesTf,addLanguages);
+        VBox vblanguagesBtns = new VBox(10);
+        vblanguagesBtns.getChildren().addAll(hbaddLanguages,doneLanguages);
+        BorderPane bpLanguages = new BorderPane();
+        bpLanguages.setPadding(new Insets(20));
+        bpLanguages.setMargin(languagesTitle,new Insets(12,12,12,12));
+        bpLanguages.setMargin(vbLanguages,new Insets(10,10,10,10));
+        bpLanguages.setTop(languagesTitle);
+        bpLanguages.setCenter(vbLanguages);
+        bpLanguages.setBottom(vblanguagesBtns);
 
 
-            Scene languagesscene = new Scene(bpLanguages);
-            languagesscene.getStylesheets().add(this.getClass().getResource("LanguagesPage.css").toExternalForm());
+        Scene languagesscene = new Scene(bpLanguages);
+        languagesscene.getStylesheets().add(this.getClass().getResource("LanguagesPage.css").toExternalForm());
 
-            languagesStage.setScene(languagesscene);
+        languagesStage.setScene(languagesscene);
 
-            //////// Add Languages //////////
-            addLanguages.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent e) {
-		    languagesList.add(addLanguagesTf.getText());
-		    c.setLanguages(languagesList);
-		    Label newLanguages = new Label(addLanguagesTf.getText());
-		    vbLanguages.getChildren().add(newLanguages);
-		    addLanguagesTf.clear();
-		    
-		}
-		});
-	    
+        //////// Add Languages //////////
+        addLanguages.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                languagesList.add(addLanguagesTf.getText());
+                c.setLanguages(languagesList);
+                Label newLanguages = new Label(addLanguagesTf.getText());
+                vbLanguages.getChildren().add(newLanguages);
+                addLanguagesTf.clear();
 
+            }
+        });
 
 
-	    doneLanguages.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent e) {
-			c.setLanguages(languagesList);
-			languagesStage.close();
-		    }
-		});
-	    
-            languagesStage.show();
-	    
+
+
+        doneLanguages.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                c.setLanguages(languagesList);
+                languagesStage.close();
+            }
+        });
+
+        languagesStage.show();
+
         }
     });
 
+
+    ////////////////////////////////////////////
+    ////////////////////////////////////////////
+    
+    ////////////////////////////////////////////
+    ///////////// Border Setup /////////////////
+    ////////////////////////////////////////////
+    
+
+    border.setMargin(characterName, new Insets(10,10,10,10));
+    
+    border.setTop(characterName);
+    border.setCenter(grid);
+    border.setBottom(hbsave);
+    border.setRight(sby);
+    border.setLeft(statvb1);
 
 	stage.show();	
 	}
