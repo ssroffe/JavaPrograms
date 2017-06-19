@@ -35,6 +35,8 @@ public class Character {
     private int armor;
     private int initiative;
     private int speed;
+    private int proficiencyBonus;
+    private int inspiration;
     private String hitdice;
     
     private int strength;
@@ -80,6 +82,7 @@ public class Character {
 
     private ArrayList<String> inventory;
     private String description;
+    private String notes;
 
     //////////////////////////
     /////// INSTANCES ////////
@@ -170,6 +173,8 @@ public class Character {
 	setMaxMP(0);
 
 	setHitDice("0");
+    setInspiration(0);
+    setProficiencyBonus(0);
 	setGold(0);
 	
 	setRace("");
@@ -230,6 +235,8 @@ public Character() {
 	setChar(0);
 
 	setInitiative(0);
+    setProficiencyBonus(0);
+    setInspiration(0);
 	setArmor(0);
 	setSpeed(0);
 	
@@ -252,6 +259,7 @@ public Character() {
 	setFlaws(new HashSet<String>());
 	setIdeals(new HashSet<String>());
 	setDescription("");
+    setNotes("");
 	setLanguages(new HashSet<String>());
 
 	setInventory(new ArrayList<String>());
@@ -298,6 +306,8 @@ public Character() {
 	setChar(0);
 
 	setInitiative(0);
+    setProficiencyBonus(0);
+    setInspiration(0);
 	setArmor(0);
 	setSpeed(0);
 
@@ -322,6 +332,7 @@ public Character() {
 	setFlaws(new HashSet<String>());
 	setIdeals(new HashSet<String>());
 	setDescription("");
+    setNotes("");
 	setLanguages(new HashSet<String>());
 
 	setSpells1(new HashSet<String>());
@@ -376,7 +387,10 @@ public Character() {
         setLevel(c.getLevel());
         setExp(c.getExp());
         setInventory(c.getInventory());
-	setLanguages(c.getLanguages());
+        setLanguages(c.getLanguages());
+        setProficiencyBonus(c.getProficiencyBonus());
+        setInspiration(c.getInspiration());
+
 
         setSpells1(c.getSpells1());
         setSpells2(c.getSpells2());
@@ -400,9 +414,10 @@ public Character() {
         setDeathRoll(c.getDeathRoll());
 
         setBonds(c.getBonds());
-	setFlaws(c.getFlaws());
-	setIdeals(c.getIdeals());
-	setDescription(c.getDescription());
+        setFlaws(c.getFlaws());
+        setIdeals(c.getIdeals());
+        setDescription(c.getDescription());
+        setNotes(c.getNotes());
         setCurrentHP(c.getCurrentHP());
         setGold(c.getGold());
         setFeatures(c.getFeatures());
@@ -457,6 +472,7 @@ public Character() {
     setSaveRoll(0);
     setDeathRoll(0);
 
+    setProficiencyBonus(0);
 	setLevel(1);
 	setExp(0);
 	setGold(0);
@@ -529,6 +545,13 @@ public Character() {
 	return subrace;
     }
 
+    public void setNotes(String n) {
+        this.notes = n;
+    }
+    public String getNotes() {
+        return notes;
+    }
+
     public void setGender(char g) {
 	this.gender = g;
     }
@@ -583,6 +606,20 @@ public Character() {
     }
     public int getArmor() {
 	return armor;
+    }
+
+    public void setProficiencyBonus(int pb) {
+        this.proficiencyBonus = pb;
+    }
+    public int getProficiencyBonus() {
+        return proficiencyBonus;
+    }
+
+    public void setInspiration(int i) {
+        this.inspiration = i;
+    }
+    public int getInspiration() {
+        return inspiration;
     }
 
     public void setInitiative(int i) {

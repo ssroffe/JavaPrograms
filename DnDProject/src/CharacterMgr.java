@@ -180,8 +180,12 @@ public class CharacterMgr extends Application {
         Stage stage = new Stage();
         stage.setTitle(c.getName() + " -- Character page");
 
+
         BorderPane border = new BorderPane();
         border.setPadding(new Insets(20));
+
+        ScrollPane scroll = new ScrollPane();
+        scroll.setContent(border);
 
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -190,7 +194,7 @@ public class CharacterMgr extends Application {
 
         grid.setPadding(new Insets(25,25,25,25));
 
-        Scene scene = new Scene(border,600,800);
+        Scene scene = new Scene(scroll,600,800);
         
         scene.getStylesheets().add(this.getClass().getResource("CharacterSheet.css").toExternalForm());
 
@@ -200,15 +204,6 @@ public class CharacterMgr extends Application {
         characterName.setId("characterName");
         //grid.add(characterName,1,0,2,1);
 
-        ScrollBar sby = new ScrollBar();
-        sby.setOrientation(Orientation.VERTICAL);
-        sby.setPrefHeight(50);
-        sby.setMax(360);
-        sby.valueProperty().addListener(new ChangeListener<Number>() {
-            public void changed(ObservableValue<? extends Number> ov, Number old_val,Number new_val) {
-                border.setLayoutY(-new_val.doubleValue());
-            }
-        });
 
         //////////// Level ////////////////
 
@@ -643,7 +638,12 @@ public class CharacterMgr extends Application {
     row++;
     row++;
 
-    //////////////// Stats ///////////////////
+    //////////////////////////////////////////
+    //////////////// STATS ///////////////////
+    //////////////////////////////////////////
+    
+    Label insp = new Label("Inspiration");
+    Label prof = new Label("Proficiency");
     Label str = new Label("Strength");
     Label con = new Label("Constitution");
     Label dex = new Label("Dexterity");
@@ -651,6 +651,17 @@ public class CharacterMgr extends Application {
     Label wis = new Label("Wisdom");
     Label cha = new Label("Chararisma");
 
+    TextField inspTf = new TextField();
+    inspTf.setId("locked-tf");
+    inspTf.setText(Integer.toString(c.getInspiration()));
+    inspTf.setEditable(false);
+    inspTf.setPrefWidth(40);
+
+    TextField profTf = new TextField();
+    profTf.setId("locked-tf");
+    profTf.setText(Integer.toString(c.getProficiencyBonus()));
+    profTf.setEditable(false);
+    profTf.setPrefWidth(40);
 
     TextField strTf = new TextField();
     strTf.setId("locked-tf");
@@ -690,7 +701,7 @@ public class CharacterMgr extends Application {
 
 
     VBox statvb1 = new VBox(10);
-    statvb1.getChildren().addAll(str,strTf,con,conTf,dex,dexTf,intel,intelTf,wis,wisTf,cha,chaTf);
+    statvb1.getChildren().addAll(insp,inspTf,prof,profTf,str,strTf,con,conTf,dex,dexTf,intel,intelTf,wis,wisTf,cha,chaTf);
 
 
     ToggleButton statbtn = new ToggleButton("Edit Stats");
@@ -703,6 +714,8 @@ public class CharacterMgr extends Application {
         int previousInt = c.getInt();
         int previousWis = c.getWis();
         int previousCha = c.getChar();
+        int previousProf = c.getProficiencyBonus();
+        int previousInsp = c.getInspiration();
         Text errMsg = new Text("One of the Stats was not an integer!");
         @Override
         public void handle(ActionEvent e) {
@@ -713,6 +726,8 @@ public class CharacterMgr extends Application {
                 previousInt = c.getInt();
                 previousWis = c.getWis();
                 previousCha = c.getChar();
+                previousProf = c.getProficiencyBonus();
+                previousInsp = c.getInspiration();
 
                 strTf.setEditable(true);
                 conTf.setEditable(true);
@@ -720,6 +735,8 @@ public class CharacterMgr extends Application {
                 intelTf.setEditable(true);
                 wisTf.setEditable(true);
                 chaTf.setEditable(true);
+                profTf.setEditable(true);
+                inspTf.setEditable(true);
 
                 strTf.setId("unlocked-tf");
                 conTf.setId("unlocked-tf");
@@ -727,6 +744,8 @@ public class CharacterMgr extends Application {
                 intelTf.setId("unlocked-tf");
                 wisTf.setId("unlocked-tf");
                 chaTf.setId("unlocked-tf");
+                profTf.setId("unlocked-tf");
+                inspTf.setId("unlocked-tf");
 
             }
             else {
@@ -736,12 +755,17 @@ public class CharacterMgr extends Application {
                 intelTf.setEditable(false);
                 wisTf.setEditable(false);
                 chaTf.setEditable(false);
+                profTf.setEditable(false);
+                inspTf.setEditable(false);
+
                 strTf.setId("locked-tf");
                 conTf.setId("locked-tf");
                 dexTf.setId("locked-tf");
                 intelTf.setId("locked-tf");
                 wisTf.setId("locked-tf");
                 chaTf.setId("locked-tf");
+                profTf.setId("locked-tf");
+                inspTf.setId("locked-tf");
 
                 boolean strIsInt = isInteger(strTf.getText());
                 boolean conIsInt = isInteger(conTf.getText());
@@ -749,14 +773,18 @@ public class CharacterMgr extends Application {
                 boolean intelIsInt = isInteger(intelTf.getText());
                 boolean wisIsInt = isInteger(wisTf.getText());
                 boolean chaIsInt = isInteger(chaTf.getText());
+                boolean profIsInt = isInteger(profTf.getText());
+                boolean inspIsInt = isInteger(inspTf.getText());
 
-                if (strIsInt && conIsInt && dexIsInt && intelIsInt && wisIsInt && chaIsInt ) {
+                if (strIsInt && conIsInt && dexIsInt && intelIsInt && wisIsInt && chaIsInt && profIsInt && inspIsInt) {
                     c.setStr(Integer.parseInt(strTf.getText()));
                     c.setCons(Integer.parseInt(conTf.getText()));
                     c.setDex(Integer.parseInt(dexTf.getText()));
                     c.setInt(Integer.parseInt(intelTf.getText()));
                     c.setWis(Integer.parseInt(wisTf.getText()));
                     c.setChar(Integer.parseInt(chaTf.getText()));
+                    c.setProficiencyBonus(Integer.parseInt(profTf.getText()));
+                    c.setInspiration(Integer.parseInt(inspTf.getText()));
                     statvb1.getChildren().remove(errMsg);
                 }
                 else {
@@ -769,6 +797,8 @@ public class CharacterMgr extends Application {
                     intelTf.setText(Integer.toString(previousInt));
                     wisTf.setText(Integer.toString(previousWis));
                     chaTf.setText(Integer.toString(previousCon));
+                    profTf.setText(Integer.toString(previousProf));
+                    inspTf.setText(Integer.toString(previousInsp));
 
                 }
             }
@@ -884,19 +914,27 @@ public class CharacterMgr extends Application {
     Button inventoryBtn = new Button("Inventory"); 
     Button idealsBtn = new Button("Ideals");
     Button descriptionBtn = new Button("Description");
-    Button featsBtn = new Button("Features");
+    Button featuresBtn = new Button("Features");
     Button languagesBtn = new Button("Languages");
+    Button bondsBtn = new Button("Bonds");
+    Button flawsBtn = new Button("Flaws");
+    Button notesBtn = new Button("Notes");
+
 
     HBox hbbtns1 = new HBox(10);
     hbbtns1.setAlignment(Pos.CENTER);
     hbbtns1.getChildren().addAll(skillsBtn,spellsBtn,inventoryBtn,languagesBtn);
     HBox hbbtns2 = new HBox(10);
     hbbtns2.setAlignment(Pos.CENTER);
-    hbbtns2.getChildren().addAll(idealsBtn,descriptionBtn,featsBtn);
+    hbbtns2.getChildren().addAll(featuresBtn,idealsBtn,bondsBtn,flawsBtn,descriptionBtn);
+
+    HBox hbbtns3 = new HBox(10);
+    hbbtns3.setAlignment(Pos.CENTER);
+    hbbtns3.getChildren().addAll(notesBtn);
 
     VBox vbbtns = new VBox(10);
     vbbtns.setAlignment(Pos.CENTER);
-    vbbtns.getChildren().addAll(hbbtns1,hbbtns2);
+    vbbtns.getChildren().addAll(hbbtns1,hbbtns2,hbbtns3);
     grid.add(vbbtns,1,row);
 
     row++;
@@ -933,11 +971,8 @@ public class CharacterMgr extends Application {
             Stage skillsStage = new Stage();
             skillsStage.setTitle("Skills Page");
 
-            // MAKE A SCROLL PANE ADD IT TO BP.CENTER
-            // MAKE THE VBOX THE CONTENTS OF THE SCROLL PANE
-
             Label skillsTitle = new Label("Skills");
-            skillsTitle.setId("skillsTitle");
+            skillsTitle.setId("title");
             VBox vbSkills = new VBox(10);
 
             HashSet<String> skillsList = c.getSkills();
@@ -963,7 +998,7 @@ public class CharacterMgr extends Application {
                         rmgrid.setAlignment(Pos.CENTER);
                         rmgrid.setHgap(10);
                         rmgrid.setVgap(10);
-                        Scene rmscene = new Scene(rmgrid);
+                        Scene rmscene = new Scene(rmgrid,400,150);
                         confirmRm.setScene(rmscene);
                         confirmRm.show();
 
@@ -1004,17 +1039,21 @@ public class CharacterMgr extends Application {
 	    VBox vbskillsBtns = new VBox(10);
 	    vbskillsBtns.getChildren().addAll(hbaddSkills,doneSkills);
 
+        ScrollPane skillsSp = new ScrollPane();
+        skillsSp.setContent(vbSkills);
+
+
         BorderPane bpSkills = new BorderPane();
         bpSkills.setPadding(new Insets(20));
         bpSkills.setMargin(skillsTitle,new Insets(12,12,12,12));
-        bpSkills.setMargin(vbSkills,new Insets(10,10,10,10));
+        bpSkills.setMargin(skillsSp,new Insets(10,10,10,10));
         bpSkills.setTop(skillsTitle);
-        bpSkills.setCenter(vbSkills);
+        bpSkills.setCenter(skillsSp);
         bpSkills.setBottom(vbskillsBtns);
 
 
         Scene skillsscene = new Scene(bpSkills);
-        skillsscene.getStylesheets().add(this.getClass().getResource("SkillsPage.css").toExternalForm());
+        skillsscene.getStylesheets().add(this.getClass().getResource("ListPage.css").toExternalForm());
 
         skillsStage.setScene(skillsscene);
 
@@ -1061,7 +1100,7 @@ public class CharacterMgr extends Application {
 
 
             Label inventoryTitle = new Label("Inventory");
-            inventoryTitle.setId("inventoryTitle");
+            inventoryTitle.setId("title");
             VBox vbInventory = new VBox(10);
 
             ArrayList<String> inventoryList = c.getInventory();
@@ -1087,7 +1126,7 @@ public class CharacterMgr extends Application {
                         rmgrid.setAlignment(Pos.CENTER);
                         rmgrid.setHgap(10);
                         rmgrid.setVgap(10);
-                        Scene rmscene = new Scene(rmgrid);
+                        Scene rmscene = new Scene(rmgrid,400,150);
                         confirmRm.setScene(rmscene);
                         confirmRm.show();
 
@@ -1127,17 +1166,21 @@ public class CharacterMgr extends Application {
         hbaddInventory.getChildren().addAll(addInventoryTf,addInventory);
         VBox vbinventoryBtns = new VBox(10);
         vbinventoryBtns.getChildren().addAll(hbaddInventory,doneInventory);
+
+        ScrollPane inventorySp = new ScrollPane();
+        inventorySp.setContent(vbInventory);
+
         BorderPane bpInventory = new BorderPane();
         bpInventory.setPadding(new Insets(20));
         bpInventory.setMargin(inventoryTitle,new Insets(12,12,12,12));
-        bpInventory.setMargin(vbInventory,new Insets(10,10,10,10));
+        bpInventory.setMargin(inventorySp,new Insets(10,10,10,10));
         bpInventory.setTop(inventoryTitle);
-        bpInventory.setCenter(vbInventory);
+        bpInventory.setCenter(inventorySp);
         bpInventory.setBottom(vbinventoryBtns);
 
 
         Scene inventoryscene = new Scene(bpInventory);
-        inventoryscene.getStylesheets().add(this.getClass().getResource("InventoryPage.css").toExternalForm());
+        inventoryscene.getStylesheets().add(this.getClass().getResource("ListPage.css").toExternalForm());
 
         inventoryStage.setScene(inventoryscene);
 
@@ -1183,7 +1226,7 @@ public class CharacterMgr extends Application {
 
 
             Label languagesTitle = new Label("Languages");
-            languagesTitle.setId("languagesTitle");
+            languagesTitle.setId("title");
             VBox vbLanguages = new VBox(10);
 
             HashSet<String> languagesList = c.getLanguages();
@@ -1209,7 +1252,7 @@ public class CharacterMgr extends Application {
                         rmgrid.setAlignment(Pos.CENTER);
                         rmgrid.setHgap(10);
                         rmgrid.setVgap(10);
-                        Scene rmscene = new Scene(rmgrid);
+                        Scene rmscene = new Scene(rmgrid,400,150);
                         confirmRm.setScene(rmscene);
                         confirmRm.show();
 
@@ -1249,17 +1292,21 @@ public class CharacterMgr extends Application {
         hbaddLanguages.getChildren().addAll(addLanguagesTf,addLanguages);
         VBox vblanguagesBtns = new VBox(10);
         vblanguagesBtns.getChildren().addAll(hbaddLanguages,doneLanguages);
+
+        ScrollPane languagesSp = new ScrollPane();
+        languagesSp.setContent(vbLanguages);
+
         BorderPane bpLanguages = new BorderPane();
         bpLanguages.setPadding(new Insets(20));
         bpLanguages.setMargin(languagesTitle,new Insets(12,12,12,12));
-        bpLanguages.setMargin(vbLanguages,new Insets(10,10,10,10));
+        bpLanguages.setMargin(languagesSp,new Insets(10,10,10,10));
         bpLanguages.setTop(languagesTitle);
-        bpLanguages.setCenter(vbLanguages);
+        bpLanguages.setCenter(languagesSp);
         bpLanguages.setBottom(vblanguagesBtns);
 
 
         Scene languagesscene = new Scene(bpLanguages);
-        languagesscene.getStylesheets().add(this.getClass().getResource("LanguagesPage.css").toExternalForm());
+        languagesscene.getStylesheets().add(this.getClass().getResource("ListPage.css").toExternalForm());
 
         languagesStage.setScene(languagesscene);
 
@@ -1292,6 +1339,647 @@ public class CharacterMgr extends Application {
         }
     });
 
+    //////////////////////////////////
+    ///////// IDEALS PAGE /////////
+    //////////////////////////////////
+
+    idealsBtn.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            Stage idealsStage = new Stage();
+            idealsStage.setTitle("Ideals Page");
+
+
+
+            Label idealsTitle = new Label("Ideals");
+            idealsTitle.setId("title");
+            VBox vbIdeals = new VBox(10);
+
+            HashSet<String> idealsList = c.getIdeals();
+            Iterator<String> itr = idealsList.iterator();
+
+            while (itr.hasNext()) {
+                String nxtItem = itr.next();
+                Label idealslabel = new Label(nxtItem);
+                HBox hbIdealsList = new HBox(10);
+
+                Button rm = new Button("remove");
+                hbIdealsList.getChildren().addAll(idealslabel,rm);
+
+                vbIdeals.getChildren().add(hbIdealsList);
+
+                ////// Remove button ///////
+                rm.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent e) {
+                        Stage confirmRm = new Stage();
+                        confirmRm.setTitle("Are you sure?");
+                        GridPane rmgrid = new GridPane();
+                        rmgrid.setAlignment(Pos.CENTER);
+                        rmgrid.setHgap(10);
+                        rmgrid.setVgap(10);
+                        Scene rmscene = new Scene(rmgrid,400,150);
+                        confirmRm.setScene(rmscene);
+                        confirmRm.show();
+
+                        Label rmLabel = new Label("remove " + nxtItem + ". Are you sure?");
+                        rmgrid.add(rmLabel,0,0);
+                        Button yesRm = new Button("Yes");
+                        Button noRm = new Button("Cancel");
+                        HBox hbynrm = new HBox(10);
+                        hbynrm.getChildren().addAll(yesRm,noRm);
+                        rmgrid.add(hbynrm,0,1);
+
+                        yesRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                vbIdeals.getChildren().remove(hbIdealsList);
+                                idealsList.remove(idealslabel.getText());
+                                c.setIdeals(idealsList);
+                                confirmRm.close();
+                            }
+                        });
+                        noRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                confirmRm.close();
+                            }
+                        });
+                    }
+                });
+
+            }
+
+	    TextField addIdealsTf = new TextField();
+	    addIdealsTf.setPromptText("Add a Language");
+        Button addIdeals = new Button("Add Language");
+        Button doneIdeals = new Button("Done");
+        HBox hbaddIdeals = new HBox(10);
+        hbaddIdeals.getChildren().addAll(addIdealsTf,addIdeals);
+        VBox vbidealsBtns = new VBox(10);
+        vbidealsBtns.getChildren().addAll(hbaddIdeals,doneIdeals);
+
+        ScrollPane idealsSp = new ScrollPane();
+        idealsSp.setContent(vbIdeals);
+
+        BorderPane bpIdeals = new BorderPane();
+        bpIdeals.setPadding(new Insets(20));
+        bpIdeals.setMargin(idealsTitle,new Insets(12,12,12,12));
+        bpIdeals.setMargin(idealsSp,new Insets(10,10,10,10));
+        bpIdeals.setTop(idealsTitle);
+        bpIdeals.setCenter(idealsSp);
+        bpIdeals.setBottom(vbidealsBtns);
+
+
+        Scene idealsscene = new Scene(bpIdeals);
+        idealsscene.getStylesheets().add(this.getClass().getResource("ListPage.css").toExternalForm());
+
+        idealsStage.setScene(idealsscene);
+
+        //////// Add Ideals //////////
+        addIdeals.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                idealsList.add(addIdealsTf.getText());
+                c.setIdeals(idealsList);
+                Label newIdeals = new Label(addIdealsTf.getText());
+                vbIdeals.getChildren().add(newIdeals);
+                addIdealsTf.clear();
+
+            }
+        });
+
+
+
+
+        doneIdeals.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                c.setIdeals(idealsList);
+                idealsStage.close();
+            }
+        });
+
+        idealsStage.show();
+
+        }
+    });
+
+    //////////////////////////////////
+    ///////// FLAWS PAGE /////////////
+    //////////////////////////////////
+
+    flawsBtn.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            Stage flawsStage = new Stage();
+            flawsStage.setTitle("Flaws Page");
+
+
+
+            Label flawsTitle = new Label("Flaws");
+            flawsTitle.setId("title");
+            VBox vbFlaws = new VBox(10);
+
+            HashSet<String> flawsList = c.getFlaws();
+            Iterator<String> itr = flawsList.iterator();
+
+            while (itr.hasNext()) {
+                String nxtItem = itr.next();
+                Label flawslabel = new Label(nxtItem);
+                HBox hbFlawsList = new HBox(10);
+
+                Button rm = new Button("remove");
+                hbFlawsList.getChildren().addAll(flawslabel,rm);
+
+                vbFlaws.getChildren().add(hbFlawsList);
+
+                ////// Remove button ///////
+                rm.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent e) {
+                        Stage confirmRm = new Stage();
+                        confirmRm.setTitle("Are you sure?");
+                        GridPane rmgrid = new GridPane();
+                        rmgrid.setAlignment(Pos.CENTER);
+                        rmgrid.setHgap(10);
+                        rmgrid.setVgap(10);
+                        Scene rmscene = new Scene(rmgrid,400,150);
+                        confirmRm.setScene(rmscene);
+                        confirmRm.show();
+
+                        Label rmLabel = new Label("remove " + nxtItem + ". Are you sure?");
+                        rmgrid.add(rmLabel,0,0);
+                        Button yesRm = new Button("Yes");
+                        Button noRm = new Button("Cancel");
+                        HBox hbynrm = new HBox(10);
+                        hbynrm.getChildren().addAll(yesRm,noRm);
+                        rmgrid.add(hbynrm,0,1);
+
+                        yesRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                vbFlaws.getChildren().remove(hbFlawsList);
+                                flawsList.remove(flawslabel.getText());
+                                c.setFlaws(flawsList);
+                                confirmRm.close();
+                            }
+                        });
+                        noRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                confirmRm.close();
+                            }
+                        });
+                    }
+                });
+
+            }
+
+	    TextField addFlawsTf = new TextField();
+	    addFlawsTf.setPromptText("Add a Language");
+        Button addFlaws = new Button("Add Language");
+        Button doneFlaws = new Button("Done");
+        HBox hbaddFlaws = new HBox(10);
+        hbaddFlaws.getChildren().addAll(addFlawsTf,addFlaws);
+        VBox vbflawsBtns = new VBox(10);
+        vbflawsBtns.getChildren().addAll(hbaddFlaws,doneFlaws);
+
+        ScrollPane flawsSp = new ScrollPane();
+        flawsSp.setContent(vbFlaws);
+
+        BorderPane bpFlaws = new BorderPane();
+        bpFlaws.setPadding(new Insets(20));
+        bpFlaws.setMargin(flawsTitle,new Insets(12,12,12,12));
+        bpFlaws.setMargin(flawsSp,new Insets(10,10,10,10));
+        bpFlaws.setTop(flawsTitle);
+        bpFlaws.setCenter(flawsSp);
+        bpFlaws.setBottom(vbflawsBtns);
+
+
+        Scene flawsscene = new Scene(bpFlaws);
+        flawsscene.getStylesheets().add(this.getClass().getResource("ListPage.css").toExternalForm());
+
+        flawsStage.setScene(flawsscene);
+
+        //////// Add Flaws //////////
+        addFlaws.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                flawsList.add(addFlawsTf.getText());
+                c.setFlaws(flawsList);
+                Label newFlaws = new Label(addFlawsTf.getText());
+                vbFlaws.getChildren().add(newFlaws);
+                addFlawsTf.clear();
+
+            }
+        });
+
+
+
+
+        doneFlaws.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                c.setFlaws(flawsList);
+                flawsStage.close();
+            }
+        });
+
+        flawsStage.show();
+
+        }
+    });
+
+    //////////////////////////////////
+    ///////// BONDS PAGE /////////////
+    //////////////////////////////////
+
+    bondsBtn.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            Stage bondsStage = new Stage();
+            bondsStage.setTitle("Bonds Page");
+
+
+
+            Label bondsTitle = new Label("Bonds");
+            bondsTitle.setId("title");
+            VBox vbBonds = new VBox(10);
+
+            HashSet<String> bondsList = c.getBonds();
+            Iterator<String> itr = bondsList.iterator();
+
+            while (itr.hasNext()) {
+                String nxtItem = itr.next();
+                Label bondslabel = new Label(nxtItem);
+                HBox hbBondsList = new HBox(10);
+
+                Button rm = new Button("remove");
+                hbBondsList.getChildren().addAll(bondslabel,rm);
+
+                vbBonds.getChildren().add(hbBondsList);
+
+                ////// Remove button ///////
+                rm.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent e) {
+                        Stage confirmRm = new Stage();
+                        confirmRm.setTitle("Are you sure?");
+                        GridPane rmgrid = new GridPane();
+                        rmgrid.setAlignment(Pos.CENTER);
+                        rmgrid.setHgap(10);
+                        rmgrid.setVgap(10);
+                        Scene rmscene = new Scene(rmgrid,400,150);
+                        confirmRm.setScene(rmscene);
+                        confirmRm.show();
+
+                        Label rmLabel = new Label("remove " + nxtItem + ". Are you sure?");
+                        rmgrid.add(rmLabel,0,0);
+                        Button yesRm = new Button("Yes");
+                        Button noRm = new Button("Cancel");
+                        HBox hbynrm = new HBox(10);
+                        hbynrm.getChildren().addAll(yesRm,noRm);
+                        rmgrid.add(hbynrm,0,1);
+
+                        yesRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                vbBonds.getChildren().remove(hbBondsList);
+                                bondsList.remove(bondslabel.getText());
+                                c.setBonds(bondsList);
+                                confirmRm.close();
+                            }
+                        });
+                        noRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                confirmRm.close();
+                            }
+                        });
+                    }
+                });
+
+            }
+
+	    TextField addBondsTf = new TextField();
+	    addBondsTf.setPromptText("Add a Language");
+        Button addBonds = new Button("Add Language");
+        Button doneBonds = new Button("Done");
+        HBox hbaddBonds = new HBox(10);
+        hbaddBonds.getChildren().addAll(addBondsTf,addBonds);
+        VBox vbbondsBtns = new VBox(10);
+        vbbondsBtns.getChildren().addAll(hbaddBonds,doneBonds);
+
+        ScrollPane bondsSp = new ScrollPane();
+        bondsSp.setContent(vbBonds);
+
+        BorderPane bpBonds = new BorderPane();
+        bpBonds.setPadding(new Insets(20));
+        bpBonds.setMargin(bondsTitle,new Insets(12,12,12,12));
+        bpBonds.setMargin(bondsSp,new Insets(10,10,10,10));
+        bpBonds.setTop(bondsTitle);
+        bpBonds.setCenter(bondsSp);
+        bpBonds.setBottom(vbbondsBtns);
+
+
+        Scene bondsscene = new Scene(bpBonds);
+        bondsscene.getStylesheets().add(this.getClass().getResource("ListPage.css").toExternalForm());
+
+        bondsStage.setScene(bondsscene);
+
+        //////// Add Bonds //////////
+        addBonds.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                bondsList.add(addBondsTf.getText());
+                c.setBonds(bondsList);
+                Label newBonds = new Label(addBondsTf.getText());
+                vbBonds.getChildren().add(newBonds);
+                addBondsTf.clear();
+
+            }
+        });
+
+
+
+
+        doneBonds.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                c.setBonds(bondsList);
+                bondsStage.close();
+            }
+        });
+
+        bondsStage.show();
+
+        }
+    });
+    
+    //////////////////////////////////
+    ///////// FEATURES PAGE /////////////
+    //////////////////////////////////
+
+    featuresBtn.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            Stage featuresStage = new Stage();
+            featuresStage.setTitle("Features Page");
+
+
+
+            Label featuresTitle = new Label("Features");
+            featuresTitle.setId("title");
+            VBox vbFeatures = new VBox(10);
+
+            HashSet<String> featuresList = c.getFeatures();
+            Iterator<String> itr = featuresList.iterator();
+
+            while (itr.hasNext()) {
+                String nxtItem = itr.next();
+                Label featureslabel = new Label(nxtItem);
+                HBox hbFeaturesList = new HBox(10);
+
+                Button rm = new Button("remove");
+                hbFeaturesList.getChildren().addAll(featureslabel,rm);
+
+                vbFeatures.getChildren().add(hbFeaturesList);
+
+                ////// Remove button ///////
+                rm.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent e) {
+                        Stage confirmRm = new Stage();
+                        confirmRm.setTitle("Are you sure?");
+                        GridPane rmgrid = new GridPane();
+                        rmgrid.setAlignment(Pos.CENTER);
+                        rmgrid.setHgap(10);
+                        rmgrid.setVgap(10);
+                        Scene rmscene = new Scene(rmgrid,400,150);
+                        confirmRm.setScene(rmscene);
+                        confirmRm.show();
+
+                        Label rmLabel = new Label("remove " + nxtItem + ". Are you sure?");
+                        rmgrid.add(rmLabel,0,0);
+                        Button yesRm = new Button("Yes");
+                        Button noRm = new Button("Cancel");
+                        HBox hbynrm = new HBox(10);
+                        hbynrm.getChildren().addAll(yesRm,noRm);
+                        rmgrid.add(hbynrm,0,1);
+
+                        yesRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                vbFeatures.getChildren().remove(hbFeaturesList);
+                                featuresList.remove(featureslabel.getText());
+                                c.setFeatures(featuresList);
+                                confirmRm.close();
+                            }
+                        });
+                        noRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                confirmRm.close();
+                            }
+                        });
+                    }
+                });
+
+            }
+
+	    TextField addFeaturesTf = new TextField();
+	    addFeaturesTf.setPromptText("Add a Language");
+        Button addFeatures = new Button("Add Language");
+        Button doneFeatures = new Button("Done");
+        HBox hbaddFeatures = new HBox(10);
+        hbaddFeatures.getChildren().addAll(addFeaturesTf,addFeatures);
+        VBox vbfeaturesBtns = new VBox(10);
+        vbfeaturesBtns.getChildren().addAll(hbaddFeatures,doneFeatures);
+
+        ScrollPane featuresSp = new ScrollPane();
+        featuresSp.setContent(vbFeatures);
+
+        BorderPane bpFeatures = new BorderPane();
+        bpFeatures.setPadding(new Insets(20));
+        bpFeatures.setMargin(featuresTitle,new Insets(12,12,12,12));
+        bpFeatures.setMargin(featuresSp,new Insets(10,10,10,10));
+        bpFeatures.setTop(featuresTitle);
+        bpFeatures.setCenter(featuresSp);
+        bpFeatures.setBottom(vbfeaturesBtns);
+
+
+        Scene featuresscene = new Scene(bpFeatures);
+        featuresscene.getStylesheets().add(this.getClass().getResource("ListPage.css").toExternalForm());
+
+        featuresStage.setScene(featuresscene);
+
+        //////// Add Features //////////
+        addFeatures.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                featuresList.add(addFeaturesTf.getText());
+                c.setFeatures(featuresList);
+                Label newFeatures = new Label(addFeaturesTf.getText());
+                vbFeatures.getChildren().add(newFeatures);
+                addFeaturesTf.clear();
+
+            }
+        });
+
+
+
+
+        doneFeatures.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                c.setFeatures(featuresList);
+                featuresStage.close();
+            }
+        });
+
+        featuresStage.show();
+
+        }
+    });
+    
+    ////////////////////////////////////
+    ////////////// NOTES ///////////////
+    ////////////////////////////////////
+    
+    notesBtn.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            Stage notesStage = new Stage();
+            notesStage.setTitle("Notes Page");
+	    
+	    
+	    
+            Label notesTitle = new Label("Notes");
+            notesTitle.setId("title");
+            VBox vbNotes = new VBox(10);
+	    
+            String notesList = c.getNotes();
+	    
+	    TextArea notes = new TextArea(c.getNotes());
+	    Button saveNotes = new Button("Save Notes");
+	    Button doneNotes = new Button("Done");
+	    HBox hbNotes = new HBox(10);
+	    hbNotes.getChildren().addAll(saveNotes,doneNotes);
+
+
+        ScrollPane notesSp = new ScrollPane();
+        notesSp.setContent(vbNotes);
+
+        BorderPane bpNotes = new BorderPane();
+        bpNotes.setPadding(new Insets(20));
+        bpNotes.setMargin(notesTitle,new Insets(12,12,12,12));
+        bpNotes.setMargin(notes,new Insets(10,10,10,10));
+        bpNotes.setTop(notesTitle);
+        bpNotes.setCenter(notes);
+        bpNotes.setBottom(hbNotes);
+
+
+        Scene notesscene = new Scene(bpNotes);
+        notesscene.getStylesheets().add(this.getClass().getResource("TextAreaPage.css").toExternalForm());
+
+        notesStage.setScene(notesscene);
+
+        //////// Save Notes //////////
+        saveNotes.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+		c.setNotes(notes.getText());
+		Text msg = new Text("Notes Saved");
+		msg.setFill(Color.FIREBRICK);
+		hbNotes.getChildren().remove(msg);
+		hbNotes.getChildren().add(msg);
+
+            }
+        });
+
+
+        doneNotes.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                c.setNotes(notes.getText());
+                notesStage.close();
+            }
+        });
+
+        notesStage.show();
+
+        }
+    });
+    
+    //////////////////////////////////////////
+    ////////////// DESCRIPTION ///////////////
+    //////////////////////////////////////////
+    
+    descriptionBtn.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            Stage descriptionStage = new Stage();
+            descriptionStage.setTitle("Description Page");
+	    
+	    
+	    
+            Label descriptionTitle = new Label("Description");
+            descriptionTitle.setId("title");
+            VBox vbDescription = new VBox(10);
+	    
+            String descriptionList = c.getDescription();
+	    
+	    TextArea description = new TextArea(c.getDescription());
+	    Button saveDescription = new Button("Save Description");
+	    Button doneDescription = new Button("Done");
+	    HBox hbDescription = new HBox(10);
+	    hbDescription.getChildren().addAll(saveDescription,doneDescription);
+
+
+        ScrollPane descriptionSp = new ScrollPane();
+        descriptionSp.setContent(vbDescription);
+
+        BorderPane bpDescription = new BorderPane();
+        bpDescription.setPadding(new Insets(20));
+        bpDescription.setMargin(descriptionTitle,new Insets(12,12,12,12));
+        bpDescription.setMargin(description,new Insets(10,10,10,10));
+        bpDescription.setTop(descriptionTitle);
+        bpDescription.setCenter(description);
+        bpDescription.setBottom(hbDescription);
+
+
+        Scene descriptionscene = new Scene(bpDescription);
+        descriptionscene.getStylesheets().add(this.getClass().getResource("TextAreaPage.css").toExternalForm());
+
+        descriptionStage.setScene(descriptionscene);
+
+        //////// Save Description //////////
+        saveDescription.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+		c.setDescription(description.getText());
+		Text msg = new Text("Description Saved");
+		msg.setFill(Color.FIREBRICK);
+		hbDescription.getChildren().remove(msg);
+		hbDescription.getChildren().add(msg);
+
+            }
+        });
+
+
+        doneDescription.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                c.setDescription(description.getText());
+                descriptionStage.close();
+            }
+        });
+
+        descriptionStage.show();
+
+        }
+    });
 
     ////////////////////////////////////////////
     ////////////////////////////////////////////
@@ -1306,7 +1994,6 @@ public class CharacterMgr extends Application {
     border.setTop(characterName);
     border.setCenter(grid);
     border.setBottom(hbsave);
-    border.setRight(sby);
     border.setLeft(statvb1);
 
 	stage.show();	
