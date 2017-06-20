@@ -1340,7 +1340,7 @@ public class CharacterMgr extends Application {
     });
 
     //////////////////////////////////
-    ///////// IDEALS PAGE /////////
+    ///////// IDEALS PAGE ////////////
     //////////////////////////////////
 
     idealsBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -1717,9 +1717,9 @@ public class CharacterMgr extends Application {
         }
     });
     
-    //////////////////////////////////
+    /////////////////////////////////////
     ///////// FEATURES PAGE /////////////
-    //////////////////////////////////
+    /////////////////////////////////////
 
     featuresBtn.setOnAction(new EventHandler<ActionEvent>() {
         @Override
@@ -1980,6 +1980,37 @@ public class CharacterMgr extends Application {
 
         }
     });
+
+
+    ////////////////////////////////////
+    /////////// SPELLS PAGE ////////////
+    ////////////////////////////////////
+    
+    spellsBtn.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            Stage spellsStage = new Stage();
+            spellsStage.setTitle("Spells Page");
+
+            Label spellsTitle = new Label("Spells");
+            descriptionTitle.setId("title");
+
+            BorderPane spellsBp = new BorderPane();
+            spellsBp.setPadding(new Insets(20));
+            spellsBp.setMargin(spellsTitle,new Insets(12,12,12,12));
+
+            ScrollPane spellsSp = new ScrollPane();
+            spellsSp.setContent(spellsBp);
+            
+            Scene spellsscene = new scene(spellsSp);
+
+            spellsStage.setScene(spellsscene);
+            
+
+        }
+    });
+       
+
 
     ////////////////////////////////////////////
     ////////////////////////////////////////////
