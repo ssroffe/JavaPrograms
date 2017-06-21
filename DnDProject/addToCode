@@ -1,0 +1,7 @@
+Skills:
+    Make the list hard coded have:
+        boolean (check box proficiency) / TextField (modifier) / Name of skill
+        Store in a fixed array
+Calculate modifiers and add that to stats
+    floor((stat - 10) / 2) if positive 
+    ceiling((stat - 10) / 2) if negative

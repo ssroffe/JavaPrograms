@@ -649,7 +649,7 @@ public class CharacterMgr extends Application {
     Label dex = new Label("Dexterity");
     Label intel = new Label("Intelligence");
     Label wis = new Label("Wisdom");
-    Label cha = new Label("Chararisma");
+    Label cha = new Label("Charisma");
 
     TextField inspTf = new TextField();
     inspTf.setId("locked-tf");
@@ -1411,8 +1411,8 @@ public class CharacterMgr extends Application {
             }
 
 	    TextField addIdealsTf = new TextField();
-	    addIdealsTf.setPromptText("Add a Language");
-        Button addIdeals = new Button("Add Language");
+	    addIdealsTf.setPromptText("Add an Ideal ");
+        Button addIdeals = new Button("Add Ideal");
         Button doneIdeals = new Button("Done");
         HBox hbaddIdeals = new HBox(10);
         hbaddIdeals.getChildren().addAll(addIdealsTf,addIdeals);
@@ -1537,8 +1537,8 @@ public class CharacterMgr extends Application {
             }
 
 	    TextField addFlawsTf = new TextField();
-	    addFlawsTf.setPromptText("Add a Language");
-        Button addFlaws = new Button("Add Language");
+	    addFlawsTf.setPromptText("Add a Flaw");
+        Button addFlaws = new Button("Add Flaw");
         Button doneFlaws = new Button("Done");
         HBox hbaddFlaws = new HBox(10);
         hbaddFlaws.getChildren().addAll(addFlawsTf,addFlaws);
@@ -1663,8 +1663,8 @@ public class CharacterMgr extends Application {
             }
 
 	    TextField addBondsTf = new TextField();
-	    addBondsTf.setPromptText("Add a Language");
-        Button addBonds = new Button("Add Language");
+	    addBondsTf.setPromptText("Add a Bond");
+        Button addBonds = new Button("Add Bond");
         Button doneBonds = new Button("Done");
         HBox hbaddBonds = new HBox(10);
         hbaddBonds.getChildren().addAll(addBondsTf,addBonds);
@@ -1789,8 +1789,8 @@ public class CharacterMgr extends Application {
             }
 
 	    TextField addFeaturesTf = new TextField();
-	    addFeaturesTf.setPromptText("Add a Language");
-        Button addFeatures = new Button("Add Language");
+	    addFeaturesTf.setPromptText("Add a Feature");
+        Button addFeatures = new Button("Add Feature");
         Button doneFeatures = new Button("Done");
         HBox hbaddFeatures = new HBox(10);
         hbaddFeatures.getChildren().addAll(addFeaturesTf,addFeatures);
