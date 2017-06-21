@@ -1993,18 +1993,164 @@ public class CharacterMgr extends Application {
             spellsStage.setTitle("Spells Page");
 
             Label spellsTitle = new Label("Spells");
-            descriptionTitle.setId("title");
+            spellsTitle.setId("title");
 
             BorderPane spellsBp = new BorderPane();
             spellsBp.setPadding(new Insets(20));
             spellsBp.setMargin(spellsTitle,new Insets(12,12,12,12));
 
+            VBox rootVb = new VBox(10);
+
             ScrollPane spellsSp = new ScrollPane();
             spellsSp.setContent(spellsBp);
             
-            Scene spellsscene = new scene(spellsSp);
+            Scene spellsscene = new Scene(spellsSp);
 
             spellsStage.setScene(spellsscene);
+
+
+            ///////////////////
+            ///// LEVEL 1 /////
+            ///////////////////
+            Label titleSpellSlots1 = new Label("Level 1 Spells");
+            titleSpellSlots1.setId("spellLevelTitle");
+            Label spellSlots1 = new Label("Spell slots:");
+            TextField spellSlots1Tf = new TextField(Integer.toString(c.getSpellSlots1()));
+            spellSlots1Tf.setEditable(false);
+            spellSlots1Tf.setId("locked-tf");
+            ToggleButton editSpellSlots1 = new ToggleButton("Edit Spell Slots");
+            Button useSpellSlot1 = new Button("Use Spell Slot");
+
+            HBox spellSlots1Hb = new HBox(10);
+            spellSlots1Hb.getChildren().addAll(titleSpellSlots1,spellSlots1,spellSlots1Tf,useSpellSlot1,editSpellSlots1);
+
+            editSpellSlots1.setOnAction(new EventHandler<ActionEvent>() {
+                int previousSpellSlots1 = c.getSpellSlots1();
+                Text errMsg = new Text("New number of Spell Slots was not an integer!");
+                @Override
+                public void handle(ActionEvent e) {
+                    if (editSpellSlots1.isSelected()) {
+                        previousSpellSlots1 = c.getSpellSlots1();
+                        spellSlots1Tf.setEditable(true);
+                        spellSlots1Tf.setId("unlocked-tf");
+                    }
+                    else {
+                        previousSpellSlots1 = c.getSpellSlots1();
+                        spellSlots1Tf.setEditable(false);
+                        spellSlots1Tf.setId("locked-tf");
+                        boolean isInt = isInteger(spellSlots1Tf.getText());
+                        if (isInt) {
+                            c.setSpellSlots1(Integer.parseInt(spellSlots1Tf.getText()));
+                            spellSlots1Hb.getChildren().remove(errMsg);
+                        }
+                        else {
+                            errMsg.setFill(Color.FIREBRICK);
+                            spellSlots1Hb.getChildren().remove(errMsg);
+                            spellSlots1Hb.getChildren().add(errMsg);
+                            spellSlots1Tf.setText(Integer.toString(previousSpellSlots1));
+                        }
+                    }
+                }
+            });
+
+            useSpellSlot1.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    c.setSpellSlots1(c.getSpellSlots1() - 1);
+                    spellSlots1Tf.setText(Integer.toString(c.getSpellSlots1()));
+                }
+            });
+            
+            VBox spells1Root = new VBox(10);
+            VBox spells1 = new VBox(10);
+            ScrollPane spells1Sp = new ScrollPane();
+            spells1Sp.setContent(spells1);
+            Button addSpells1Btn = new Button("Add Spell");
+            HBox addSpells1Hb = new HBox(10);
+            addSpells1Hb.getChildren().addAll(addSpells1Btn);
+
+            spells1Root.getChildren().addAll(spellSlots1Hb,spells1Sp,addSpells1Hb);
+
+            HashSet<String> spells1List = c.getSpells1();
+            Iterator<String> spells1Itr = spells1List.iterator();
+
+            while (spells1Itr.hasNext()) {
+                String nextItem = spells1Itr.next();
+                String[] splitItem = nextItem.split("--");
+                HBox itemHb = new HBox(10);
+                Label spellName = new Label(splitItem[0]);
+                TextArea spellDescription = new TextArea();
+                spellDescription.setPromptText("Spell Description");
+                try {
+                    spellDescription.setText(splitItem[1]);
+                }
+                catch (ArrayIndexOutOfBoundsException ioe) {
+                }
+                Button rm = new Button("remove");
+
+                itemHb.getChildren().addAll(spellName,spellDescription,rm);
+                spells1.getChildren().add(itemHb);
+
+                ////// Remove button ///////
+                rm.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent e) {
+                        Stage confirmRm = new Stage();
+                        confirmRm.setTitle("Are you sure?");
+                        GridPane rmgrid = new GridPane();
+                        rmgrid.setAlignment(Pos.CENTER);
+                        rmgrid.setHgap(10);
+                        rmgrid.setVgap(10);
+                        Scene rmscene = new Scene(rmgrid,400,150);
+                        confirmRm.setScene(rmscene);
+                        confirmRm.show();
+
+                        Label rmLabel = new Label("remove " + splitItem[0] + ". Are you sure?");
+                        rmgrid.add(rmLabel,0,0);
+                        Button yesRm = new Button("Yes");
+                        Button noRm = new Button("Cancel");
+                        HBox hbynrm = new HBox(10);
+                        hbynrm.getChildren().addAll(yesRm,noRm);
+                        rmgrid.add(hbynrm,0,1);
+
+                        yesRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                spells1.getChildren().remove(itemHb);
+                                spells1List.remove(spellName.getText() + "--" + spellDescription.getText());
+                                c.setSpells1(spells1List);
+                                confirmRm.close();
+                            }
+                        });
+                        noRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                confirmRm.close();
+                            }
+                        });
+                    }
+                });
+
+                
+            }
+            
+            addSpells1Btn.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                }
+            });
+            
+            rootVb.getChildren().add(spells1Root);
+
+            ///////////////////
+            ///// LEVEL 2 /////
+            ///////////////////
+            
+            
+
+            spellsStage.show();                 
+            spellsBp.setTop(spellsTitle);
+            spellsBp.setCenter(rootVb);
             
 
         }
