@@ -1574,16 +1574,22 @@ public class CharacterMgr extends Application {
 
             Label weaponsTitle = new Label("Weapons");
             weaponsTitle.setId("title");
+            
+            VBox weaponsHeader = new VBox(10);
+            
             VBox vbWeapons = new VBox(10);
 
             ArrayList<String> weaponsList = c.getWeapons();
             Iterator<String> itr = weaponsList.iterator();
 
-            HBox labels = new HBox(10);
+            HBox labelsHb = new HBox(10);
             Label proficient = new Label("Proficient");
             Label weaponName = new Label("Weapon");
             Label damageLabel = new Label("Damage");
-            labels.getChildren().addAll(proficient,weaponName,damageLabel);
+            labelsHb.getChildren().addAll(proficient,weaponName,damageLabel);
+            
+            weaponsHeader.getChildren().addAll(weaponsTitle,labelsHb);
+            
             int index = 0;
 
             while (itr.hasNext()) {
@@ -1626,7 +1632,7 @@ public class CharacterMgr extends Application {
                 HBox hbWeaponsList = new HBox(10);
 
                 Button rm = new Button("remove");
-                hbWeaponsList.getChildren().addAll(isProficient,weaponslabel,damage,damageMod,rm,edit);
+                hbWeaponsList.getChildren().addAll(isProficient,weaponsTf,damage,damageMod,rm,editBtn);
 
                 vbWeapons.getChildren().add(hbWeaponsList);
 
@@ -1636,13 +1642,13 @@ public class CharacterMgr extends Application {
                     public void handle(ActionEvent e) {
                         if (editBtn.isSelected()) {
                             damage.setEditable(true);
-                            damage.setEditable("unlocked-tf");
+                            damage.setId("unlocked-tf");
                             weaponsTf.setEditable(true);
                             weaponsTf.setId("unlocked-tf");
                         }
                         else {
                             damage.setEditable(false);
-                            damage.setEditable("locked-tf");
+                            damage.setId("locked-tf");
                             weaponsTf.setEditable(false);
                             weaponsTf.setId("locked-tf");
                             weaponsList.set(currIndex,weaponsTf.getText() + "--" + damage.getText() + "--" + Boolean.toString(isProficient.isSelected()));
@@ -1654,8 +1660,15 @@ public class CharacterMgr extends Application {
                 isProficient.selectedProperty().addListener(new ChangeListener<Boolean>() {
                     public void changed(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
                         
-                        weaponsList.set(currIndex,weaponsTf.getText() + "--" + damage.getText() + "--" + Boolean.toString(isProficient.isSelected()));
+                        weaponsList.set(currIndex,weaponsTf.getText() + "--" + damage.getText() + "--" + Boolean.toString(newVal));
                         c.setWeapons(weaponsList);
+                        if (newVal) {
+                            damageMod.setText(fmt.format(calcMod(c.getStr()) + c.getProficiencyBonus()));
+                        }
+                        else {
+                            damageMod.setText(fmt.format(calcMod(c.getStr())));
+                        }
+
                     }
                 });
 
@@ -1698,14 +1711,13 @@ public class CharacterMgr extends Application {
                         });
                     }
                 });
-
-                row++;
+                index++;
 
             }
 
 	    TextField addWeaponsTf = new TextField();
-	    addWeaponsTf.setPromptText("Add a Language");
-        Button addWeapons = new Button("Add Language");
+	    addWeaponsTf.setPromptText("Add a Weapon");
+        Button addWeapons = new Button("Add Weapon");
         Button doneWeapons = new Button("Done");
         HBox hbaddWeapons = new HBox(10);
         hbaddWeapons.getChildren().addAll(addWeaponsTf,addWeapons);
@@ -1719,7 +1731,7 @@ public class CharacterMgr extends Application {
         bpWeapons.setPadding(new Insets(20));
         bpWeapons.setMargin(weaponsTitle,new Insets(12,12,12,12));
         bpWeapons.setMargin(weaponsSp,new Insets(10,10,10,10));
-        bpWeapons.setTop(weaponsTitle);
+        bpWeapons.setTop(weaponsHeader);
         bpWeapons.setCenter(weaponsSp);
         bpWeapons.setBottom(vbweaponsBtns);
 
@@ -1734,10 +1746,108 @@ public class CharacterMgr extends Application {
             @Override
             public void handle(ActionEvent e) {
                 weaponsList.add(addWeaponsTf.getText());
+                int newRow = weaponsList.size() - 1;
                 c.setWeapons(weaponsList);
-                Label newWeapons = new Label(addWeaponsTf.getText());
-                vbWeapons.getChildren().add(newWeapons);
+
+                TextField newWeapons = new TextField(addWeaponsTf.getText());
+                newWeapons.setEditable(false);
+                newWeapons.setId("locked-tf");
+
+                CheckBox isProficient = new CheckBox();
+                Button rm = new Button("remove");
+
+                TextField damage = new TextField();
+                damage.setEditable(false);
+                damage.setId("locked-tf");
+                
+                ToggleButton editBtn = new ToggleButton("edit");
+
+                Label damageMod = new Label();
+                damageMod.setText(fmt.format(calcMod(c.getStr())));
+                
                 addWeaponsTf.clear();
+
+                HBox hbWeaponsList = new HBox(10);
+
+                hbWeaponsList.getChildren().addAll(isProficient,newWeapons,damage,damageMod,rm,editBtn);
+                vbWeapons.getChildren().add(hbWeaponsList);
+
+                ////// Edit button //////
+
+                editBtn.setOnAction(new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent e) {
+                        if (editBtn.isSelected()) {
+                            damage.setEditable(true);
+                            damage.setId("unlocked-tf");
+                            newWeapons.setEditable(true);
+                            newWeapons.setId("unlocked-tf");
+                        }
+                        else {
+                            damage.setEditable(false);
+                            damage.setId("locked-tf");
+                            newWeapons.setEditable(false);
+                            newWeapons.setId("locked-tf");
+                            weaponsList.set(newRow,newWeapons.getText() + "--" + damage.getText() + "--" + Boolean.toString(isProficient.isSelected()));
+                            c.setWeapons(weaponsList);
+                        }
+                    }
+                });
+
+                isProficient.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                    public void changed(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
+                        
+                        weaponsList.set(newRow,newWeapons.getText() + "--" + damage.getText() + "--" + Boolean.toString(newVal));
+                        c.setWeapons(weaponsList);
+                        if (newVal) {
+                            damageMod.setText(fmt.format(calcMod(c.getStr()) + c.getProficiencyBonus()));
+                        }
+                        else {
+                            damageMod.setText(fmt.format(calcMod(c.getStr())));
+                        }
+
+                    }
+                });
+
+                ////// Remove button ///////
+                rm.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent e) {
+                        Stage confirmRm = new Stage();
+                        confirmRm.setTitle("Are you sure?");
+                        GridPane rmgrid = new GridPane();
+                        rmgrid.setAlignment(Pos.CENTER);
+                        rmgrid.setHgap(10);
+                        rmgrid.setVgap(10);
+                        Scene rmscene = new Scene(rmgrid,400,150);
+                        confirmRm.setScene(rmscene);
+                        confirmRm.show();
+
+                        Label rmLabel = new Label("remove " + newWeapons.getText() + ". Are you sure?");
+                        rmgrid.add(rmLabel,0,0);
+                        Button yesRm = new Button("Yes");
+                        Button noRm = new Button("Cancel");
+                        HBox hbynrm = new HBox(10);
+                        hbynrm.getChildren().addAll(yesRm,noRm);
+                        rmgrid.add(hbynrm,0,1);
+
+                        yesRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                vbWeapons.getChildren().remove(hbWeaponsList);
+                                weaponsList.remove(newRow);
+                                c.setWeapons(weaponsList);
+                                confirmRm.close();
+                            }
+                        });
+                        noRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                confirmRm.close();
+                            }
+                        });
+                    }
+                });
+
 
             }
         });
