@@ -19,14 +19,13 @@ public class Character {
     private String subrace;
     private String clss; //class
     private char gender;
-    private String weapon;
+    private ArrayList<String> weapons;
     private String background;
 
     //health and magic
 	private int maxHP;
     private int currentHP;
-    private int maxMP;
-    private int currentMP;
+    private int tempHP;
 
     private int level;
     private int exp;
@@ -72,7 +71,6 @@ public class Character {
     private int spellSlots8;
 
 
-    private HashSet<String> skills;
     private HashSet<String> ideals;
     private HashSet<String> bonds;
     private HashSet<String> flaws;
@@ -81,6 +79,8 @@ public class Character {
     private HashSet<String> features;
 
     private ArrayList<String> inventory;
+    private boolean[] proficiencies;
+    
     private String description;
     private String notes;
 
@@ -89,7 +89,7 @@ public class Character {
     //////////////////////////
     
     public Character(String name, String clss, String race, String subrace, char gender,
-		     String weapon, HashSet<String> cantrips, HashSet<String> spells, HashSet<String> skills,
+		     ArrayList<String> weapons, HashSet<String> cantrips, HashSet<String> spells,
 		     int maxHealth, int armor, int initiative, int speed, String hitdice,
 		     int str, int cons, int dex, int intel, int wis, int charis, int level, int exp,
              HashSet<String> spells1,HashSet<String> spells2,HashSet<String> spells3,HashSet<String> spells4,
@@ -104,9 +104,8 @@ public class Character {
 	setRace(race);
 	setSubrace(subrace);
 	setGender(gender);
-	setWeapon(weapon);
+	setWeapons(weapons);
 	setCantrips(cantrips);
-	setSkills(skills);
 	setMaxHP(maxHealth);
 	setArmor(armor);
     setBackground(background);
@@ -170,7 +169,8 @@ public class Character {
 	setSpeed(0);
 	
 	setMaxHP(0);
-	setMaxMP(0);
+
+    setTempHP(0);
 
 	setHitDice("0");
     setInspiration(0);
@@ -180,9 +180,8 @@ public class Character {
 	setRace("");
 	setSubrace("");
 	setGender('m');
-	setWeapon("");
+	setWeapons(new ArrayList<String>());
 
-	setSkills(new HashSet<String>());
 
 	setCantrips(new HashSet<String>());
 	setFeatures(new HashSet<String>());
@@ -211,7 +210,7 @@ public class Character {
     setSpellSlots6(0);
     setSpellSlots7(0);
     setSpellSlots8(0);
-
+    setProficiencies(new boolean[18]);
 	setLevel(1);
 	setExp(0);
     
@@ -241,7 +240,7 @@ public Character() {
 	setSpeed(0);
 	
 	setMaxHP(0);
-	setMaxMP(0);
+    setTempHP(0);
 
 	setHitDice("0");
 	setGold(0);
@@ -249,9 +248,8 @@ public Character() {
 	setRace("");
 	setSubrace("");
 	setGender('m');
-	setWeapon("");
+	setWeapons(new ArrayList<String>());
 
-	setSkills(new HashSet<String>());
 
 	setCantrips(new HashSet<String>());
 	setBonds(new HashSet<String>());
@@ -263,6 +261,7 @@ public Character() {
 	setLanguages(new HashSet<String>());
 
 	setInventory(new ArrayList<String>());
+    setProficiencies(new boolean[18]);
 
 	setSpells1(new HashSet<String>());
 	setSpells2(new HashSet<String>());
@@ -317,14 +316,14 @@ public Character() {
 	setGold(0);
 	
 	setMaxHP(0);
-	setMaxMP(0);
+    setTempHP(0);
 
 	setRace("");
 	setSubrace("");
 	setGender('m');
-	setWeapon("");
+	setWeapons(new ArrayList<String>());
 
-	setSkills(new HashSet<String>());
+    setProficiencies(new boolean[18]);
 	
 	setCantrips(new HashSet<String>());
 	setBonds(new HashSet<String>());
@@ -369,12 +368,11 @@ public Character() {
         setClss(c.getClss());
         setSubrace(c.getSubrace());
         setGender(c.getGender());
-        setWeapon(c.getWeapon());
+        setWeapons(c.getWeapons());
         setArmor(c.getArmor());
         setCantrips(c.getCantrips());
-        setSkills(c.getSkills());
         setMaxHP(c.getMaxHP());
-        setMaxMP(c.getMaxMP());
+        setTempHP(c.getTempHP());
         setInitiative(c.getInitiative());
         setSpeed(c.getSpeed());
         setHitDice(c.getHitDice());
@@ -390,6 +388,7 @@ public Character() {
         setLanguages(c.getLanguages());
         setProficiencyBonus(c.getProficiencyBonus());
         setInspiration(c.getInspiration());
+        setProficiencies(c.getProficiencies());
 
 
         setSpells1(c.getSpells1());
@@ -444,7 +443,6 @@ public Character() {
 	setGender('m');
 	
 	setCantrips(new HashSet<String>());
-	setSkills(new HashSet<String>());
 	setBonds(new HashSet<String>());
 	setFeatures(new HashSet<String>());
 	setLanguages(new HashSet<String>());
@@ -467,7 +465,7 @@ public Character() {
     setSpellSlots7(0);
     setSpellSlots8(0);
 
-	setWeapon("");
+	setWeapons(new ArrayList<String>());
 
     setSaveRoll(0);
     setDeathRoll(0);
@@ -477,7 +475,7 @@ public Character() {
 	setExp(0);
 	setGold(0);
 	
-	setMaxMP(0);
+    setTempHP(0);
 	setHitDice("0");
 	setInventory(new ArrayList<String>());
 	setCurrentHP(maxHealth);
@@ -559,11 +557,11 @@ public Character() {
 	return gender;
     }
 
-    public void setWeapon(String w) {
-	this.weapon = w;
+    public void setWeapons(ArrayList<String> w) {
+	this.weapons = w;
     }
-    public String getWeapon() {
-	return weapon;
+    public ArrayList<String> getWeapons() {
+	return weapons;
     }
 
     public void setMaxHP(int mHP) {
@@ -580,18 +578,11 @@ public Character() {
 	return currentHP;
     }
 
-    public void setMaxMP(int mMP) {
-	this.maxMP = mMP;
+    public void setTempHP(int tHP) {
+	this.tempHP = tHP;
     }
-    public int getMaxMP() {
-	return maxMP;
-    }
-
-    public void setCurrentMP(int cMP) {
-	this.currentMP = cMP;
-    }
-    public int getCurrentMP() {
-	return currentMP;
+    public int getTempHP() {
+	return tempHP;
     }
 
     public void setGold(double g) {
@@ -613,6 +604,16 @@ public Character() {
     }
     public int getProficiencyBonus() {
         return proficiencyBonus;
+    }
+
+    public void setProficiencies(boolean[] b) {
+        this.proficiencies = b;
+    }
+    public boolean[] getProficiencies() {
+        return proficiencies;
+    }
+    public void setProficiencyVal(boolean b,int index) {
+        this.proficiencies[index] = b;
     }
 
     public void setInspiration(int i) {
@@ -862,13 +863,6 @@ public Character() {
         return spellSlots8;
     }
 
-    public void setSkills(HashSet<String> s) {
-        this.skills = s;
-    }
-    public HashSet<String> getSkills() {
-        return skills;
-    }
-
     public void setFeatures(HashSet<String> f) {
         this.features = f;
     }
@@ -931,18 +925,18 @@ public Character() {
 	//////// Saving/Loading ///////
 	///////////////////////////////
 
-    public static void SaveCharacter(Character character) {
+    public static void SaveCharacter(Character character,String fileName) {
 
-	Gson gson = new Gson();
+        Gson gson = new Gson();
 
-	String name = character.getName();
+        String name = character.getName();
 	
-	try (FileWriter writer = new FileWriter(name + ".json")) {
-	    gson.toJson(character,writer);
-	}
-	catch (IOException e) {
-	    e.printStackTrace();
-	}
+        try (FileWriter writer = new FileWriter(fileName)) {
+            gson.toJson(character,writer);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -958,7 +952,7 @@ public Character() {
         try (Reader reader = new FileReader(CNamePath)) {
 	    
             character = gson.fromJson(reader, Character.class);	   
-            character.setName(name);
+            //character.setName(name);
 
         } catch (IOException e) {
             e.printStackTrace();
