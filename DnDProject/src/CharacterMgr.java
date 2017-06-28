@@ -1538,11 +1538,54 @@ public class CharacterMgr extends Application {
             @Override
             public void handle(ActionEvent e) {
                 languagesList.add(addLanguagesTf.getText());
+                int newRow = languagesList.size() - 1;
                 c.setLanguages(languagesList);
                 Label newLanguages = new Label(addLanguagesTf.getText());
-                vbLanguages.getChildren().add(newLanguages);
+                Button rm = new Button("remove");
+                HBox hbnewLanguages = new HBox(10);
+                hbnewLanguages.getChildren().addAll(newLanguages,rm);
+                vbLanguages.getChildren().add(hbnewLanguages);
                 addLanguagesTf.clear();
 
+                ////// Remove button ///////
+                rm.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent e) {
+                        Stage confirmRm = new Stage();
+                        confirmRm.setTitle("Are you sure?");
+                        GridPane rmgrid = new GridPane();
+                        rmgrid.setAlignment(Pos.CENTER);
+                        rmgrid.setHgap(10);
+                        rmgrid.setVgap(10);
+                        Scene rmscene = new Scene(rmgrid,400,150);
+                        confirmRm.setScene(rmscene);
+                        confirmRm.show();
+
+                        Label rmLabel = new Label("remove " +newLanguages.getText()+ ". Are you sure?");
+                        rmgrid.add(rmLabel,0,0);
+                        Button yesRm = new Button("Yes");
+                        Button noRm = new Button("Cancel");
+                        HBox hbynrm = new HBox(10);
+                        hbynrm.getChildren().addAll(yesRm,noRm);
+                        rmgrid.add(hbynrm,0,1);
+
+                        yesRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                vbLanguages.getChildren().remove(hbnewLanguages);
+                                languagesList.remove(newLanguages.getText());
+                                c.setLanguages(languagesList);
+                                confirmRm.close();
+                            }
+                        });
+                        noRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                confirmRm.close();
+                            }
+                        });
+                    }
+                });
             }
         });
 
@@ -1973,10 +2016,55 @@ public class CharacterMgr extends Application {
             @Override
             public void handle(ActionEvent e) {
                 idealsList.add(addIdealsTf.getText());
+                int newRow = idealsList.size() - 1;
                 c.setIdeals(idealsList);
                 Label newIdeals = new Label(addIdealsTf.getText());
-                vbIdeals.getChildren().add(newIdeals);
+                Button rm = new Button("remove");
+                HBox hbnewIdeals = new HBox(10);
+                hbnewIdeals.getChildren().addAll(newIdeals,rm);
+                vbIdeals.getChildren().add(hbnewIdeals);
                 addIdealsTf.clear();
+
+                ////// Remove button ///////
+                rm.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent e) {
+                        Stage confirmRm = new Stage();
+                        confirmRm.setTitle("Are you sure?");
+                        GridPane rmgrid = new GridPane();
+                        rmgrid.setAlignment(Pos.CENTER);
+                        rmgrid.setHgap(10);
+                        rmgrid.setVgap(10);
+                        Scene rmscene = new Scene(rmgrid,400,150);
+                        confirmRm.setScene(rmscene);
+                        confirmRm.show();
+
+                        Label rmLabel = new Label("remove " +newIdeals.getText()+ ". Are you sure?");
+                        rmgrid.add(rmLabel,0,0);
+                        Button yesRm = new Button("Yes");
+                        Button noRm = new Button("Cancel");
+                        HBox hbynrm = new HBox(10);
+                        hbynrm.getChildren().addAll(yesRm,noRm);
+                        rmgrid.add(hbynrm,0,1);
+
+                        yesRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                vbIdeals.getChildren().remove(hbnewIdeals);
+                                idealsList.remove(newIdeals.getText());
+                                c.setIdeals(idealsList);
+                                confirmRm.close();
+                            }
+                        });
+                        noRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                confirmRm.close();
+                            }
+                        });
+                    }
+                });
+
 
             }
         });
@@ -2099,11 +2187,54 @@ public class CharacterMgr extends Application {
             @Override
             public void handle(ActionEvent e) {
                 flawsList.add(addFlawsTf.getText());
+                int newRow = flawsList.size() - 1;
                 c.setFlaws(flawsList);
                 Label newFlaws = new Label(addFlawsTf.getText());
-                vbFlaws.getChildren().add(newFlaws);
+                Button rm = new Button("remove");
+                HBox hbnewFlaws = new HBox(10);
+                hbnewFlaws.getChildren().addAll(newFlaws,rm);
+                vbFlaws.getChildren().add(hbnewFlaws);
                 addFlawsTf.clear();
 
+                ////// Remove button ///////
+                rm.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent e) {
+                        Stage confirmRm = new Stage();
+                        confirmRm.setTitle("Are you sure?");
+                        GridPane rmgrid = new GridPane();
+                        rmgrid.setAlignment(Pos.CENTER);
+                        rmgrid.setHgap(10);
+                        rmgrid.setVgap(10);
+                        Scene rmscene = new Scene(rmgrid,400,150);
+                        confirmRm.setScene(rmscene);
+                        confirmRm.show();
+
+                        Label rmLabel = new Label("remove " +newFlaws.getText()+ ". Are you sure?");
+                        rmgrid.add(rmLabel,0,0);
+                        Button yesRm = new Button("Yes");
+                        Button noRm = new Button("Cancel");
+                        HBox hbynrm = new HBox(10);
+                        hbynrm.getChildren().addAll(yesRm,noRm);
+                        rmgrid.add(hbynrm,0,1);
+
+                        yesRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                vbFlaws.getChildren().remove(hbnewFlaws);
+                                flawsList.remove(newFlaws.getText());
+                                c.setFlaws(flawsList);
+                                confirmRm.close();
+                            }
+                        });
+                        noRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                confirmRm.close();
+                            }
+                        });
+                    }
+                });
             }
         });
 
@@ -2225,11 +2356,54 @@ public class CharacterMgr extends Application {
             @Override
             public void handle(ActionEvent e) {
                 bondsList.add(addBondsTf.getText());
+                int newRow = bondsList.size() - 1;
                 c.setBonds(bondsList);
                 Label newBonds = new Label(addBondsTf.getText());
-                vbBonds.getChildren().add(newBonds);
+                Button rm = new Button("remove");
+                HBox hbnewBonds = new HBox(10);
+                hbnewBonds.getChildren().addAll(newBonds,rm);
+                vbBonds.getChildren().add(hbnewBonds);
                 addBondsTf.clear();
 
+                ////// Remove button ///////
+                rm.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent e) {
+                        Stage confirmRm = new Stage();
+                        confirmRm.setTitle("Are you sure?");
+                        GridPane rmgrid = new GridPane();
+                        rmgrid.setAlignment(Pos.CENTER);
+                        rmgrid.setHgap(10);
+                        rmgrid.setVgap(10);
+                        Scene rmscene = new Scene(rmgrid,400,150);
+                        confirmRm.setScene(rmscene);
+                        confirmRm.show();
+
+                        Label rmLabel = new Label("remove " +newBonds.getText()+ ". Are you sure?");
+                        rmgrid.add(rmLabel,0,0);
+                        Button yesRm = new Button("Yes");
+                        Button noRm = new Button("Cancel");
+                        HBox hbynrm = new HBox(10);
+                        hbynrm.getChildren().addAll(yesRm,noRm);
+                        rmgrid.add(hbynrm,0,1);
+
+                        yesRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                vbBonds.getChildren().remove(hbnewBonds);
+                                bondsList.remove(newBonds.getText());
+                                c.setBonds(bondsList);
+                                confirmRm.close();
+                            }
+                        });
+                        noRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                confirmRm.close();
+                            }
+                        });
+                    }
+                });
             }
         });
 
@@ -2351,11 +2525,54 @@ public class CharacterMgr extends Application {
             @Override
             public void handle(ActionEvent e) {
                 featuresList.add(addFeaturesTf.getText());
+                int newRow = featuresList.size() - 1;
                 c.setFeatures(featuresList);
                 Label newFeatures = new Label(addFeaturesTf.getText());
-                vbFeatures.getChildren().add(newFeatures);
+                Button rm = new Button("remove");
+                HBox hbnewFeatures = new HBox(10);
+                hbnewFeatures.getChildren().addAll(newFeatures,rm);
+                vbFeatures.getChildren().add(hbnewFeatures);
                 addFeaturesTf.clear();
 
+                ////// Remove button ///////
+                rm.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent e) {
+                        Stage confirmRm = new Stage();
+                        confirmRm.setTitle("Are you sure?");
+                        GridPane rmgrid = new GridPane();
+                        rmgrid.setAlignment(Pos.CENTER);
+                        rmgrid.setHgap(10);
+                        rmgrid.setVgap(10);
+                        Scene rmscene = new Scene(rmgrid,400,150);
+                        confirmRm.setScene(rmscene);
+                        confirmRm.show();
+
+                        Label rmLabel = new Label("remove " +newFeatures.getText()+ ". Are you sure?");
+                        rmgrid.add(rmLabel,0,0);
+                        Button yesRm = new Button("Yes");
+                        Button noRm = new Button("Cancel");
+                        HBox hbynrm = new HBox(10);
+                        hbynrm.getChildren().addAll(yesRm,noRm);
+                        rmgrid.add(hbynrm,0,1);
+
+                        yesRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                vbFeatures.getChildren().remove(hbnewFeatures);
+                                featuresList.remove(newFeatures.getText());
+                                c.setFeatures(featuresList);
+                                confirmRm.close();
+                            }
+                        });
+                        noRm.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                confirmRm.close();
+                            }
+                        });
+                    }
+                });
             }
         });
 
@@ -2393,42 +2610,42 @@ public class CharacterMgr extends Application {
 	    
             String notesList = c.getNotes();
 	    
-	    TextArea notes = new TextArea(c.getNotes());
-	    Button saveNotes = new Button("Save Notes");
-	    Button doneNotes = new Button("Done");
-	    HBox hbNotes = new HBox(10);
-	    hbNotes.getChildren().addAll(saveNotes,doneNotes);
+            TextArea notes = new TextArea(c.getNotes());
+            Button saveNotes = new Button("Save Notes");
+            Button doneNotes = new Button("Done");
+            HBox hbNotes = new HBox(10);
+            hbNotes.getChildren().addAll(saveNotes,doneNotes);
 
 
-        ScrollPane notesSp = new ScrollPane();
-        notesSp.setContent(vbNotes);
+            ScrollPane notesSp = new ScrollPane();
+            notesSp.setContent(vbNotes);
 
-        BorderPane bpNotes = new BorderPane();
-        bpNotes.setPadding(new Insets(20));
-        bpNotes.setMargin(notesTitle,new Insets(12,12,12,12));
-        bpNotes.setMargin(notes,new Insets(10,10,10,10));
-        bpNotes.setTop(notesTitle);
-        bpNotes.setCenter(notes);
-        bpNotes.setBottom(hbNotes);
+            BorderPane bpNotes = new BorderPane();
+            bpNotes.setPadding(new Insets(20));
+            bpNotes.setMargin(notesTitle,new Insets(12,12,12,12));
+            bpNotes.setMargin(notes,new Insets(10,10,10,10));
+            bpNotes.setTop(notesTitle);
+            bpNotes.setCenter(notes);
+            bpNotes.setBottom(hbNotes);
 
 
-        Scene notesscene = new Scene(bpNotes);
-        notesscene.getStylesheets().add(this.getClass().getResource("TextAreaPage.css").toExternalForm());
+            Scene notesscene = new Scene(bpNotes);
+            notesscene.getStylesheets().add(this.getClass().getResource("TextAreaPage.css").toExternalForm());
 
-        notesStage.setScene(notesscene);
+            notesStage.setScene(notesscene);
 
-        //////// Save Notes //////////
-        saveNotes.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-		c.setNotes(notes.getText());
-		Text msg = new Text("Notes Saved");
-		msg.setFill(Color.FIREBRICK);
-		hbNotes.getChildren().remove(msg);
-		hbNotes.getChildren().add(msg);
+            //////// Save Notes //////////
+            saveNotes.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    c.setNotes(notes.getText());
+                    Text msg = new Text("Notes Saved");
+                    msg.setFill(Color.FIREBRICK);
+                    hbNotes.getChildren().remove(msg);
+                    hbNotes.getChildren().add(msg);
 
-            }
-        });
+                }
+            });
 
 
         doneNotes.setOnAction(new EventHandler<ActionEvent>() {
@@ -2466,53 +2683,57 @@ public class CharacterMgr extends Application {
 	    
             String descriptionList = c.getDescription();
 	    
-	    TextArea description = new TextArea(c.getDescription());
-	    Button saveDescription = new Button("Save Description");
-	    Button doneDescription = new Button("Done");
-	    HBox hbDescription = new HBox(10);
-	    hbDescription.getChildren().addAll(saveDescription,doneDescription);
+            TextArea description = new TextArea(c.getDescription());
+            Button saveDescription = new Button("Save Description");
+            Button doneDescription = new Button("Done");
+            HBox hbDescription = new HBox(10);
+            hbDescription.getChildren().addAll(saveDescription,doneDescription);
 
 
-        ScrollPane descriptionSp = new ScrollPane();
-        descriptionSp.setContent(vbDescription);
+            ScrollPane descriptionSp = new ScrollPane();
+            descriptionSp.setContent(vbDescription);
 
-        BorderPane bpDescription = new BorderPane();
-        bpDescription.setPadding(new Insets(20));
-        bpDescription.setMargin(descriptionTitle,new Insets(12,12,12,12));
-        bpDescription.setMargin(description,new Insets(10,10,10,10));
-        bpDescription.setTop(descriptionTitle);
-        bpDescription.setCenter(description);
-        bpDescription.setBottom(hbDescription);
-
-
-        Scene descriptionscene = new Scene(bpDescription);
-        descriptionscene.getStylesheets().add(this.getClass().getResource("TextAreaPage.css").toExternalForm());
-
-        descriptionStage.setScene(descriptionscene);
-
-        //////// Save Description //////////
-        saveDescription.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-		c.setDescription(description.getText());
-		Text msg = new Text("Description Saved");
-		msg.setFill(Color.FIREBRICK);
-		hbDescription.getChildren().remove(msg);
-		hbDescription.getChildren().add(msg);
-
-            }
-        });
+            BorderPane bpDescription = new BorderPane();
+            bpDescription.setPadding(new Insets(20));
+            bpDescription.setMargin(descriptionTitle,new Insets(12,12,12,12));
+            bpDescription.setMargin(description,new Insets(10,10,10,10));
+            bpDescription.setTop(descriptionTitle);
+            bpDescription.setCenter(description);
+            bpDescription.setBottom(hbDescription);
 
 
-        doneDescription.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                c.setDescription(description.getText());
-                descriptionStage.close();
-            }
-        });
+            Scene descriptionscene = new Scene(bpDescription);
+            descriptionscene.getStylesheets().add(this.getClass().getResource("TextAreaPage.css").toExternalForm());
 
-        descriptionStage.show();
+            descriptionStage.setScene(descriptionscene);
+
+            //////// Save Description //////////
+            saveDescription.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    c.setDescription(description.getText());
+                    Text msg = new Text("Description Saved");
+                    msg.setFill(Color.FIREBRICK);
+                    hbDescription.getChildren().remove(msg);
+                    hbDescription.getChildren().add(msg);
+
+                }
+            });
+
+
+            doneDescription.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    c.setDescription(description.getText());
+                    descriptionStage.close();
+                }
+            });
+            descriptionStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                public void handle(WindowEvent we) {
+                    c.setDescription(description.getText());
+                }
+            });
+            descriptionStage.show();
 
         }
     });
