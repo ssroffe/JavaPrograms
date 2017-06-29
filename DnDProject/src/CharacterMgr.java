@@ -7,6 +7,7 @@ import java.util.*;
 import java.io.File;
 import java.text.DecimalFormat;
 import javafx.application.Application;
+import javafx.collections.*;
 import javafx.event.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
@@ -1600,7 +1601,13 @@ public class CharacterMgr extends Application {
 
             }
 
-	    TextField addLanguagesTf = new TextField();
+        ObservableList<String> options = FXCollections.observableArrayList( "Common", "Dwarvish", "Elvish",
+                                                                        "Giant", "Gnomish", "Goblin",
+                                                                        "Halfling", "Orc", "Abyssal",
+                                                                        "Celestial", "Draconic", "Deep Speech",
+                                                                        "Infernal", "Primordial", "Sylvan", "Undercommon");
+	    ComboBox addLanguagesTf = new ComboBox(options);
+        addLanguagesTf.setEditable(true);
 	    addLanguagesTf.setPromptText("Add a Language");
         Button addLanguages = new Button("Add Language");
         Button doneLanguages = new Button("Done");
@@ -1630,55 +1637,57 @@ public class CharacterMgr extends Application {
         addLanguages.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                languagesList.add(addLanguagesTf.getText());
-                int newRow = languagesList.size() - 1;
-                c.setLanguages(languagesList);
-                Label newLanguages = new Label(addLanguagesTf.getText());
-                Button rm = new Button("remove");
-                HBox hbnewLanguages = new HBox(10);
-                hbnewLanguages.getChildren().addAll(newLanguages,rm);
-                vbLanguages.getChildren().add(hbnewLanguages);
-                addLanguagesTf.clear();
+                if (!addLanguagesTf.getValue().toString().isEmpty()) {
+                    languagesList.add(addLanguagesTf.getValue().toString());
+                    int newRow = languagesList.size() - 1;
+                    c.setLanguages(languagesList);
+                    Label newLanguages = new Label(addLanguagesTf.getValue().toString());
+                    Button rm = new Button("remove");
+                    HBox hbnewLanguages = new HBox(10);
+                    hbnewLanguages.getChildren().addAll(newLanguages,rm);
+                    vbLanguages.getChildren().add(hbnewLanguages);
+                    addLanguagesTf.setValue(null);
 
-                ////// Remove button ///////
-                rm.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent e) {
-                        Stage confirmRm = new Stage();
-                        confirmRm.setTitle("Are you sure?");
-                        GridPane rmgrid = new GridPane();
-                        rmgrid.setAlignment(Pos.CENTER);
-                        rmgrid.setHgap(10);
-                        rmgrid.setVgap(10);
-                        Scene rmscene = new Scene(rmgrid,400,150);
-                        confirmRm.setScene(rmscene);
-                        confirmRm.show();
+                    ////// Remove button ///////
+                    rm.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent e) {
+                            Stage confirmRm = new Stage();
+                            confirmRm.setTitle("Are you sure?");
+                            GridPane rmgrid = new GridPane();
+                            rmgrid.setAlignment(Pos.CENTER);
+                            rmgrid.setHgap(10);
+                            rmgrid.setVgap(10);
+                            Scene rmscene = new Scene(rmgrid,400,150);
+                            confirmRm.setScene(rmscene);
+                            confirmRm.show();
 
-                        Label rmLabel = new Label("remove " +newLanguages.getText()+ ". Are you sure?");
-                        rmgrid.add(rmLabel,0,0);
-                        Button yesRm = new Button("Yes");
-                        Button noRm = new Button("Cancel");
-                        HBox hbynrm = new HBox(10);
-                        hbynrm.getChildren().addAll(yesRm,noRm);
-                        rmgrid.add(hbynrm,0,1);
+                            Label rmLabel = new Label("remove " +newLanguages.getText()+ ". Are you sure?");
+                            rmgrid.add(rmLabel,0,0);
+                            Button yesRm = new Button("Yes");
+                            Button noRm = new Button("Cancel");
+                            HBox hbynrm = new HBox(10);
+                            hbynrm.getChildren().addAll(yesRm,noRm);
+                            rmgrid.add(hbynrm,0,1);
 
-                        yesRm.setOnAction(new EventHandler<ActionEvent>() {
-                            @Override
-                            public void handle(ActionEvent e) {
-                                vbLanguages.getChildren().remove(hbnewLanguages);
-                                languagesList.remove(newLanguages.getText());
-                                c.setLanguages(languagesList);
-                                confirmRm.close();
-                            }
-                        });
-                        noRm.setOnAction(new EventHandler<ActionEvent>() {
-                            @Override
-                            public void handle(ActionEvent e) {
-                                confirmRm.close();
-                            }
-                        });
-                    }
-                });
+                            yesRm.setOnAction(new EventHandler<ActionEvent>() {
+                                @Override
+                                public void handle(ActionEvent e) {
+                                    vbLanguages.getChildren().remove(hbnewLanguages);
+                                    languagesList.remove(newLanguages.getText());
+                                    c.setLanguages(languagesList);
+                                    confirmRm.close();
+                                }
+                            });
+                            noRm.setOnAction(new EventHandler<ActionEvent>() {
+                                @Override
+                                public void handle(ActionEvent e) {
+                                    confirmRm.close();
+                                }
+                            });
+                        }
+                    });
+                }
             }
         });
 
