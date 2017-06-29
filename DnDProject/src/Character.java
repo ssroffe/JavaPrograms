@@ -80,6 +80,7 @@ public class Character {
 
     private ArrayList<String> inventory;
     private boolean[] proficiencies;
+    private boolean[] savingThrows;
     
     private String description;
     private String notes;
@@ -211,6 +212,7 @@ public class Character {
     setSpellSlots7(0);
     setSpellSlots8(0);
     setProficiencies(new boolean[18]);
+    setSavingThrows(new boolean[6]);
 	setLevel(1);
 	setExp(0);
     
@@ -262,6 +264,7 @@ public Character() {
 
 	setInventory(new ArrayList<String>());
     setProficiencies(new boolean[18]);
+    setSavingThrows(new boolean[6]);
 
 	setSpells1(new HashSet<String>());
 	setSpells2(new HashSet<String>());
@@ -324,6 +327,7 @@ public Character() {
 	setWeapons(new ArrayList<String>());
 
     setProficiencies(new boolean[18]);
+    setSavingThrows(new boolean[6]);
 	
 	setCantrips(new HashSet<String>());
 	setBonds(new HashSet<String>());
@@ -389,6 +393,7 @@ public Character() {
         setProficiencyBonus(c.getProficiencyBonus());
         setInspiration(c.getInspiration());
         setProficiencies(c.getProficiencies());
+        setSavingThrows(c.getSavingThrows());
 
 
         setSpells1(c.getSpells1());
@@ -614,6 +619,16 @@ public Character() {
     }
     public void setProficiencyVal(boolean b,int index) {
         this.proficiencies[index] = b;
+    }
+
+    public void setSavingThrows(boolean[] s) {
+        this.savingThrows = s;
+    }
+    public boolean[] getSavingThrows() {
+        return savingThrows;
+    }
+    public void setSavingThrowsVal(boolean s, int index) {
+        this.savingThrows[index] = s;
     }
 
     public void setInspiration(int i) {

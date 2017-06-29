@@ -975,6 +975,7 @@ public class CharacterMgr extends Application {
     Button languagesBtn = new Button("Languages");
     Button bondsBtn = new Button("Bonds");
     Button flawsBtn = new Button("Flaws");
+    Button savingThrowsBtn = new Button("Saving Throws");
     Button notesBtn = new Button("Notes");
 
 
@@ -987,7 +988,7 @@ public class CharacterMgr extends Application {
 
     HBox hbbtns3 = new HBox(10);
     hbbtns3.setAlignment(Pos.CENTER);
-    hbbtns3.getChildren().addAll(notesBtn);
+    hbbtns3.getChildren().addAll(savingThrowsBtn,notesBtn);
 
     VBox vbbtns = new VBox(10);
     vbbtns.setAlignment(Pos.CENTER);
@@ -1026,10 +1027,15 @@ public class CharacterMgr extends Application {
         Text notice = new Text("Character was saved.");
         @Override
         public void handle(ActionEvent e) {
-            Character.SaveCharacter(c,fileName);
-            notice.setFill(Color.FIREBRICK);
-            grid.getChildren().remove(notice);
-            grid.add(notice,1,saveRow + 1);
+            if (fileName.isEmpty()) {
+                saveAs.fire();
+            }
+            else {
+                Character.SaveCharacter(c,fileName);
+                notice.setFill(Color.FIREBRICK);
+                grid.getChildren().remove(notice);
+                grid.add(notice,1,saveRow + 1);
+            }
         }
     });
 
@@ -1130,7 +1136,94 @@ public class CharacterMgr extends Application {
         }
     });
 
+    ///////////////////////////////
+    ///////// SAVINGTHROWS PAGE /////////
+    ///////////////////////////////
 
+    savingThrowsBtn.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            Stage savingThrowsStage = new Stage();
+            savingThrowsStage.setTitle("Saving Throws Page");
+
+            Label savingThrowsTitle = new Label("Saving Throws");
+            savingThrowsTitle.setId("title");
+            VBox vbSavingThrows = new VBox(10);
+
+            boolean[] savingThrowsList = c.getSavingThrows();
+            String[] savingThrows = { "Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma" };
+
+            int[] savingThrowsMod = { calcMod(c.getStr()), calcMod(c.getDex()), calcMod(c.getCons()), calcMod(c.getInt()),
+                                        calcMod(c.getWis()), calcMod(c.getChar()) };
+
+            for (int i = 0; i < savingThrowsList.length; i++) {
+
+                String nxtItem = savingThrows[i];
+                Label savingThrowsLabel = new Label(nxtItem);
+                Label modLabel = new Label();
+                if (c.getSavingThrows()[i]) {
+                    modLabel.setText(fmt.format(savingThrowsMod[i] + c.getProficiencyBonus()));
+                }
+                else {
+                    modLabel.setText(fmt.format(savingThrowsMod[i]));
+                }
+                HBox hbSavingThrowsList = new HBox(10);
+                CheckBox isProficient = new CheckBox();
+                isProficient.setSelected(c.getSavingThrows()[i]);
+                isProficient.setAllowIndeterminate(false);
+                final int j = i;
+                isProficient.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                    public void changed(ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) {
+                        c.setSavingThrowsVal(new_val,j);
+                        if (new_val) {
+                            modLabel.setText(fmt.format(savingThrowsMod[j] + c.getProficiencyBonus()));
+                        }
+                        else if (!new_val) {
+                            modLabel.setText(fmt.format(savingThrowsMod[j]));
+                        }
+                    }
+                });
+
+                hbSavingThrowsList.getChildren().addAll(isProficient,modLabel, savingThrowsLabel);
+
+                vbSavingThrows.getChildren().add(hbSavingThrowsList);
+
+
+            }
+
+        Button doneSavingThrows = new Button("Done");
+        HBox hbaddSavingThrows = new HBox(10);
+        VBox vbsavingThrowsBtns = new VBox(10);
+	    vbsavingThrowsBtns.getChildren().addAll(doneSavingThrows);
+
+
+        BorderPane bpSavingThrows = new BorderPane();
+        ScrollPane savingThrowsRoot = new ScrollPane();
+        bpSavingThrows.setPadding(new Insets(20));
+        bpSavingThrows.setMargin(savingThrowsTitle,new Insets(12,12,12,12));
+        bpSavingThrows.setMargin(vbSavingThrows,new Insets(10,10,10,10));
+        bpSavingThrows.setTop(savingThrowsTitle);
+        bpSavingThrows.setCenter(vbSavingThrows);
+        bpSavingThrows.setBottom(vbsavingThrowsBtns);
+
+        savingThrowsRoot.setContent(bpSavingThrows);
+
+        Scene savingThrowsscene = new Scene(savingThrowsRoot);
+        savingThrowsscene.getStylesheets().add(this.getClass().getResource("ListPage.css").toExternalForm());
+
+        savingThrowsStage.setScene(savingThrowsscene);
+
+        doneSavingThrows.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                savingThrowsStage.close();
+            }
+        });
+
+        savingThrowsStage.show();
+
+        }
+    });
     //////////////////////////////////////
     ////////// Inventory Page ////////////
     //////////////////////////////////////
@@ -1629,7 +1722,8 @@ public class CharacterMgr extends Application {
             Label proficient = new Label("Proficient");
             Label weaponName = new Label("Weapon");
             Label damageLabel = new Label("Damage");
-            labelsHb.getChildren().addAll(proficient,weaponName,damageLabel);
+            Label hitLabel = new Label("Modifier");
+            labelsHb.getChildren().addAll(proficient,hitLabel,weaponName,damageLabel);
             
             weaponsHeader.getChildren().addAll(weaponsTitle,labelsHb);
             
@@ -1654,6 +1748,8 @@ public class CharacterMgr extends Application {
                 Label damageMod = new Label();
                 ToggleButton editBtn = new ToggleButton("edit");
 
+                Label hitMod = new Label();
+
                 try {
                     damage.setText(splitItem[1]);
                     isProficient.setSelected(Boolean.parseBoolean(splitItem[2]));
@@ -1665,17 +1761,19 @@ public class CharacterMgr extends Application {
 
 
                 if (isProficient.isSelected()) {
-                    damageMod.setText(fmt.format(calcMod(c.getStr()) + c.getProficiencyBonus()));
+                    hitMod.setText(fmt.format(calcMod(c.getStr()) + c.getProficiencyBonus()));
                 }
                 else {
-                    damageMod.setText(fmt.format(calcMod(c.getStr())));
+                    hitMod.setText(fmt.format(calcMod(c.getStr())));
 
                 }
+
+                damageMod.setText(fmt.format(calcMod(c.getStr())));
 
                 HBox hbWeaponsList = new HBox(10);
 
                 Button rm = new Button("remove");
-                hbWeaponsList.getChildren().addAll(isProficient,weaponsTf,damage,damageMod,rm,editBtn);
+                hbWeaponsList.getChildren().addAll(isProficient,hitMod,weaponsTf,damage,damageMod,rm,editBtn);
 
                 vbWeapons.getChildren().add(hbWeaponsList);
 
@@ -1706,10 +1804,10 @@ public class CharacterMgr extends Application {
                         weaponsList.set(currIndex,weaponsTf.getText() + "--" + damage.getText() + "--" + Boolean.toString(newVal));
                         c.setWeapons(weaponsList);
                         if (newVal) {
-                            damageMod.setText(fmt.format(calcMod(c.getStr()) + c.getProficiencyBonus()));
+                            hitMod.setText(fmt.format(calcMod(c.getStr()) + c.getProficiencyBonus()));
                         }
                         else {
-                            damageMod.setText(fmt.format(calcMod(c.getStr())));
+                            hitMod.setText(fmt.format(calcMod(c.getStr())));
                         }
 
                     }
@@ -1807,12 +1905,15 @@ public class CharacterMgr extends Application {
 
                 Label damageMod = new Label();
                 damageMod.setText(fmt.format(calcMod(c.getStr())));
+
+                Label hitMod = new Label();
+                hitMod.setText(fmt.format(calcMod(c.getStr())));
                 
                 addWeaponsTf.clear();
 
                 HBox hbWeaponsList = new HBox(10);
 
-                hbWeaponsList.getChildren().addAll(isProficient,newWeapons,damage,damageMod,rm,editBtn);
+                hbWeaponsList.getChildren().addAll(isProficient,hitMod,newWeapons,damage,damageMod,rm,editBtn);
                 vbWeapons.getChildren().add(hbWeaponsList);
 
                 ////// Edit button //////
@@ -1842,10 +1943,10 @@ public class CharacterMgr extends Application {
                         weaponsList.set(newRow,newWeapons.getText() + "--" + damage.getText() + "--" + Boolean.toString(newVal));
                         c.setWeapons(weaponsList);
                         if (newVal) {
-                            damageMod.setText(fmt.format(calcMod(c.getStr()) + c.getProficiencyBonus()));
+                            hitMod.setText(fmt.format(calcMod(c.getStr()) + c.getProficiencyBonus()));
                         }
                         else {
-                            damageMod.setText(fmt.format(calcMod(c.getStr())));
+                            hitMod.setText(fmt.format(calcMod(c.getStr())));
                         }
 
                     }
