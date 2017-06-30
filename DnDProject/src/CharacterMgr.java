@@ -3245,7 +3245,7 @@ public class CharacterMgr extends Application {
 
 
         //show only json files
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON files (*.json)","*.json");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("D&D files (*.dnd)","*.dnd");
         fc.getExtensionFilters().add(extFilter);
         File file = fc.showOpenDialog(primaryStage);
         if (file != null) {
@@ -3288,7 +3288,8 @@ public class CharacterMgr extends Application {
         fc.setTitle("Save Character As");
         File initDir = new File(".");
         fc.setInitialDirectory(initDir);
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON files (*.json)","*.json");
+        //FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON files (*.json)","*.json");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("D&D files (*.dnd)","*.dnd");
 
         fc.getExtensionFilters().add(extFilter);
         File file = fc.showSaveDialog(stage);

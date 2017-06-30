@@ -967,7 +967,6 @@ public Character() {
         try (Reader reader = new FileReader(CNamePath)) {
 	    
             character = gson.fromJson(reader, Character.class);	   
-            //character.setName(name);
 
         } catch (IOException e) {
             e.printStackTrace();
