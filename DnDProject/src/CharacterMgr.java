@@ -528,6 +528,8 @@ public class CharacterMgr extends Application {
     currHealth.setText(Integer.toString(c.getCurrentHP()));
     grid.add(currHealth,1,row);
 
+    final int currHPRow = row;
+
     row++;
 
     /////// ADD/LOSE HP ////////
@@ -549,7 +551,8 @@ public class CharacterMgr extends Application {
         @Override
         public void handle(ActionEvent e) {
             boolean isInt = isInteger(pmHPTf.getText());
-            if (isInt) {
+            boolean notempty = !(pmHPTf.getText().isEmpty());
+            if (isInt && notempty) {
                 int addHPVal = Integer.parseInt(pmHPTf.getText()) + c.getCurrentHP();
                 if (addHPVal >= c.getMaxHP()) {
                     c.setCurrentHP(c.getMaxHP());
@@ -565,16 +568,20 @@ public class CharacterMgr extends Application {
                 errMsg.setFill(Color.FIREBRICK);
                 grid.add(errMsg,3,addHPRow);
             }
+            pmHPTf.clear();
 
         }
     });
+
+    Button deathRollsBtn = new Button(); //Create for a fire() event when knocked out
 
     minusHP.setOnAction(new EventHandler<ActionEvent>() {
         Text errMsg = new Text("Inputted Value was not an Integer!");
         @Override
         public void handle(ActionEvent e) {
             boolean isInt = isInteger(pmHPTf.getText());
-            if (isInt) {
+            boolean notempty = !(pmHPTf.getText().isEmpty());
+            if (isInt && notempty) {
                 int loseHPVal = c.getCurrentHP() - Integer.parseInt(pmHPTf.getText());
                 if (loseHPVal > 0) {
                     c.setCurrentHP(loseHPVal);
@@ -583,6 +590,7 @@ public class CharacterMgr extends Application {
                 else {
                     c.setCurrentHP(0);
                     currHealth.setText(Integer.toString(c.getCurrentHP()));
+                    deathRollsBtn.fire();
                 }
                 grid.getChildren().remove(errMsg);
             }
@@ -590,6 +598,7 @@ public class CharacterMgr extends Application {
                 errMsg.setFill(Color.FIREBRICK);
                 grid.add(errMsg,3,addHPRow);
             }
+            pmHPTf.clear();
         }
     });
 
@@ -602,10 +611,131 @@ public class CharacterMgr extends Application {
         public void handle(ActionEvent e) {
             c.setCurrentHP(c.getMaxHP());
             currHealth.setText(Integer.toString(c.getCurrentHP()));
+            pmHPTf.clear();
         }
     });
 
+    ////////////////////////////
+    //////// DEATH ROLLS ///////
+    ////////////////////////////
 
+    deathRollsBtn.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            Button revive = new Button("Revive");
+            Label deathSavesLabel = new Label("Death Saves");
+            deathSavesLabel.setId("deathSavesLabel");
+            Label fails = new Label("Failures:   ");
+            Label saves = new Label("Successes:");
+            HBox savesHb = new HBox(10);
+            HBox failsHb = new HBox(10);
+
+            VBox sflabels = new VBox(10);
+            sflabels.getChildren().addAll(saves,fails);
+            VBox cbs = new VBox(10);
+            cbs.getChildren().addAll(savesHb,failsHb);
+
+            HBox vbs = new HBox(10);
+            vbs.getChildren().addAll(sflabels,cbs);
+            
+            CheckBox[] savesArray = new CheckBox[3];
+            CheckBox[] failsArray = new CheckBox[3];
+            Text saved = new Text("You are stable.");
+            saved.setFill(Color.GREEN);
+            Text died = new Text("You have died.");
+            died.setFill(Color.FIREBRICK);
+
+            for (int i = 0; i < 3; i++) {
+                CheckBox savescb = new CheckBox();
+                CheckBox failscb = new CheckBox();
+                failscb.setAllowIndeterminate(false);
+                savescb.setAllowIndeterminate(false);
+                failsArray[i] = failscb;
+                savesArray[i] = savescb;
+
+                savesHb.getChildren().add(savescb);
+                failsHb.getChildren().add(failscb);
+
+                savescb.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                    public void changed(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
+                        if (newVal) {
+                            c.setSaveRoll(c.getSaveRoll() + 1);
+                        }
+                        else {
+                            c.setSaveRoll(c.getSaveRoll() - 1);
+                        }
+                        if (c.getSaveRoll() == 3) {
+                            c.setSaveRoll(0);
+                            c.setDeathRoll(0);
+                            grid.getChildren().remove(died);
+                            grid.add(saved,2,addHPRow);
+                            for (int j=0; j < 3; j++) {
+                                savesArray[j].setDisable(true);
+                                failsArray[j].setDisable(true);
+                            }
+                        }
+                    }
+                });
+                failscb.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                    public void changed(ObservableValue<? extends Boolean> ov, Boolean oldVal, Boolean newVal) {
+                        if (newVal) {
+                            c.setDeathRoll(c.getDeathRoll() + 1);
+                        }
+                        else {
+                            c.setDeathRoll(c.getDeathRoll() - 1);
+                        }
+                        if (c.getDeathRoll() == 3) {
+                            c.setSaveRoll(0);
+                            c.setDeathRoll(0);
+                            grid.getChildren().remove(saved);
+                            grid.add(died,2,addHPRow);
+                            for (int j=0; j < 3; j++) {
+                                savesArray[j].setDisable(true);
+                                failsArray[j].setDisable(true);
+                            }
+                        }
+                    }
+                });
+            }
+            
+
+            grid.getChildren().remove(currHealth);
+            grid.getChildren().remove(currHealthLabel);
+            grid.getChildren().remove(pmHPTf);
+            grid.getChildren().remove(setmaxhp);
+            grid.getChildren().remove(saved);
+            grid.getChildren().remove(died);
+            grid.getChildren().remove(hbpmHP);
+            grid.add(vbs,1,currHPRow,1,2);
+            grid.add(deathSavesLabel,0,currHPRow);
+            grid.add(revive,2,currHPRow);
+
+            revive.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent e) {
+                    c.setSaveRoll(0);
+                    c.setDeathRoll(0);
+                    c.setCurrentHP(1);
+
+                    grid.getChildren().remove(deathSavesLabel);
+                    grid.getChildren().remove(vbs);
+                    grid.getChildren().remove(revive);
+                    grid.getChildren().remove(saved);
+                    grid.getChildren().remove(died);
+                    grid.add(currHealthLabel,0,currHPRow);
+                    currHealth.setText(Integer.toString(c.getCurrentHP()));
+                    grid.add(currHealth,1,currHPRow);
+                    
+                    grid.add(pmHPTf,1, addHPRow);
+                    grid.add(hbpmHP,2,addHPRow);
+
+                    grid.add(setmaxhp,1,addHPRow+1);
+                }
+            });
+                    
+        }
+    });
+
+    row++;
     /////////// TEMP HP ///////////
 	Label tempHealthLabel = new Label("Temp HP:");
 	grid.add(tempHealthLabel,0,row);
@@ -1606,8 +1736,9 @@ public class CharacterMgr extends Application {
                                                                         "Halfling", "Orc", "Abyssal",
                                                                         "Celestial", "Draconic", "Deep Speech",
                                                                         "Infernal", "Primordial", "Sylvan", "Undercommon");
-	    ComboBox addLanguagesTf = new ComboBox(options);
+	    ComboBox<String> addLanguagesTf = new ComboBox<String>(options);
         addLanguagesTf.setEditable(true);
+        addLanguagesTf.setTooltip(new Tooltip());
 	    addLanguagesTf.setPromptText("Add a Language");
         Button addLanguages = new Button("Add Language");
         Button doneLanguages = new Button("Done");
