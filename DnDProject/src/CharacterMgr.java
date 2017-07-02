@@ -128,8 +128,13 @@ public class CharacterMgr extends Application {
         
 
         Label clss = new Label("Class name:");
-        TextField clssTf = new TextField();
-        clssTf.setPromptText("Input Class Name");
+
+        ObservableList<String> classOptions = FXCollections.observableArrayList( "Barbarian", "Bard", "Cleric", "Druid", "Fighter", "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard");
+
+        ComboBox<String> clssTf = new ComboBox<String>(classOptions);
+        clssTf.setEditable(true);
+
+        clssTf.setPromptText("Select a Class");
 
         HBox hbClss = new HBox(10);
         hbClss.setAlignment(Pos.CENTER);
@@ -152,13 +157,13 @@ public class CharacterMgr extends Application {
                     noName.setFill(Color.FIREBRICK);
                     grid.add(noName,0,4);
                 }
-                else if (clss.getText() == null || clssTf.getText().isEmpty()) {
+                else if (clssTf.getValue().toString() == null || clssTf.getValue().toString().isEmpty()) {
                     Character c = new Character(nameTf.getText());
                     stage.close();
                     CharacterSheet(c);
                 }
                 else {
-                    Character c = new Character(nameTf.getText(),clssTf.getText());
+                    Character c = new Character(nameTf.getText(),clssTf.getValue().toString());
                     stage.close();
                     CharacterSheet(c);
                 }
@@ -284,30 +289,20 @@ public class CharacterMgr extends Application {
         row++;
 
         //////////// Class ////////////////
+        ObservableList<String> classOptions = FXCollections.observableArrayList( "Barbarian", "Bard", "Cleric", "Druid", "Fighter", "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard");
         Label clssLabel = new Label("Class:");
         grid.add(clssLabel,0,row);
-        TextField clssTf = new TextField();
+        ComboBox<String> clssTf = new ComboBox<String>(classOptions);
         clssTf.setId("locked-tf");
-        clssTf.setText(c.getClss());
-        clssTf.setEditable(false);
+        clssTf.setEditable(true);
+        clssTf.setValue(c.getClss());
         grid.add(clssTf,1,row);
 
-        ToggleButton clssbtn = new ToggleButton("edit");
-        clssbtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                if (clssbtn.isSelected()) {
-                    clssTf.setEditable(true);
-                    clssTf.setId("unlocked-tf");
-                }
-                else {
-                    clssTf.setEditable(false);
-                    clssTf.setId("locked-tf");
-                    c.setClss(clssTf.getText());
-                }
+        clssTf.valueProperty().addListener(new ChangeListener<String>() {
+            public void changed(ObservableValue ov, String oldVal, String newVal) {
+                c.setClss(newVal.toString());
             }
         });
-        grid.add(clssbtn,2,row);
 
         /*
         Button testbtn = new Button("test");
