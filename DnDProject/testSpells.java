@@ -9,14 +9,16 @@ public class testSpells {
     public static void main(String[] args) {
 
         Gson gson = new Gson();
-        Spell spell = new Spell();
+        Spell[] spell;
 
        
-        File f = new File("spell_data.json");
-        
-        try (Reader reader = new FileReader("spell_data.json")) {
-            spell = gson.fromJson(reader, Spell.class);
-            spell.printSpell();
+        try (Reader reader = new FileReader("spells.json")) {
+            spell = gson.fromJson(reader,Spell[].class); 
+            //System.out.println("here");
+            for (int i = 0; i < spell.length; i++) {
+                System.out.println(spell[i].printSpell());
+                System.out.println();
+            }
         }
         catch (IOException e) {
             e.printStackTrace();

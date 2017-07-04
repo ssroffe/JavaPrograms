@@ -10,63 +10,64 @@ import java.util.*;
 import java.io.*;
 
 public class Spell {
-    private String school;
     private String name;
-    private String level;
-    private String ritual;
-    private String casting_time;
-    private ArrayList<String> clss;
+    private ArrayList<String> desc;
     private String range;
-    private String components;
+    private ArrayList<String> components;
+    private String ritual;
     private String duration;
     private String concentration;
-    private String page;
-
+    private String casting_time;
+    private int level;
+    private String school;
+    private HashSet<String> clss;
+    
     // Constructors
-    public Spell(String school, String name, String level, String ritual, String casting_time, ArrayList<String> clss,
-            String range, String components, String duration, String concentration, String page) {
-        setSchool(school);
+    public Spell(String name, ArrayList<String> desc, String range, ArrayList<String> components, String ritual, String duration,
+            String concentration, String casting_time, int level, String school, HashSet<String> clss) {
         setName(name);
-        setLevel(level);
-        setRitual(ritual);
-        setCastingTime(casting_time);
-        setClss(clss);
+        setDesc(desc);
         setRange(range);
         setComponents(components);
+        setRitual(ritual);
         setDuration(duration);
         setConcentration(concentration);
-        setPage(page);
+        setCastingTime(casting_time);
+        setLevel(level);
+        setSchool(school);
+        setClss(clss);
     }
 
     public Spell(String name) {
         setName(name);
+        setDesc(new ArrayList<String>());
         setSchool("");
-        setLevel("");
+        setLevel(1);
         setRitual("");
         setCastingTime("");
-        setClss(new ArrayList<String>());
+        setClss(new HashSet<String>());
         setRange("");
-        setComponents("");
+        setComponents(new ArrayList<String>());
         setDuration("");
         setConcentration("");
-        setPage("");
     }
 
     public Spell() {
         setSchool("");
+        setDesc(new ArrayList<String>());
         setName("");
-        setLevel("");
+        setLevel(1);
         setRitual("");
         setCastingTime("");
-        setClss(new ArrayList<String>());
+        setClss(new HashSet<String>());
         setRange("");
-        setComponents("");
+        setComponents(new ArrayList<String>());
         setDuration("");
         setConcentration("");
-        setPage("");
     }
     public Spell(Spell s) {
         setSchool(s.getSchool());
+        setDesc(s.getDesc());
         setName(s.getName());
         setLevel(s.getLevel());
         setRitual(s.getRitual());
@@ -76,7 +77,6 @@ public class Spell {
         setComponents(s.getComponents());
         setDuration(s.getDuration());
         setConcentration(s.getConcentration());
-        setPage(s.getPage());
     }
 
     // Set and Get Methods
@@ -94,43 +94,11 @@ public class Spell {
         return name;
     }
 
-    public void setLevel(String l) {
+    public void setLevel(int l) {
         this.level = l;
     }
-    public String getLevel() {
+    public int getLevel() {
         return level;
-    }
-
-    public int getLevelInt() {
-        String lvl = this.level;
-        
-        if (lvl.equalsIgnoreCase("Cantrip")) {
-            return 0;
-        }
-        else if (lvl.equalsIgnoreCase("1st")) {
-            return 1;
-        }
-        else if (lvl.equalsIgnoreCase("2nd")) {
-            return 2;
-        }
-        else if (lvl.equalsIgnoreCase("3rd")) {
-            return 3;
-        }
-        else if (lvl.equalsIgnoreCase("4th")) {
-            return 4;
-        }
-        else if (lvl.equalsIgnoreCase("5th")) {
-            return 5;
-        }
-        else if (lvl.equalsIgnoreCase("6th")) {
-            return 6;
-        }
-        else if (lvl.equalsIgnoreCase("7th")) {
-            return 7;
-        }
-        else {
-            return 8;
-        }
     }
 
     public void setRitual(String r) {
@@ -155,10 +123,10 @@ public class Spell {
         return casting_time;
     }
 
-    public void setClss(ArrayList<String> c) {
+    public void setClss(HashSet<String> c) {
         this.clss = c;
     }
-    public ArrayList<String> getClss() {
+    public HashSet<String> getClss() {
         return clss;
     }
 
@@ -169,10 +137,10 @@ public class Spell {
         return range;
     }
 
-    public void setComponents(String c) {
+    public void setComponents(ArrayList<String> c) {
         this.components = c;
     }
-    public String getComponents() {
+    public ArrayList<String> getComponents() {
         return components;
     }
 
@@ -198,14 +166,14 @@ public class Spell {
         }
     }
 
-    public void setPage(String p) {
-        this.page = p;
+    public void setDesc(ArrayList<String> d) {
+        this.desc = d;
     }
-    public String getPage() {
-        return page;
+    public ArrayList<String> getDesc() {
+        return desc;
     }
 
-
-    public String printSpell() {
-        return "Spell: " + name + "level: " + level + " " + getLevelInt() + "\n" + 
+    public String toString() {
+        return name;
+    }
 }

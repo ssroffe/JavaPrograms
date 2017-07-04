@@ -10,6 +10,7 @@ package dnd;
 
 import java.util.*;
 import java.io.*;
+import dnd.Spell;
 import com.google.gson.Gson;
 
 public class Character {
@@ -18,6 +19,7 @@ public class Character {
     private String race;
     private String subrace;
     private String clss; //class
+    private String subClss;
     private char gender;
     private ArrayList<String> weapons;
     private String background;
@@ -52,23 +54,25 @@ public class Character {
     
 
     //Spells
-    private HashSet<String> cantrips;
-    private HashSet<String> spells1;
+    private HashSet<Spell> cantrips;
+    private HashSet<Spell> spells1;
     private int spellSlots1;
-    private HashSet<String> spells2;
+    private HashSet<Spell> spells2;
     private int spellSlots2;
-    private HashSet<String> spells3;
+    private HashSet<Spell> spells3;
     private int spellSlots3;
-    private HashSet<String> spells4;
+    private HashSet<Spell> spells4;
     private int spellSlots4;
-    private HashSet<String> spells5;
+    private HashSet<Spell> spells5;
     private int spellSlots5;
-    private HashSet<String> spells6;
+    private HashSet<Spell> spells6;
     private int spellSlots6;
-    private HashSet<String> spells7;
+    private HashSet<Spell> spells7;
     private int spellSlots7;
-    private HashSet<String> spells8;
+    private HashSet<Spell> spells8;
     private int spellSlots8;
+    private HashSet<Spell> spells9;
+    private int spellSlots9;
 
 
     private HashSet<String> ideals;
@@ -90,13 +94,14 @@ public class Character {
     //////////////////////////
     
     public Character(String name, String clss, String race, String subrace, char gender,
-		     ArrayList<String> weapons, HashSet<String> cantrips, HashSet<String> spells,
+		     ArrayList<String> weapons, HashSet<Spell> cantrips, 
 		     int maxHealth, int armor, int initiative, int speed, String hitdice,
 		     int str, int cons, int dex, int intel, int wis, int charis, int level, int exp,
-             HashSet<String> spells1,HashSet<String> spells2,HashSet<String> spells3,HashSet<String> spells4,
-             HashSet<String> spells5,HashSet<String> spells6,HashSet<String> spells7,HashSet<String> spells8,
+             HashSet<Spell> spells1,HashSet<Spell> spells2,HashSet<Spell> spells3,HashSet<Spell> spells4,
+             HashSet<Spell> spells5,HashSet<Spell> spells6,HashSet<Spell> spells7,HashSet<Spell> spells8,
+             HashSet<Spell> spells9,
              int spellSlots1,int spellSlots2,int spellSlots3,int spellSlots4,
-             int spellSlots5,int spellSlots6,int spellSlots7,int spellSlots8,
+             int spellSlots5,int spellSlots6,int spellSlots7,int spellSlots8, int spellSlots9,
 		     int dRoll, int sRoll, HashSet<String> bonds, String background,
 		     ArrayList<String> inventory, HashSet<String> features, int gold) {
 	
@@ -130,6 +135,7 @@ public class Character {
     setSpells6(spells6);
     setSpells7(spells7);
     setSpells8(spells8);
+    setSpells9(spells9);
 
     setSpellSlots1(spellSlots1);
     setSpellSlots2(spellSlots2);
@@ -139,6 +145,7 @@ public class Character {
     setSpellSlots6(spellSlots6);
     setSpellSlots7(spellSlots7);
     setSpellSlots8(spellSlots8);
+    setSpellSlots9(spellSlots9);
 
     setSaveRoll(sRoll);
     setDeathRoll(dRoll);
@@ -156,6 +163,7 @@ public class Character {
     public Character(String name) {
 	setName(name);
 	setClss("");
+    setSubClss("");
     setBackground("");
 	
 	setStr(0);
@@ -184,7 +192,7 @@ public class Character {
 	setWeapons(new ArrayList<String>());
 
 
-	setCantrips(new HashSet<String>());
+	setCantrips(new HashSet<Spell>());
 	setFeatures(new HashSet<String>());
 	setBonds(new HashSet<String>());
 	setFlaws(new HashSet<String>());
@@ -194,14 +202,15 @@ public class Character {
 
 	setInventory(new ArrayList<String>());
 
-	setSpells1(new HashSet<String>());
-	setSpells2(new HashSet<String>());
-	setSpells3(new HashSet<String>());
-	setSpells4(new HashSet<String>());
-	setSpells5(new HashSet<String>());
-	setSpells6(new HashSet<String>());
-	setSpells7(new HashSet<String>());
-	setSpells8(new HashSet<String>());
+	setSpells1(new HashSet<Spell>());
+	setSpells2(new HashSet<Spell>());
+	setSpells3(new HashSet<Spell>());
+	setSpells4(new HashSet<Spell>());
+	setSpells5(new HashSet<Spell>());
+	setSpells6(new HashSet<Spell>());
+	setSpells7(new HashSet<Spell>());
+	setSpells8(new HashSet<Spell>());
+	setSpells9(new HashSet<Spell>());
 
     setSpellSlots1(0);
     setSpellSlots2(0);
@@ -211,6 +220,7 @@ public class Character {
     setSpellSlots6(0);
     setSpellSlots7(0);
     setSpellSlots8(0);
+    setSpellSlots9(0);
     setProficiencies(new boolean[18]);
     setSavingThrows(new boolean[6]);
 	setLevel(1);
@@ -226,6 +236,7 @@ public class Character {
 public Character() {
 	setName("");
 	setClss("");
+    setSubClss("");
     setBackground("");
 	
 	setStr(0);
@@ -253,7 +264,7 @@ public Character() {
 	setWeapons(new ArrayList<String>());
 
 
-	setCantrips(new HashSet<String>());
+	setCantrips(new HashSet<Spell>());
 	setBonds(new HashSet<String>());
 	setFeatures(new HashSet<String>());
 	setFlaws(new HashSet<String>());
@@ -266,14 +277,15 @@ public Character() {
     setProficiencies(new boolean[18]);
     setSavingThrows(new boolean[6]);
 
-	setSpells1(new HashSet<String>());
-	setSpells2(new HashSet<String>());
-	setSpells3(new HashSet<String>());
-	setSpells4(new HashSet<String>());
-	setSpells5(new HashSet<String>());
-	setSpells6(new HashSet<String>());
-	setSpells7(new HashSet<String>());
-	setSpells8(new HashSet<String>());
+	setSpells1(new HashSet<Spell>());
+	setSpells2(new HashSet<Spell>());
+	setSpells3(new HashSet<Spell>());
+	setSpells4(new HashSet<Spell>());
+	setSpells5(new HashSet<Spell>());
+	setSpells6(new HashSet<Spell>());
+	setSpells7(new HashSet<Spell>());
+	setSpells8(new HashSet<Spell>());
+	setSpells9(new HashSet<Spell>());
 
     setSpellSlots1(0);
     setSpellSlots2(0);
@@ -283,6 +295,7 @@ public Character() {
     setSpellSlots6(0);
     setSpellSlots7(0);
     setSpellSlots8(0);
+    setSpellSlots9(0);
 
 	setLevel(1);
 	setExp(0);
@@ -298,6 +311,7 @@ public Character() {
     public Character(String name,String clss) {
 	setName(name);
 	setClss(clss);
+    setSubClss("");
     setBackground("");
 	
 	setStr(0);
@@ -329,7 +343,7 @@ public Character() {
     setProficiencies(new boolean[18]);
     setSavingThrows(new boolean[6]);
 	
-	setCantrips(new HashSet<String>());
+	setCantrips(new HashSet<Spell>());
 	setBonds(new HashSet<String>());
 	setFeatures(new HashSet<String>());
 	setFlaws(new HashSet<String>());
@@ -338,14 +352,15 @@ public Character() {
     setNotes("");
 	setLanguages(new HashSet<String>());
 
-	setSpells1(new HashSet<String>());
-	setSpells2(new HashSet<String>());
-	setSpells3(new HashSet<String>());
-	setSpells4(new HashSet<String>());
-	setSpells5(new HashSet<String>());
-	setSpells6(new HashSet<String>());
-	setSpells7(new HashSet<String>());
-	setSpells8(new HashSet<String>());
+	setSpells1(new HashSet<Spell>());
+	setSpells2(new HashSet<Spell>());
+	setSpells3(new HashSet<Spell>());
+	setSpells4(new HashSet<Spell>());
+	setSpells5(new HashSet<Spell>());
+	setSpells6(new HashSet<Spell>());
+	setSpells7(new HashSet<Spell>());
+	setSpells8(new HashSet<Spell>());
+	setSpells9(new HashSet<Spell>());
 
     setSpellSlots1(0);
     setSpellSlots2(0);
@@ -355,6 +370,7 @@ public Character() {
     setSpellSlots6(0);
     setSpellSlots7(0);
     setSpellSlots8(0);
+    setSpellSlots9(0);
 
     setSaveRoll(0);
     setDeathRoll(0);
@@ -370,6 +386,7 @@ public Character() {
         setRace(c.getRace());
         setBackground(c.getBackground());
         setClss(c.getClss());
+        setSubClss(c.getSubClss());
         setSubrace(c.getSubrace());
         setGender(c.getGender());
         setWeapons(c.getWeapons());
@@ -404,6 +421,7 @@ public Character() {
         setSpells6(c.getSpells6());
         setSpells7(c.getSpells7());
         setSpells8(c.getSpells8());
+        setSpells9(c.getSpells9());
 
         setSpellSlots1(c.getSpellSlots1());
         setSpellSlots2(c.getSpellSlots2());
@@ -413,6 +431,7 @@ public Character() {
         setSpellSlots6(c.getSpellSlots6());
         setSpellSlots7(c.getSpellSlots7());
         setSpellSlots8(c.getSpellSlots8());
+        setSpellSlots9(c.getSpellSlots9());
 
         setSaveRoll(c.getSaveRoll());
         setDeathRoll(c.getDeathRoll());
@@ -431,6 +450,7 @@ public Character() {
 		     int str, int cons, int dex, int intel, int wis, int charis) {
 	setName(name);
 	setClss(clss);
+    setSubClss("");
     setBackground(background);
 	setMaxHP(maxHealth);
 	setArmor(armor);
@@ -447,19 +467,20 @@ public Character() {
 	setSubrace("");
 	setGender('m');
 	
-	setCantrips(new HashSet<String>());
+	setCantrips(new HashSet<Spell>());
 	setBonds(new HashSet<String>());
 	setFeatures(new HashSet<String>());
 	setLanguages(new HashSet<String>());
 
-    setSpells1(new HashSet<String>());
-	setSpells2(new HashSet<String>());
-	setSpells3(new HashSet<String>());
-	setSpells4(new HashSet<String>());
-	setSpells5(new HashSet<String>());
-	setSpells6(new HashSet<String>());
-	setSpells7(new HashSet<String>());
-	setSpells8(new HashSet<String>());
+    setSpells1(new HashSet<Spell>());
+	setSpells2(new HashSet<Spell>());
+	setSpells3(new HashSet<Spell>());
+	setSpells4(new HashSet<Spell>());
+	setSpells5(new HashSet<Spell>());
+	setSpells6(new HashSet<Spell>());
+	setSpells7(new HashSet<Spell>());
+	setSpells8(new HashSet<Spell>());
+	setSpells9(new HashSet<Spell>());
 
     setSpellSlots1(0);
     setSpellSlots2(0);
@@ -469,6 +490,7 @@ public Character() {
     setSpellSlots6(0);
     setSpellSlots7(0);
     setSpellSlots8(0);
+    setSpellSlots9(0);
 
 	setWeapons(new ArrayList<String>());
 
@@ -518,6 +540,13 @@ public Character() {
     }
     public String getClss() {
 	return clss;
+    }
+
+    public void setSubClss(String c) {
+	this.clss = c;
+    }
+    public String getSubClss() {
+	return subClss;
     }
     
     public void setRace(String r) {
@@ -715,18 +744,18 @@ public Character() {
         return charisma;
     }
 
-    public void setCantrips(HashSet<String> c) {
+    public void setCantrips(HashSet<Spell> c) {
         this.cantrips = c;
     }
-    public HashSet<String> getCantrips() {
+    public HashSet<Spell> getCantrips() {
         return cantrips;
     }
 
-    public void setSpells1(HashSet<String> s) {
+    public void setSpells1(HashSet<Spell> s) {
         this.spells1 = s;
     }
 
-    public HashSet<String> getSpells1() {
+    public HashSet<Spell> getSpells1() {
         return spells1;
     }
 
@@ -758,60 +787,68 @@ public Character() {
 	return description;
     }
 
-    public void setSpells2(HashSet<String> s) {
+    public void setSpells2(HashSet<Spell> s) {
         this.spells2 = s;
     }
 
-    public HashSet<String> getSpells2() {
+    public HashSet<Spell> getSpells2() {
         return spells2;
     }
 
-    public void setSpells3(HashSet<String> s) {
+    public void setSpells3(HashSet<Spell> s) {
         this.spells3 = s;
     }
 
-    public HashSet<String> getSpells3() {
+    public HashSet<Spell> getSpells3() {
         return spells3;
     }
 
-    public void setSpells4(HashSet<String> s) {
+    public void setSpells4(HashSet<Spell> s) {
         this.spells4 = s;
     }
 
-    public HashSet<String> getSpells4() {
+    public HashSet<Spell> getSpells4() {
         return spells4;
     }
 
-    public void setSpells5(HashSet<String> s) {
+    public void setSpells5(HashSet<Spell> s) {
         this.spells5 = s;
     }
 
-    public HashSet<String> getSpells5() {
+    public HashSet<Spell> getSpells5() {
         return spells5;
     }
 
-    public void setSpells6(HashSet<String> s) {
+    public void setSpells6(HashSet<Spell> s) {
         this.spells6 = s;
     }
 
-    public HashSet<String> getSpells6() {
+    public HashSet<Spell> getSpells6() {
         return spells6;
     }
 
-    public void setSpells7(HashSet<String> s) {
+    public void setSpells7(HashSet<Spell> s) {
         this.spells7 = s;
     }
 
-    public HashSet<String> getSpells7() {
+    public HashSet<Spell> getSpells7() {
         return spells7;
     }
 
-    public void setSpells8(HashSet<String> s) {
+    public void setSpells8(HashSet<Spell> s) {
         this.spells8 = s;
     }
 
-    public HashSet<String> getSpells8() {
+    public HashSet<Spell> getSpells8() {
         return spells8;
+    }
+    
+    public void setSpells9(HashSet<Spell> s) {
+        this.spells9 = s;
+    }
+
+    public HashSet<Spell> getSpells9() {
+        return spells9;
     }
 
     public void setSpellSlots1(int s) {
@@ -876,6 +913,14 @@ public Character() {
 
     public int getSpellSlots8() {
         return spellSlots8;
+    }
+
+    public void setSpellSlots9(int s) {
+        this.spellSlots9 = s;
+    }
+
+    public int getSpellSlots9() {
+        return spellSlots9;
     }
 
     public void setFeatures(HashSet<String> f) {
