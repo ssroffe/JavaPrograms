@@ -2991,18 +2991,10 @@ public class CharacterMgr extends Application {
             Label spellsTitle = new Label("Spells");
             spellsTitle.setId("title");
 
-            BorderPane spellsBp = new BorderPane();
-            spellsBp.setPadding(new Insets(20));
-            spellsBp.setMargin(spellsTitle,new Insets(12,12,12,12));
 
             VBox rootVb = new VBox(10);
 
-            ScrollPane spellsSp = new ScrollPane();
-            spellsSp.setContent(spellsBp);
-            
-            Scene spellsscene = new Scene(spellsSp);
 
-            spellsStage.setScene(spellsscene);
 
             // Load the Spells
             Gson gson = new Gson();
@@ -3055,6 +3047,8 @@ public class CharacterMgr extends Application {
             HashSet<Spell> spells0List = c.getCantrips();
             Iterator<Spell> itr0 = spells0List.iterator();
 
+            ScrollPane spSpells0 = new ScrollPane();
+            spSpells0.setContent(vbSpells0);
 
             while (itr0.hasNext()) {
                 Spell nxtItem = itr0.next();
@@ -3116,6 +3110,7 @@ public class CharacterMgr extends Application {
                         infoGrid.setAlignment(Pos.CENTER);
                         infoGrid.setHgap(10);
                         infoGrid.setVgap(10);
+                        infoGrid.setPadding(new Insets(15,15,15,15));
                         Scene infoScene = new Scene(infoGrid);
                         infoStage.setScene(infoScene);
 
@@ -3181,7 +3176,7 @@ public class CharacterMgr extends Application {
                         infoGrid.add(duration,1,5);
                         infoGrid.add(desc,0,6);
 
-                        Button done = new Button("Okay");
+                        Button done = new Button("OK");
                         infoGrid.add(done,0,7);
 
                         infoStage.show();
@@ -3204,7 +3199,7 @@ public class CharacterMgr extends Application {
             VBox spells0Root = new VBox(10);
             HBox spellSlots0Hb = new HBox(10);
             spellSlots0Hb.getChildren().addAll(titleSpellSlots0,spellBox0, addSpells0Btn);
-            spells0Root.getChildren().addAll(spellSlots0Hb,vbSpells0);
+            spells0Root.getChildren().addAll(spellSlots0Hb,spSpells0);
 
             addSpells0Btn.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent e) {
@@ -3268,6 +3263,7 @@ public class CharacterMgr extends Application {
                             GridPane infoGrid = new GridPane();
                             infoGrid.setAlignment(Pos.CENTER);
                             infoGrid.setHgap(10);
+                            infoGrid.setPadding(new Insets(15,15,15,15));
                             infoGrid.setVgap(10);
                             Scene infoScene = new Scene(infoGrid);
                             infoStage.setScene(infoScene);
@@ -3334,7 +3330,7 @@ public class CharacterMgr extends Application {
                             infoGrid.add(duration,1,5);
                             infoGrid.add(desc,0,6,2,1);
 
-                            Button done = new Button("Okay");
+                            Button done = new Button("OK");
                             infoGrid.add(done,0,7);
                             infoStage.show();
 
@@ -3359,12 +3355,29 @@ public class CharacterMgr extends Application {
             ///////////////////
             ///// LEVEL 2 /////
             ///////////////////
+
+
+
+
+            /////////////////////////////
+            ///// Spells page setup /////
+            /////////////////////////////
+            BorderPane spellsBp = new BorderPane();
+            spellsBp.setPadding(new Insets(20));
+            spellsBp.setMargin(spellsTitle,new Insets(12,12,12,12));
+            spellsBp.setTop(spellsTitle);
+            spellsBp.setCenter(rootVb);
+
+            ScrollPane spellsSp = new ScrollPane();
+            spellsSp.setContent(spellsBp);
             
+            Scene spellsscene = new Scene(spellsSp);
+
+            spellsStage.setScene(spellsscene);
             
             rootVb.getChildren().addAll(spells0Root);
             spellsStage.show();                 
-            spellsBp.setTop(spellsTitle);
-            spellsBp.setCenter(rootVb);
+
             
 
         }
