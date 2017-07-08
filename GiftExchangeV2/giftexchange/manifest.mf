@@ -1,2 +1,0 @@
-Main-Class: GiftExchangev2
-Class-Path: jars/mail.jar
